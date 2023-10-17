@@ -2,29 +2,54 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define N 6
+#define nnodes 6
 
 struct Graph {
-    struct Node* nodes[N];
+    struct Node* nodes[nnodes];
 };
 
+// structure of nodes 
 struct Node {
-    int x, y;
-    int dest;
-    struct Node* next;
+    int x, y;  // coordinates of point
+    int id;    // id of point 
+    struct Node* next;  // ??
 };
 
+// structure of edge
 struct Edge {
     int src, dest, weight;
 };
 
-struct Graph* createGraph (struct Edge edges[], int n) {
-    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
 
+
+struct Graph* createGraph (int nedges) {
+    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
     srand(time(0));
 
-    for (int i = 0; i < n; i++) {
+    // initialise nodes 
+    for (int i = 0; i < nnodes; i++) {
         graph->nodes[i]->x = rand();
         graph->nodes[i]->y = rand();
+        graph->nodes[i]->id = i++;
     }
+
+
+
+    // add edges to the directed graph one by one
+    for (int id = 0; id < nnodes; id++)
+    {
+        for (int j = 0; j < nedges; j++)
+        {
+            struct Edge* edge = (struct Edge*)malloc(sizeof(Edge));
+            
+            edge->src = id;
+            do 
+            {
+                edge->dest = rand();
+            } while ( (edge->dest == id) && (edge->dest < 0) && (edge->dest >= nnodes) )
+        }
+    }
+ 
+    return graph;
+
 }
