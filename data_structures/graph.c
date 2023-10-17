@@ -10,7 +10,7 @@ struct Graph {
 
 // structure of nodes 
 struct Node {
-    int x, y;  // coordinates of point
+    int x, y, z;  // coordinates of point
     int id;    // id of point 
     // struct Node* next;  not useful for now
 };
