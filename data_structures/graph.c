@@ -6,11 +6,12 @@
 
 struct Graph {
     struct Node* nodes[nnodes];
+    int dim;
 };
 
 // structure of nodes 
 struct Node {
-    int x, y;  // coordinates of point
+    int* coord;  // coordinates of n-dimentional point
     int id;    // id of point 
     // struct Node* next;  not useful for now
 };
