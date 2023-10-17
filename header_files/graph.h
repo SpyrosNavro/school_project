@@ -12,7 +12,7 @@ struct Graph {
 struct Node {
     int x, y;  // coordinates of point
     int id;    // id of point 
-    struct Node* next;  // ??
+    // struct Node* next;  not useful for now
 };
 
 // structure of edge
@@ -33,8 +33,6 @@ struct Graph* createGraph (int nedges) {
         graph->nodes[i]->id = i++;
     }
 
-
-
     // add edges to the directed graph one by one
     for (int id = 0; id < nnodes; id++)
     {
@@ -46,10 +44,9 @@ struct Graph* createGraph (int nedges) {
             do 
             {
                 edge->dest = rand();
-            } while ( (edge->dest == id) && (edge->dest < 0) && (edge->dest >= nnodes) )
+            } while ( (edge->dest == id) && (edge->dest < 0) && (edge->dest >= nnodes) );
         }
     }
- 
-    return graph;
 
+    return graph;
 }
