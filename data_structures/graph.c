@@ -20,9 +20,8 @@ struct Edge {
     int src, dest, weight;
 };
 
-
-
-struct Graph* createGraph (int nedges) {
+struct Graph* createGraph (int nedges) 
+{
     struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
     srand(time(0));
 
@@ -38,7 +37,7 @@ struct Graph* createGraph (int nedges) {
     {
         for (int j = 0; j < nedges; j++)
         {
-            struct Edge* edge = (struct Edge*)malloc(sizeof(Edge));
+            struct Edge* edge = (struct Edge*)malloc(sizeof(struct Edge));
             
             edge->src = id;
             do 
