@@ -10,7 +10,7 @@ struct Graph {
 
 // structure of nodes 
 struct Node {
-    int x, y, z;  // coordinates of point
+    int x, y;  // coordinates of point
     int id;    // id of point 
     // struct Node* next;  not useful for now
 };
@@ -20,10 +20,21 @@ struct Edge {
     int src, dest, weight;
 };
 
-struct Graph* createGraph (int nedges) 
+struct Graph* createGraph (int nedges, const char *file_name) 
 {
     struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
+    FILE* pointer;
     srand(time(0));
+    
+    pointer = fopen(file_name, "r");
+    if (pointer == NULL) 
+    {
+        print("no such file.");
+        return 0;
+    }
+
+    // atoi: char => int
+    // fgetc: obtain input single character at a time. returns the ASCII code of the character read. it moves to the next character by itself
 
     // initialise nodes 
     for (int i = 0; i < nnodes; i++) {
