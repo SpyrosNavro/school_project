@@ -34,6 +34,13 @@ struct Graph* createGraph (int nedges, const char *file_name)
         return 0;
     }
 
+    while ( !(feof(pointer)) )
+    {
+        // insesrt char
+        // transform string into int
+        // save into node->coord
+    }
+
     // atoi: char => int
     // fgetc: obtain input single character at a time. returns the ASCII code of the character read. it moves to the next character by itself
 
