@@ -21,16 +21,15 @@ struct Edge {
     int src, dest, weight;
 };
 
-struct Graph* createGraph (int nedges, const char *file_name) 
+
+void import_data(const char *file_name)
 {
-    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
     FILE* pointer;
-    srand(time(0));
     
     pointer = fopen(file_name, "r");
     if (pointer == NULL) 
     {
-        print("no such file.");
+        print("no file was found.");
         return 0;
     }
 
@@ -40,6 +39,12 @@ struct Graph* createGraph (int nedges, const char *file_name)
         // transform string into int
         // save into node->coord
     }
+}
+
+
+struct Graph* createGraph (int nedges, const char *file_name) 
+{
+    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
 
     // atoi: char => int
     // fgetc: obtain input single character at a time. returns the ASCII code of the character read. it moves to the next character by itself
