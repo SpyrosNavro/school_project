@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "graph.h"
+
 #define nnodes 6
 
 typedef struct graph {
@@ -42,10 +44,12 @@ int** import_data(const char *file_name, int row, int column)
         // transform string into int
         // save into node->coord
     }
+
+    return 0;
 }
 
 
-struct Graph* createGraph (int nedges, const char *file_name, int row, int column) 
+Graph createGraph (int nedges, const char *file_name, int row, int column) 
 {
     Graph* graph = (struct Graph*)malloc(sizeof(Graph));
     int** data = import_data(file_name, row, column);
