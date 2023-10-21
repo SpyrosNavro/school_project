@@ -4,7 +4,7 @@
 
 struct graph {
     Node nodes[nnodes];
-    int dim;
+    int dim;  // incomplete
 };
 
 // structure of nodes 
