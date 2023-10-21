@@ -76,7 +76,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
     return graph;
 }
 
-void deleteGraph()
+void deleteGraph(Graph graph)
 {
     return 0;
 }

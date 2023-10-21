@@ -1,7 +1,11 @@
 #include "graph.h"  
 #include "acutest.h"
 
-void test_import(const char *file_name, int row, int column) 
+#define row 2
+#define column 2
+#define file_name "file.txt"
+
+void test_import(void) 
 {
     int** array = import_data(file_name, row, column);
 
@@ -10,7 +14,10 @@ void test_import(const char *file_name, int row, int column)
 
 void test_create(void)
 {
-    return 0;
+    int nedges = 2;
+    Graph graph = createGraph(nedges, file_name, row, column);
+    TEST_ASSERT(graph != NULL);
+    deleteGraph(graph);
 }
 
 TEST_GRAPH = {
