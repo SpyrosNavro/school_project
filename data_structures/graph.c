@@ -6,11 +6,12 @@
 
 struct Graph {
     struct Node* nodes[nnodes];
+    int dim;
 };
 
 // structure of nodes 
 struct Node {
-    int x, y, z;  // coordinates of point
+    int* coord;  // coordinates of n-dimentional point
     int id;    // id of point 
     // struct Node* next;  not useful for now
 };
@@ -20,10 +21,33 @@ struct Edge {
     int src, dest, weight;
 };
 
-struct Graph* createGraph (int nedges) 
+
+void import_data(const char *file_name)
+{
+    FILE* pointer;
+    
+    pointer = fopen(file_name, "r");
+    if (pointer == NULL) 
+    {
+        print("no file was found.");
+        return 0;
+    }
+
+    while ( !(feof(pointer)) )
+    {
+        // insesrt char
+        // transform string into int
+        // save into node->coord
+    }
+}
+
+
+struct Graph* createGraph (int nedges, const char *file_name) 
 {
     struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
-    srand(time(0));
+
+    // atoi: char => int
+    // fgetc: obtain input single character at a time. returns the ASCII code of the character read. it moves to the next character by itself
 
     // initialise nodes 
     for (int i = 0; i < nnodes; i++) {
