@@ -1,62 +1,99 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+#include "graph.h"
 
-#define nnodes 6
-
-struct Graph {
-    struct Node* nodes[nnodes];
-    int dim;
+struct graph {
+    Node* nodes;
+    int dim, nnodes, neighbors;
 };
 
 // structure of nodes 
-struct Node {
+struct node {
     int* coord;  // coordinates of n-dimentional point
     int id;    // id of point 
+    Edge edges[];
     // struct Node* next;  not useful for now
 };
 
 // structure of edge
-struct Edge {
-    int src, dest, weight;
+struct edge {
+    int src, dest, distance;
 };
 
 
 
-/*
 
 struct Graph* createGraph (int nedges, const char *file_name) 
 {
-    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
-
-    // atoi: char => int
-    // fgetc: obtain input single character at a time. returns the ASCII code of the character read. it moves to the next character by itself
+    Graph graph = malloc(sizeof(*graph));
+    int** data = import_data(file_name, row, column);
+    
+    graph->dim = column;
+    graph->nnodes = row;
+    graph->neighbors = nedges;
 
     // initialise nodes 
-    for (int i = 0; i < nnodes; i++) {
-    //    graph->nodes[i]->x = rand();
-    //    graph->nodes[i]->y = rand();
-        graph->nodes[i]->id = i++;
-    }
-
-    // add edges to the directed graph one by one
-    for (int id = 0; id < nnodes; id++)
+    for (int id = 0; id < row; id++)
     {
+        for (int j = 0; j < column; j++)
+        {
+            graph->nodes[id] = malloc(sizeof( *(graph->nodes[id]) ));   // allocate node
+            graph->nodes[id]->coord[j] = data[id][j];                   // put data in node
+            
+            //*(graph->nodes[i]->coord + j) = data[i][j];
+        }
+
+        // add directed edges to each node
         for (int j = 0; j < nedges; j++)
         {
-            struct Edge* edge = (struct Edge*)malloc(sizeof(struct Edge));
-            
+            Edge edge = malloc(sizeof(*edge));
+            graph->nodes[id]->edges[j] = edge;
             edge->src = id;
+
             do 
             {
                 edge->dest = rand();
-            } while ( (edge->dest == id) && (edge->dest < 0) && (edge->dest >= nnodes) );
+                edge->distance = compute_distance(graph->nodes[id], graph->nodes[edge->dest], graph->dim);
+            } while ( (edge->dest == id) && (edge->dest < 0) && (edge->dest >= graph->nnodes) );
         }
     }
 
+    // add directed edges to each node
+    // for (int id = 0; id < row; id++)
+    // {
+    //     for (int j = 0; j < nedges; j++)
+    //     {
+    //         Edge edge = malloc(sizeof(*edge));
+    //         graph->nodes[id]->edges[j] = edge;
+    //         edge->src = id;
+
+    //         do 
+    //         {
+    //             edge->dest = rand();
+    //         } while ( (edge->dest == id) && (edge->dest < 0) && (edge->dest >= graph->nnodes) );
+    //     }
+    // }
+
     return graph;
 }
-*/
+
+
+
+
+
+void deleteGraph(Graph graph)
+{   
+    for (int i = graph->nnodes - 1; i >= 0; i--)
+    {
+        for (int j = 0; j < graph->neighbors; j++)
+        {
+            free(graph->nodes[i]->edges[j]);
+        }
+        free(graph->nodes[i]);
+    }
+
+    free(graph);
+    return 0;
+}
+
 
 
 int** import_data(const char *file_name)
@@ -67,7 +104,7 @@ int** import_data(const char *file_name)
     if (pointer == NULL) 
     {
         printf("no file was found.");
-        //return 1;
+        return 1;
     }
      
     int** vector = NULL; // dynamilly allocated array (vector of vectors )
@@ -79,7 +116,7 @@ int** import_data(const char *file_name)
     if (vector == NULL){
         printf("error allocating memory for the vector");
         fclose(pointer);
-        //return 1;
+        return 1;
     }
     
     for (int i =0; i< vrows; i++){
