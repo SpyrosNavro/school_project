@@ -1,4 +1,12 @@
-#include "graph.h"
+//#include "header_files/graph.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+
+typedef struct graph* Graph;
+typedef struct node* Node;
+typedef struct edge* Edge;
 
 struct graph {
     Node* nodes;
@@ -41,21 +49,22 @@ int** import_data(const char *file_name, int vrows)
 {
     FILE* pointer;
     int** vector = NULL; // dynamilly allocated array (vector of vectors )
-    int vrows=9759;
+    // int vrows=9759;
     int vcol=3;
      
     pointer = fopen(file_name, "r");  // reading the file 
     if (pointer == NULL) 
     {
         printf("no file was found.");
-        return 1;
+        return NULL;
     }     
     
-    vector = (int**) malloc(vrows * sizeof(int * )); // 2dimensional 
+    vector = (int**) malloc(vrows*sizeof(int* )); // 2dimensional 
+    
     if (vector == NULL){
         printf("error allocating memory for the vector");
         fclose(pointer);
-        return 1;
+        return NULL;
     }
     
     for (int i =0; i< vrows; i++){
@@ -141,7 +150,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
             graph->nodes[id]->edges[j] = edge;
         }
     }
-    
+
     return graph;
 }
 
@@ -149,7 +158,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
 
 
 
-void deleteGraph(Graph graph)
+int deleteGraph(Graph graph)
 {   
     for (int i = graph->nnodes - 1; i >= 0; i--)
     {
@@ -161,5 +170,44 @@ void deleteGraph(Graph graph)
     }
 
     free(graph);
+    return 0;
+}
+
+
+int main(void) 
+{     
+    char *filename = "5k.txt";
+    int vrows = 9759;
+    int** vector = import_data(filename, vrows);
+
+    for (int i =0; i< 3; i++)
+    {
+        printf("row %d:", i);
+        printf("hello\n");
+
+        for(int j=0; j < 3; j++) 
+        {
+            printf("%d \n", vector[i][j] );
+            printf("hello2\n");
+
+        }
+    }
+
+    if(vector !=NULL )
+    {
+        printf("Succesfully created the vector ");
+
+        // delete vector 
+        for (int i=0; i< vrows; i++)
+        {
+            //free(vector[i]);
+        }
+        //free(vector);
+    }
+    else{
+        printf("Failed to create vector ");
+    }
+    
+
     return 0;
 }
