@@ -1,8 +1,14 @@
+//#include "header_files/graph.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <math.h>
 
-//#include "graph.h"
 /*
+typedef struct graph* Graph;
+typedef struct node* Node;
+typedef struct edge* Edge;
+
 struct graph {
     Node* nodes;
     int dim, nnodes, neighbors;
@@ -24,80 +30,20 @@ struct edge {
 
 
 
-struct Graph* createGraph (int nedges, const char *file_name) 
+
+int compute_distance (Node a, Node b, int dim)
 {
-    Graph graph = malloc(sizeof(*graph));
-    int** data = import_data(file_name, row, column);
-    
-    graph->dim = column;
-    graph->nnodes = row;
-    graph->neighbors = nedges;
-
-    // initialise nodes 
-    for (int id = 0; id < row; id++)
+    int sum = 0;
+    for (int i = 0; i < dim; i++) 
     {
-        for (int j = 0; j < column; j++)
-        {
-            graph->nodes[id] = malloc(sizeof( *(graph->nodes[id]) ));   // allocate node
-            graph->nodes[id]->coord[j] = data[id][j];                   // put data in node
-            
-            //*(graph->nodes[i]->coord + j) = data[i][j];
-        }
-
-        // add directed edges to each node
-        for (int j = 0; j < nedges; j++)
-        {
-            Edge edge = malloc(sizeof(*edge));
-            graph->nodes[id]->edges[j] = edge;
-            edge->src = id;
-
-            do 
-            {
-                edge->dest = rand();
-                edge->distance = compute_distance(graph->nodes[id], graph->nodes[edge->dest], graph->dim);
-            } while ( (edge->dest == id) && (edge->dest < 0) && (edge->dest >= graph->nnodes) );
-        }
+        sum = sum + pow(a->coord[i] - b->coord[i], 2);
     }
-
-    // add directed edges to each node
-    // for (int id = 0; id < row; id++)
-    // {
-    //     for (int j = 0; j < nedges; j++)
-    //     {
-    //         Edge edge = malloc(sizeof(*edge));
-    //         graph->nodes[id]->edges[j] = edge;
-    //         edge->src = id;
-
-    //         do 
-    //         {
-    //             edge->dest = rand();
-    //         } while ( (edge->dest == id) && (edge->dest < 0) && (edge->dest >= graph->nnodes) );
-    //     }
-    // }
-
-    return graph;
-}
-
-
-
-
-
-void deleteGraph(Graph graph)
-{   
-    for (int i = graph->nnodes - 1; i >= 0; i--)
-    {
-        for (int j = 0; j < graph->neighbors; j++)
-        {
-            free(graph->nodes[i]->edges[j]);
-        }
-        free(graph->nodes[i]);
-    }
-
-    free(graph);
-    return 0;
+    sum = sqrt(sum);
+    return sum;
 }
 
 */
+
 
 int** import_data(const char *file_name, int vrows)
 {
@@ -174,6 +120,67 @@ int** import_data(const char *file_name, int vrows)
    return vector; 
 }
 
+
+
+/*
+
+Graph createGraph (int nedges, const char *file_name, int row, int column) 
+{
+    Graph graph = malloc(sizeof(*graph));
+    int** data = import_data(file_name, row);
+    
+    graph->dim = column;
+    graph->nnodes = row;
+    graph->neighbors = nedges;
+
+    // initialise nodes 
+    for (int id = 0; id < row; id++)
+    {
+        for (int j = 0; j < column; j++)
+        {
+            graph->nodes[id] = malloc(sizeof( *(graph->nodes[id]) ));   // allocate node
+            graph->nodes[id]->coord[j] = data[id][j];                   // put data in node
+        }
+
+        // add directed edges to each node
+        for (int j = 0; j < nedges; j++)
+        {
+            Edge edge = malloc(sizeof(*edge));   // allocate edge
+            edge->src = id;
+
+            do 
+            {
+                edge->dest = rand();
+                edge->distance = compute_distance(graph->nodes[id], graph->nodes[edge->dest], graph->dim);
+            } while ( (edge->dest == id) && (edge->dest < 0) && (edge->dest >= graph->nnodes) );
+
+            graph->nodes[id]->edges[j] = edge;
+        }
+    }
+
+    return graph;
+}
+
+
+
+
+
+int deleteGraph(Graph graph)
+{   
+    for (int i = graph->nnodes - 1; i >= 0; i--)
+    {
+        for (int j = 0; j < graph->neighbors; j++)
+        {
+            free(graph->nodes[i]->edges[j]);
+        }
+        free(graph->nodes[i]);
+    }
+
+    free(graph);
+    return 0;
+}
+
+*/
 int main(){
      
     char *filename = "5k.txt";
