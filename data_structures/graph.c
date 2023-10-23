@@ -174,3 +174,33 @@ int** import_data(const char *file_name, int vrows)
    return vector; 
 }
 
+int main(){
+     
+    char *filename = "5k.txt";
+    int vrows=9759;
+    int** vector = import_data(filename, vrows);
+/*
+    for (int i =0; i< 3; i++){
+        printf("row %d:", i+1);
+        for(int j=0; j < 3; j++) {
+            printf("%d \n",vector[i][j]);
+             
+        }
+    }
+*/    
+    if(vector !=NULL ){
+        printf("Succesfully created the vector ");
+
+        // delete vector 
+        for (int i=0; i< vrows; i++){
+            free(vector[i]);
+        }
+        free(vector);
+    }
+    else{
+        printf("Failed to create vector ");
+    }
+    
+
+    return 0;
+}
