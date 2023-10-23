@@ -1,8 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include "graph.h"
 
-//#include "graph.h"
-/*
 struct graph {
     Node* nodes;
     int dim, nnodes, neighbors;
@@ -24,10 +21,11 @@ struct edge {
 
 
 
-struct Graph* createGraph (int nedges, const char *file_name) 
+
+Graph createGraph (int nedges, const char *file_name, int row, int column) 
 {
     Graph graph = malloc(sizeof(*graph));
-    int** data = import_data(file_name, row, column);
+    //int** data = import_data(file_name, row, column);
     
     graph->dim = column;
     graph->nnodes = row;
@@ -97,29 +95,44 @@ void deleteGraph(Graph graph)
     return 0;
 }
 
-*/
+
+
+
+
+int compute_distance (Node a, Node b, int dim)
+{
+    int sum = 0;
+    for (int i = 0; i < dim; i++) 
+    {
+        sum = sum + pow(a->coord[i] + b->coord[i], 2);
+    }
+    sum = sqrt(sum);
+    return sum;
+}
+
+
+
+
 
 int** import_data(const char *file_name, int vrows)
 {
     FILE* pointer;
+    int** vector = NULL; // dynamilly allocated array (vector of vectors )
+    int vrows=9759;
+    int vcol=3;
      
     pointer = fopen(file_name, "r");  // reading the file 
     if (pointer == NULL) 
     {
         printf("no file was found.");
-        return NULL;
-    }
-     
-    int** vector = NULL; // dynamilly allocated array (vector of vectors )
-    
-    int vcol=3;
-     
+        return 1;
+    }     
     
     vector = (int**) malloc(vrows * sizeof(int * )); // 2dimensional 
     if (vector == NULL){
         printf("error allocating memory for the vector");
         fclose(pointer);
-        return NULL;
+        return 1;
     }
     
     for (int i =0; i< vrows; i++){
@@ -133,8 +146,6 @@ int** import_data(const char *file_name, int vrows)
         }
 
     }
-
-    
 
     // save the elements of the file inside the vector (every row has three columns - its coordinates )
     for (int i= 0; i < vrows; i++){
@@ -160,17 +171,13 @@ int** import_data(const char *file_name, int vrows)
     */
 
     // freeing the memory of the vector 
-    /*
     for (int i=0; i< vrows; i++){
         free(vector[i]);
 
     }
     free(vector);
-    */
     fclose(pointer);
    
-    
-    
    return vector; 
 }
 
