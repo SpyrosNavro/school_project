@@ -1,5 +1,8 @@
-#include "graph.h"
+#include <stdio.h>
+#include <stdlib.h>
 
+//#include "graph.h"
+/*
 struct graph {
     Node* nodes;
     int dim, nnodes, neighbors;
@@ -94,9 +97,9 @@ void deleteGraph(Graph graph)
     return 0;
 }
 
+*/
 
-
-int** import_data(const char *file_name)
+int** import_data(const char *file_name, int vrows)
 {
     FILE* pointer;
      
@@ -104,11 +107,11 @@ int** import_data(const char *file_name)
     if (pointer == NULL) 
     {
         printf("no file was found.");
-        return 1;
+        return NULL;
     }
      
     int** vector = NULL; // dynamilly allocated array (vector of vectors )
-    int vrows=9759;
+    
     int vcol=3;
      
     
@@ -116,7 +119,7 @@ int** import_data(const char *file_name)
     if (vector == NULL){
         printf("error allocating memory for the vector");
         fclose(pointer);
-        return 1;
+        return NULL;
     }
     
     for (int i =0; i< vrows; i++){
@@ -157,11 +160,13 @@ int** import_data(const char *file_name)
     */
 
     // freeing the memory of the vector 
+    /*
     for (int i=0; i< vrows; i++){
         free(vector[i]);
 
     }
     free(vector);
+    */
     fclose(pointer);
    
     
