@@ -29,7 +29,7 @@ struct edge {
 
 
 
-
+/*
 int compute_distance (Node a, Node b, int dim)
 {
     int sum = 0;
@@ -41,7 +41,7 @@ int compute_distance (Node a, Node b, int dim)
     return sum;
 }
 
-
+*/
 
 
 
@@ -115,7 +115,7 @@ int** import_data(const char *file_name, int vrows)
 
 
 
-
+/*
 
 Graph createGraph (int nedges, const char *file_name, int row, int column) 
 {
@@ -172,7 +172,7 @@ int deleteGraph(Graph graph)
     free(graph);
     return 0;
 }
-
+*/
 
 int main(void) 
 {     
