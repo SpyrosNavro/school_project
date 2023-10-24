@@ -1,8 +1,4 @@
-//#include "header_files/graph.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <math.h>
+#include "../header_files/graph.h"
 
 typedef struct graph* Graph;
 typedef struct node* Node;
@@ -29,7 +25,7 @@ struct edge {
 
 
 
-/*
+
 int compute_distance (Node a, Node b, int dim)
 {
     int sum = 0;
@@ -41,7 +37,7 @@ int compute_distance (Node a, Node b, int dim)
     return sum;
 }
 
-*/
+
 
 
 
@@ -49,7 +45,6 @@ int** import_data(const char *file_name, int vrows)
 {
     FILE* pointer;
     int** vector = NULL; // dynamilly allocated array (vector of vectors )
-    // int vrows=9759;
     int vcol=3;
      
     pointer = fopen(file_name, "r");  // reading the file 
@@ -103,11 +98,11 @@ int** import_data(const char *file_name, int vrows)
     */
 
     // freeing the memory of the vector 
-    for (int i=0; i< vrows; i++){
-        free(vector[i]);
+    // for (int i=0; i< vrows; i++){
+    //     free(vector[i]);
 
-    }
-    free(vector);
+    // }
+    // free(vector);
     fclose(pointer);
    
    return vector; 
@@ -115,7 +110,7 @@ int** import_data(const char *file_name, int vrows)
 
 
 
-/*
+
 
 Graph createGraph (int nedges, const char *file_name, int row, int column) 
 {
@@ -172,7 +167,10 @@ int deleteGraph(Graph graph)
     free(graph);
     return 0;
 }
-*/
+
+
+
+
 
 int main(void) 
 {     
