@@ -11,24 +11,25 @@ struct graph {
 
 // structure of nodes 
 struct node {
-    int* coord;  // coordinates of n-dimentional point
     int id;    // id of point 
-    Edge edges[];
+    int* coord;  // coordinates of n-dimentional point
+    Edge* edges;
     // struct Node* next;  not useful for now
 };
 
 // structure of edge
 struct edge {
-    int src, dest, distance;
+    int src, dest;
+    float distance;
 };
 
 
 
 
 
-int compute_distance (Node a, Node b, int dim)
+float compute_distance (Node a, Node b, int dim)
 {
-    int sum = 0;
+    float sum = 0;
     for (int i = 0; i < dim; i++) 
     {
         sum = sum + pow(a->coord[i] - b->coord[i], 2);
@@ -115,37 +116,51 @@ int** import_data(const char *file_name, int vrows)
 Graph createGraph (int nedges, const char *file_name, int row, int column) 
 {
     Graph graph = malloc(sizeof(*graph));
+    graph->nodes = malloc ( row * sizeof(*(graph->nodes) ));  // allocate array of nodes
+
     int** data = import_data(file_name, row);
     
     graph->dim = column;
     graph->nnodes = row;
     graph->neighbors = nedges;
-
+    
     // initialise nodes 
     for (int id = 0; id < row; id++)
-    {
+    { 
+        graph->nodes[id] = malloc(sizeof( *(graph->nodes[id]) ));   // allocate node
+        graph->nodes[id]->id = id;
         for (int j = 0; j < column; j++)
         {
-            graph->nodes[id] = malloc(sizeof( *(graph->nodes[id]) ));   // allocate node
-            graph->nodes[id]->coord[j] = data[id][j];                   // put data in node
-        }
-
-        // add directed edges to each node
-        for (int j = 0; j < nedges; j++)
-        {
-            Edge edge = malloc(sizeof(*edge));   // allocate edge
-            edge->src = id;
-
-            do 
-            {
-                edge->dest = rand();
-                edge->distance = compute_distance(graph->nodes[id], graph->nodes[edge->dest], graph->dim);
-            } while ( (edge->dest == id) && (edge->dest < 0) && (edge->dest >= graph->nnodes) );
-
-            graph->nodes[id]->edges[j] = edge;
+            graph->nodes[id]->coord = (int*)malloc(column * sizeof( *(graph->nodes[id]->coord) ));
+            *(graph->nodes[id]->coord + j) = data[id][j];                   // put data in node
+            printf("id%d data: %d\n", id, data[id][j]);
         }
     }
 
+    for (int id = 0; id < row; id++)
+    {
+        // add directed edges to each node
+        graph->nodes[id]->edges = malloc ( nedges * sizeof(*(graph->nodes[id]->edges)) );
+        for (int j = 0; j < nedges; j++)
+        {
+            //Edge edge = malloc(sizeof(*edge));   // allocate edge
+            graph->nodes[id]->edges[j] = malloc(sizeof( *(graph->nodes[id]->edges[j]) ));
+            graph->nodes[id]->edges[j]->src = id;
+
+            do 
+            {
+                // rand in range [0, rows-1]
+                // rand() % (max_number + 1 - minimum_number) + minimum_number
+                graph->nodes[id]->edges[j]->dest = rand()%row; 
+            }
+            while ( (graph->nodes[id]->edges[j]->dest == id) || (graph->nodes[id]->edges[j]->dest < 0) || (graph->nodes[id]->edges[j]->dest >= graph->nnodes) );
+
+            // compute distance
+            graph->nodes[id]->edges[j]->distance = compute_distance(graph->nodes[id], graph->nodes[graph->nodes[id]->edges[j]->dest], graph->dim);
+            
+            printf("distance between %d and %d is %f\n", graph->nodes[id]->edges[j]->src, graph->nodes[id]->edges[j]->dest, graph->nodes[id]->edges[j]->distance);
+        }
+    }
     return graph;
 }
 
@@ -155,17 +170,18 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
 
 int deleteGraph(Graph graph)
 {   
-    for (int i = graph->nnodes - 1; i >= 0; i--)
+    for (int i = 0; i < graph->nnodes - 1; i++)
     {
         for (int j = 0; j < graph->neighbors; j++)
         {
             free(graph->nodes[i]->edges[j]);
         }
+        printf("hola nino\n");
         free(graph->nodes[i]);
     }
 
     free(graph);
-    return 0;
+    return 1;
 }
 
 
@@ -174,38 +190,45 @@ int deleteGraph(Graph graph)
 
 int main(void) 
 {     
-    char *filename = "5k.txt";
+    const char *filename = "5k.txt";
     int vrows = 9759;
+    int column = 3;
+    int nedges = 2;
     int** vector = import_data(filename, vrows);
+    Graph graph;
 
-    for (int i =0; i< 3; i++)
-    {
-        printf("row %d:", i);
-        printf("hello\n");
+    // for (int i =0; i< 3; i++)
+    // {
+    //     printf("row %d:\n", i);
 
-        for(int j=0; j < 3; j++) 
-        {
-            printf("%d \n", vector[i][j] );
-            printf("hello2\n");
+    //     for(int j=0; j < 3; j++) 
+    //     {
+    //         printf("%d \n", vector[i][j] );
 
-        }
-    }
-
+    //     }
+    // }
+    
     if(vector !=NULL )
     {
-        printf("Succesfully created the vector ");
+        printf("Succesfully created the vector\n");
 
         // delete vector 
         for (int i=0; i< vrows; i++)
         {
-            //free(vector[i]);
+            free(vector[i]);
         }
-        //free(vector);
+        free(vector);
     }
     else{
         printf("Failed to create vector ");
     }
-    
+
+    graph = createGraph(nedges, filename, vrows, column);
+
+    if (deleteGraph(graph) == 1)
+    {
+        printf("delete was successful");
+    }
 
     return 0;
 }
