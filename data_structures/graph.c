@@ -14,6 +14,7 @@ struct node {
     int id;    // id of point 
     int* coord;  // coordinates of n-dimentional point
     Edge* edges;
+    // reverse neighbors
     // struct Node* next;  not useful for now
 };
 
