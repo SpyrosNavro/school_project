@@ -1,30 +1,5 @@
 #include "../header_files/graph.h"
 
-typedef struct graph* Graph;
-typedef struct node* Node;
-typedef struct edge* Edge;
-
-struct graph {
-    Node* nodes;
-    int dim, nnodes, neighbors;
-    int* checked;
-};
-
-// structure of nodes 
-struct node {
-    int id;    // id of point 
-    int nreverse;
-    int* coord;  // coordinates of n-dimentional point
-    Edge* edges;
-    Edge* reverse;
-};
-
-// structure of edge
-struct edge {
-    int src, dest;
-    float distance;
-};
-
 
 
 
@@ -95,7 +70,6 @@ int** import_data(const char *file_name, int vrows)
         printf("row %d:", i+1);
         for(int j=0; j < vcol; j++) {
             printf("%d \n",vector[i][j]);
-             
         }
     }
     */
@@ -142,7 +116,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
         for (int j = 0; j < column; j++)
         {
             graph->nodes[id]->coord = (int*)malloc(column * sizeof( *(graph->nodes[id]->coord) ));
-            *(graph->nodes[id]->coord + j) = data[id][j];                   // put data in node
+            *(graph->nodes[id]->coord + j) = data[id][j];   // put data in node
             printf("id%d data: %d\n", id, data[id][j]);
         }
     }
