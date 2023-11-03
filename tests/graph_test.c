@@ -25,6 +25,10 @@ struct edge {
     float distance;
 };
 
+
+
+
+
 void test_compute (void)
 {
     Node a;
@@ -53,6 +57,10 @@ void test_compute (void)
     TEST_ASSERT(result == 9.05);
 }
 
+
+
+
+
 void test_import(void) 
 {
     int row = 9759;
@@ -60,6 +68,10 @@ void test_import(void)
 
     TEST_ASSERT(array != NULL);
 }
+
+
+
+
 
 void test_create(void)
 {
@@ -71,6 +83,11 @@ void test_create(void)
     TEST_ASSERT(graph != NULL);
     deleteGraph(graph);
 }
+
+
+
+
+
 
 void test_delete(void)
 {
@@ -84,6 +101,10 @@ void test_delete(void)
     result = deleteGraph(graph);
     TEST_ASSERT(graph == 1);
 }
+
+//-------------------------------------------------------//
+//-------------------------------------------------------//
+//-------------------------------------------------------//
 
 TEST_GRAPH = {
     { "import_data", test_import },
