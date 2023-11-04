@@ -17,8 +17,8 @@ int main(void)
     int* point;
     int* start;
     PQ queue;
-    int neighbor, neighbor_of_neighbor;
-    int rneighbor;
+    int neighbor, neighbor_of_neighbor, neighbor_of_reverse;
+    int reverse, reverse_of_neighbor, reverse_of_reverse;
 
     graph = createGraph(nedges, filename, row, col);
     point = malloc(graph->dim * sizeof(*point));
@@ -32,45 +32,68 @@ int main(void)
 
     do
     {
-
         flag = 1;
         
         for (int id = 0; id < row; id++)
         {
             
+
             // NEIGHBORS
             for (int neighbors = 0; neighbors < graph->neighbors; neighbors++)
             {
                 // neighbor
-                neighbor = graph->nodes[id]->edges[neighbors]->dest; // correct
+                neighbor = graph->nodes[id]->edges[neighbors]->dest;
                 pqueue_insert(queue, graph->nodes[neighbor], graph->nodes[id]->edges[neighbors]->distance);
 
 
                 // neighbor of neighbor
-                for (int non = 0; non < graph->neighbors; non++)
+                for (int i = 0; i < graph->neighbors; i++)
                 {
-                    neighbor_of_neighbor = graph->nodes[neighbor]->edges[non]->dest;
+                    neighbor_of_neighbor = graph->nodes[neighbor]->edges[i]->dest;
                     distance = compute_distance(graph->nodes[id], graph->nodes[neighbor_of_neighbor], graph->dim);
                     pqueue_insert(queue, graph->nodes[neighbor_of_neighbor], distance);
                 }
 
-                flag = 0;
-            }
 
-            // REVERSE NEIGHBORS
-            for (int reverse = 0; reverse < graph->nodes[id]->nreverse; reverse++)
-            {
-                // reverse neighbor
-                rneighbor = graph->nodes[id]->reverse[reverse]->src;
-                pqueue_insert(queue, graph->nodes[rneighbor], graph->nodes[id]->reverse[reverse]->distance);
-
-                // reverse neighbor of reverse neighbor
-                for (int ror = 0; ror < graph->nodes[id]->nreverse; ror++)
+                // reverse neighbor of neighbor
+                for (int i = 0; i < graph->nodes[neighbor]->nreverse; i++)
                 {
-
+                    reverse_of_neighbor = graph->nodes[neighbor]->reverse[i]->src;
+                    distance = compute_distance(graph->nodes[id], graph->nodes[reverse_of_neighbor], graph->dim);
+                    pqueue_insert(queue, graph->nodes[reverse_of_neighbor], distance);
                 }
 
-                flag = 0;
+
+            }
+
+
+
+            // REVERSE NEIGHBORS
+            for (int rev = 0; rev < graph->nodes[id]->nreverse; rev++)
+            {
+                // reverse neighbor
+                reverse = graph->nodes[id]->reverse[rev]->src;
+                pqueue_insert(queue, graph->nodes[reverse], graph->nodes[id]->reverse[rev]->distance);
+
+
+                // neighbors of reverse neighbor
+                for (int i = 0; i < graph->neighbors; i++)
+                {
+                    neighbor_of_reverse = graph->nodes[reverse]->edges[i]->dest;
+                    distance = compute_distance(graph->nodes[id], graph->nodes[neighbor_of_reverse], graph->dim);
+                    pqueue_insert(queue, graph->nodes[neighbor_of_reverse], distance);
+                }
+
+
+                // reverse neighbors of reverse neighbor
+                for (int i = 0; i < graph->nodes[reverse]->nreverse; i++)
+                {
+                    reverse_of_reverse = graph->nodes[reverse]->reverse[i]->src;
+                    distance = compute_distance(graph->nodes[id], graph->nodes[reverse_of_reverse], graph->dim);
+                    pqueue_insert(queue, graph->nodes[reverse_of_reverse], distance);
+                }
+
+
             }
             
             //---------------------------------------//

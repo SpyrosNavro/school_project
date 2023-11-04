@@ -1,42 +1,30 @@
-MAKE += --silent
+CC = gcc
+CFLAGS = -Wall -Wextra -g
+LDFLAGS =
 
-PROGRAMS = 	$(subst data_structures/, , $(wildcard data_structures/*))
+# List the source files
+SRCS = nndescent.c graph.c pqueue.c
 
-all: data_structures tests
+# Derive object file names from source file names
+OBJS = $(SRCS:.c=.o)
 
-programs-%:
-	$(MAKE) -C data_structures/$*
+# List header files
+HEADERS = nndescent.h graph.h pqueue.h
 
-programs: $(addprefix data_structures-, $(PROGRAMS))
+# The executable name
+EXEC = nndescent
 
-tests:
-	$(MAKE) -C tests all
+# The main target
+all: $(EXEC)
 
-run: run-tests run-programs
+# Compile each .c file into a .o file
+%.o: %.c $(HEADERS)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-run-programs-%:
-	$(MAKE) -C data_structures/$* run
+# Link all the object files into the executable
+$(EXEC): $(OBJS)
+	$(CC) $(LDFLAGS) $^ -o $@
 
-run-programs: $(addprefix run-programs-, $(PROGRAMS))
-
-run-tests:
-	$(MAKE) -C tests run
-
-valgrind: valgrind-tests valgrind-programs
-
-valgrind-programs-%:
-	$(MAKE) -C data_structures/$* valgrind
-
-valgrind-programs: $(addprefix valgrind-programs-, $(PROGRAMS))
-
-valgrind-tests:
-	$(MAKE) -C tests valgrind
-
-clean-programs:
-	$(MAKE) -C data_structures/$* clean
-
-clean: $(addprefix clean-programs-, $(PROGRAMS))
-	$(MAKE) -C tests clean
-	$(MAKE) -C lib clean
-
-.PHONY: programs tests lib run run-programs run-tests clean
+# Clean command to remove generated files
+clean:
+	rm -f $(OBJS) $(EXEC)
