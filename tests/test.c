@@ -76,14 +76,10 @@ void test_import(void)
 void test_create(void)
 {
     int nedges = 2;
-<<<<<<< HEAD
-    Graph graph = createGraph(nedges, filename, vrows, column);
-=======
     int row = 9759;
     int column = 3;
 
     Graph graph = createGraph(nedges, "5k.txt", row, column);
->>>>>>> aabdbfb60fff254f678ec5d3817999932dc2d582
     TEST_ASSERT(graph != NULL);
     deleteGraph(graph);
 }
