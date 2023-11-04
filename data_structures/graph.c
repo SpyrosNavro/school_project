@@ -1,29 +1,5 @@
 #include "../header_files/graph.h"
 
-typedef struct graph* Graph;
-typedef struct node* Node;
-typedef struct edge* Edge;
-
-struct graph {
-    Node* nodes;
-    int dim, nnodes, neighbors;
-};
-
-// structure of nodes 
-struct node {
-    int id;    // id of point 
-    int* coord;  // coordinates of n-dimentional point
-    Edge* edges;
-    // reverse neighbors
-    // struct Node* next;  not useful for now
-};
-
-// structure of edge
-struct edge {
-    int src, dest;
-    float distance;
-};
-
 
 
 
@@ -94,7 +70,6 @@ int** import_data(const char *file_name, int vrows)
         printf("row %d:", i+1);
         for(int j=0; j < vcol; j++) {
             printf("%d \n",vector[i][j]);
-             
         }
     }
     */
@@ -118,6 +93,8 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
 {
     Graph graph = malloc(sizeof(*graph));
     graph->nodes = malloc ( row * sizeof(*(graph->nodes) ));  // allocate array of nodes
+    graph->checked = calloc(row, sizeof( *(graph->checked) ));
+    int dest;
 
     int** data = import_data(file_name, row);
     
@@ -125,27 +102,36 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
     graph->nnodes = row;
     graph->neighbors = nedges;
     
-    // initialise nodes 
+    // initialise NODES
     for (int id = 0; id < row; id++)
     { 
         graph->nodes[id] = malloc(sizeof( *(graph->nodes[id]) ));   // allocate node
         graph->nodes[id]->id = id;
+        graph->nodes[id]->reverse = malloc ( nedges * sizeof(*(graph->nodes[id]->reverse)) );  // allocate reverse neighbors
+        graph->nodes[id]->nreverse = 0;
+
+
+        graph->checked[id] = 0;
+        
         for (int j = 0; j < column; j++)
         {
             graph->nodes[id]->coord = (int*)malloc(column * sizeof( *(graph->nodes[id]->coord) ));
-            *(graph->nodes[id]->coord + j) = data[id][j];                   // put data in node
+            *(graph->nodes[id]->coord + j) = data[id][j];   // put data in node
             printf("id%d data: %d\n", id, data[id][j]);
         }
     }
 
+
+
+    // initialise EDGES
     for (int id = 0; id < row; id++)
     {
         // add directed edges to each node
         graph->nodes[id]->edges = malloc ( nedges * sizeof(*(graph->nodes[id]->edges)) );
+                
         for (int j = 0; j < nedges; j++)
         {
-            //Edge edge = malloc(sizeof(*edge));   // allocate edge
-            graph->nodes[id]->edges[j] = malloc(sizeof( *(graph->nodes[id]->edges[j]) ));
+            graph->nodes[id]->edges[j] = malloc(sizeof( *(graph->nodes[id]->edges[j]) ));  // allocate edge
             graph->nodes[id]->edges[j]->src = id;
 
             do 
@@ -153,13 +139,23 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
                 // rand in range [0, rows-1]
                 // rand() % (max_number + 1 - minimum_number) + minimum_number
                 graph->nodes[id]->edges[j]->dest = rand()%row; 
+
+                dest = graph->nodes[id]->edges[j]->dest;
             }
-            while ( (graph->nodes[id]->edges[j]->dest == id) || (graph->nodes[id]->edges[j]->dest < 0) || (graph->nodes[id]->edges[j]->dest >= graph->nnodes) );
+            while ( (dest == id) || (dest < 0) || (dest >= graph->nnodes) );
 
             // compute distance
             graph->nodes[id]->edges[j]->distance = compute_distance(graph->nodes[id], graph->nodes[graph->nodes[id]->edges[j]->dest], graph->dim);
+
+            // save reverse edge to destination
+            graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse] = graph->nodes[id]->edges[j];
+            graph->nodes[dest]->nreverse = graph->nodes[dest]->nreverse + 1;
             
-            printf("distance between %d and %d is %f\n", graph->nodes[id]->edges[j]->src, graph->nodes[id]->edges[j]->dest, graph->nodes[id]->edges[j]->distance);
+            // realloc array of reverse neighbors
+            if (graph->nodes[dest]->nreverse%nedges == 0) 
+            {
+                graph->nodes[dest]->reverse = realloc ( graph->nodes[dest]->reverse, 2*graph->nodes[dest]->nreverse*sizeof(Edge*) );
+            }
         }
     }
     return graph;
@@ -177,7 +173,6 @@ int deleteGraph(Graph graph)
         {
             free(graph->nodes[i]->edges[j]);
         }
-        printf("hola nino\n");
         free(graph->nodes[i]);
     }
 
