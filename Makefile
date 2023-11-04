@@ -1,30 +1,25 @@
+OBJS = graph.o pqueue.o nndescent.o
+OUT = main
 CC = gcc
-CFLAGS = -Wall -Wextra -g
-LDFLAGS =
+FLAGS = -g -c -Wall
 
-# List the source files
-SRCS = nndescent.c graph.c pqueue.c
+all : $(OBJS)
+	rm -f /tmp/*.out 
+	$(CC) -g -Wall -o $(OUT) $(OBJS)
 
-# Derive object file names from source file names
-OBJS = $(SRCS:.c=.o)
+graph.o : ./data_structures/graph.c
+	$(CC) $(FLAGS) ./data_structures/graph.c
 
-# List header files
-HEADERS = nndescent.h graph.h pqueue.h
+pqueue.o : ./data_structures/pqueue.c
+	$(CC) $(FLAGS) ./data_structures/pqueue.c
 
-# The executable name
-EXEC = nndescent
+nndescent.o : ./nndescent.c
+	$(CC) $(FLAGS) ./nndescent.c
 
-# The main target
-all: $(EXEC)
+valgrind: $(OUT)
+	rm -f /tmp/*.out 
+	valgrind --leak-check=full --show-leak-kinds=all  --track-origins=yes ./main
 
-# Compile each .c file into a .o file
-%.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Link all the object files into the executable
-$(EXEC): $(OBJS)
-	$(CC) $(LDFLAGS) $^ -o $@
-
-# Clean command to remove generated files
-clean:
-	rm -f $(OBJS) $(EXEC)
+clean :
+	rm -f /tmp/*.out 
+	rm -f $(OBJS) $(OUT)

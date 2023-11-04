@@ -11,7 +11,7 @@ int main(void)
     int row = 9759;
     int col = 3;
     int flag = 0;
-    int randomid;
+//    int randomid;
     float distance;
     int* point;
     int* start;
@@ -132,7 +132,7 @@ int main(void)
     // search for the k-nearest neighbors of given point
     do
     {
-        /* code */
+    /* code */
     } while (flag == 0);
     
     
