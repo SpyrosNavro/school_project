@@ -233,7 +233,7 @@ void test_extractMin(void)
 //-------------------------------------------------------//
 //-------------------------------------------------------//
 
-TEST_GRAPH = {
+TEST_LIST = {
     { "import_data", test_import },
     { "createGraph", test_create },
     { "deleteGraph", test_delete },
