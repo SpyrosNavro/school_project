@@ -182,7 +182,7 @@ int deleteGraph(Graph graph)
 
 
 
-/*
+
 
 // int main(void) 
 // {     
@@ -204,33 +204,6 @@ int deleteGraph(Graph graph)
 //     //     }
 //     // }
     
-<<<<<<< HEAD
-    if(vector !=NULL )
-    {
-        printf("Succesfully created the vector\n");
-
-        // delete vector 
-        for (int i=0; i< vrows; i++)
-        {
-            free(vector[i]);
-        }
-        free(vector);
-    }
-    else{
-        printf("Failed to create vector ");
-    }
-
-    graph = createGraph(nedges, filename, vrows, column);
-
-    if (deleteGraph(graph) == 1)
-    {
-        printf("delete was successful");
-    }
-
-    return 0;
-}
-*/
-=======
 //     if(vector !=NULL )
 //     {
 //         printf("Succesfully created the vector\n");
@@ -255,4 +228,3 @@ int deleteGraph(Graph graph)
 
 //     return 0;
 // }
->>>>>>> 9627d0482112a638e409deb8eb24937177b9c9b7
