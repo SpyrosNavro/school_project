@@ -184,26 +184,27 @@ int deleteGraph(Graph graph)
 
 /*
 
-int main(void) 
-{     
-    const char *filename = "5k.txt";
-    int vrows = 9759;
-    int column = 3;
-    int nedges = 2;
-    int** vector = import_data(filename, vrows);
-    Graph graph;
+// int main(void) 
+// {     
+//     const char *filename = "5k.txt";
+//     int vrows = 9759;
+//     int column = 3;
+//     int nedges = 2;
+//     int** vector = import_data(filename, vrows);
+//     Graph graph;
 
-    // for (int i =0; i< 3; i++)
-    // {
-    //     printf("row %d:\n", i);
+//     // for (int i =0; i< 3; i++)
+//     // {
+//     //     printf("row %d:\n", i);
 
-    //     for(int j=0; j < 3; j++) 
-    //     {
-    //         printf("%d \n", vector[i][j] );
+//     //     for(int j=0; j < 3; j++) 
+//     //     {
+//     //         printf("%d \n", vector[i][j] );
 
-    //     }
-    // }
+//     //     }
+//     // }
     
+<<<<<<< HEAD
     if(vector !=NULL )
     {
         printf("Succesfully created the vector\n");
@@ -229,3 +230,29 @@ int main(void)
     return 0;
 }
 */
+=======
+//     if(vector !=NULL )
+//     {
+//         printf("Succesfully created the vector\n");
+
+//         // delete vector 
+//         for (int i=0; i< vrows; i++)
+//         {
+//             free(vector[i]);
+//         }
+//         free(vector);
+//     }
+//     else{
+//         printf("Failed to create vector ");
+//     }
+
+//     graph = createGraph(nedges, filename, vrows, column);
+
+//     if (deleteGraph(graph) == 1)
+//     {
+//         printf("delete was successful");
+//     }
+
+//     return 0;
+// }
+>>>>>>> 9627d0482112a638e409deb8eb24937177b9c9b7

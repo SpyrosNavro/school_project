@@ -51,6 +51,7 @@ int main(void)
                 insertPQueue(queue[id], graph->nodes[neighbor], graph->nodes[id]->edges[neighbors]->distance);
                 insertPQueue(queue[neighbor], graph->nodes[id], graph->nodes[id]->edges[neighbors]->distance);
 
+
                 // neighbor of neighbor
                 for (int i = 0; i < graph->neighbors; i++)
                 {
@@ -113,7 +114,9 @@ int main(void)
 
     } while (flag == 0);
 
-//    randomid = rand()%row;
+    // free queue
+
+    //randomid = rand()%row;  // prob wrong
     flag = 1;
 
     start = malloc(graph->dim * sizeof(*start));

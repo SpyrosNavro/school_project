@@ -5,7 +5,11 @@ FLAGS = -g -c -Wall -lm
 
 all : $(OBJS)
 	rm -f /tmp/*.out 
+<<<<<<< HEAD
 	$(CC) -g -Wall -o $(OUT) $(OBJS) -lm
+=======
+	$(CC) -g -Wall -o -lm $(OBJS) $(OUT)
+>>>>>>> 9627d0482112a638e409deb8eb24937177b9c9b7
 
 graph.o : ./data_structures/graph.c 
 	$(CC) $(FLAGS) ./data_structures/graph.c 
