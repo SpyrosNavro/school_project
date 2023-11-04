@@ -165,7 +165,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
 
 
 
-int deleteGraph(Graph graph)
+void deleteGraph(Graph graph)
 {   
     for (int i = 0; i < graph->nnodes - 1; i++)
     {
@@ -177,7 +177,6 @@ int deleteGraph(Graph graph)
     }
 
     free(graph);
-    return 1;
 }
 
 

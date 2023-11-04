@@ -60,12 +60,10 @@ void test_delete(void)
     int nedges = 2;
     int row = 9759;
     int column = 3;
-    int result;
 
     Graph graph = createGraph(nedges, "5k.txt", row, column);
-    TEST_ASSERT(graph != NULL);
-    result = deleteGraph(graph);
-    TEST_ASSERT(graph == 1);
+    deleteGraph(graph);
+    TEST_ASSERT(graph == NULL);
 }
 
 
