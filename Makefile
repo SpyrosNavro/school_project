@@ -5,7 +5,7 @@ FLAGS = -g -c -Wall
 
 all : $(OBJS)
 	rm -f /tmp/*.out 
-	$(CC) -g -Wall -o $(OUT) $(OBJS)
+	$(CC) -g -Wall -o -lm $(OBJS) $(OUT)
 
 graph.o : ./data_structures/graph.c
 	$(CC) $(FLAGS) ./data_structures/graph.c

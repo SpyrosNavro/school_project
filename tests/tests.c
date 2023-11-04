@@ -1,12 +1,81 @@
-#include "acutest.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include "pqueue.h"
-#include "graph.h"
+#include "tests.h"
 
 
-void test_createPQueue(){
+
+void test_compute (void)
+{
+    Node a;
+    Node b;
+    int dim = 2;
+    float result;
+    
+    // allocate nodes
+    a = malloc(sizeof(*a));
+    b = malloc(sizeof(*b));
+
+    // allocate array of coordinates
+    a->coord = (int*)malloc(dim * sizeof( *(a->coord) ));
+    b->coord = (int*)malloc(dim * sizeof( *(b->coord) ));
+
+    // random coordinates
+    a->coord[0] = 3;
+    a->coord[1] = 7;
+
+    b->coord[0] = 12;
+    b->coord[1] = 8;
+
+    result = compute_distance(a, b, dim);
+
+    // distance of points a and b is about 9.05
+    TEST_ASSERT(result == 9.05);
+}
+
+
+
+void test_import(void) 
+{
+    int row = 9759;
+    int** array = import_data("5k.txt", row);
+
+    TEST_ASSERT(array != NULL);
+}
+
+
+
+void test_create(void)
+{
+    int nedges = 2;
+    int row = 9759;
+    int column = 3;
+
+    Graph graph = createGraph(nedges, "5k.txt", row, column);
+    TEST_ASSERT(graph != NULL);
+    deleteGraph(graph);
+}
+
+
+
+void test_delete(void)
+{
+    int nedges = 2;
+    int row = 9759;
+    int column = 3;
+    int result;
+
+    Graph graph = createGraph(nedges, "5k.txt", row, column);
+    TEST_ASSERT(graph != NULL);
+    result = deleteGraph(graph);
+    TEST_ASSERT(graph == 1);
+}
+
+
+//-------------------------------------------------------//
+//---------------------PRIORITY QUEUE--------------------//
+//-------------------------------------------------------//
+
+
+void test_createPQueue(void)
+{
     struct PQueue* pqueue = createPQueue(7);
     TEST_ASSERT(pqueue->capacity==7);
     TEST_ASSERT(pqueue !=NULL);
@@ -15,7 +84,10 @@ void test_createPQueue(){
     destroyPQueue(pqueue);
 }
 
-void test_insertPQueue(){
+
+
+void test_insertPQueue(void)
+{
     struct PQueue* pqueue = createPQueue(10);
     Node mynode,mynode2,mynode3,mynode4,mynode5,mynode6, mynode7, mynode8,mynode9 ;
 
@@ -82,7 +154,10 @@ void test_insertPQueue(){
     destroyPQueue(pqueue);
 }
 
-void test_extractMin(){
+
+
+void test_extractMin(void)
+{
     struct PQueue* pqueue = createPQueue(10);
     Node mynode,mynode2,mynode3,mynode4,mynode5,mynode6, mynode7, mynode8,mynode9 ;
 
@@ -149,18 +224,24 @@ void test_extractMin(){
     free(mynode8);
     free(mynode9);
     
-
-
     
-
     destroyPQueue(pqueue);
 
     //return 0;
 }
 
-TEST_LIST = {
-    { "createPQueue", test_createPQueue },
-    { "insert", test_insert },
-    { "extractMin", test_extractMin },
+
+//-------------------------------------------------------//
+//-------------------------------------------------------//
+//-------------------------------------------------------//
+
+TEST_GRAPH = {
+    { "import_data", test_import },
+    { "createGraph", test_create },
+    { "deleteGraph", test_delete },
+    { "compute_distance", test_compute},
+    { "createPQueue", test_createPQueue},
+    { "insertPQueue", test_insertPQueue},
+    { "extractMin", test_extractMin},
     { NULL, NULL }
 };
