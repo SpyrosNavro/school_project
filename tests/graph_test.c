@@ -16,7 +16,7 @@ void test_import(void)
 void test_create(void)
 {
     int nedges = 2;
-    Graph graph = createGraph(nedges, file_name, row, column);
+    Graph graph = createGraph(nedges, filename, vrows, column);
     TEST_ASSERT(graph != NULL);
     deleteGraph(graph);
 }
