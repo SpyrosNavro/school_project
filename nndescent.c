@@ -1,5 +1,5 @@
-#include "graph.h"
-#include "pqueue.h"
+#include "header_files/graph.h"
+#include "header_files/pqueue.h"
 
 typedef struct PQueue* PQ;
 
@@ -50,6 +50,7 @@ int main(void)
                 neighbor = graph->nodes[id]->edges[neighbors]->dest;
                 insertPQueue(queue[id], graph->nodes[neighbor], graph->nodes[id]->edges[neighbors]->distance);
                 insertPQueue(queue[neighbor], graph->nodes[id], graph->nodes[id]->edges[neighbors]->distance);
+
 
                 // neighbor of neighbor
                 for (int i = 0; i < graph->neighbors; i++)
@@ -113,7 +114,9 @@ int main(void)
 
     } while (flag == 0);
 
-    randomid = rand()%row;
+    // free queue
+
+    //randomid = rand()%row;  // prob wrong
     flag = 1;
 
     start = malloc(graph->dim * sizeof(*start));

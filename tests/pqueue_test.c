@@ -160,7 +160,7 @@ void test_extractMin(){
 
 TEST_LIST = {
     { "createPQueue", test_createPQueue },
-    { "insert", test_insertPQueue },
+    { "insert", test_insert },
     { "extractMin", test_extractMin },
     { NULL, NULL }
 };
