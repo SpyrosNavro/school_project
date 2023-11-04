@@ -1,5 +1,5 @@
-#include "graph.h"
-#include "pqueue.h"
+#include "header_files/graph.h"
+#include "header_files/pqueue.h"
 
 typedef struct PQueue* PQ;
 
@@ -11,7 +11,7 @@ int main(void)
     int row = 9759;
     int col = 3;
     int flag = 0;
-    int randomid;
+//    int randomid;
     float distance;
     int* point;
     int* start;
@@ -113,7 +113,7 @@ int main(void)
 
     } while (flag == 0);
 
-    randomid = rand()%row;
+//    randomid = rand()%row;
     flag = 1;
 
     start = malloc(graph->dim * sizeof(*start));
@@ -129,7 +129,7 @@ int main(void)
     // search for the k-nearest neighbors of given point
     do
     {
-        /* code */
+    /* code */
     } while (flag == 0);
     
     

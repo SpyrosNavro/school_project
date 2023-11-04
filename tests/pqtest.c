@@ -15,7 +15,7 @@ void test_createPQueue(){
     destroyPQueue(pqueue);
 }
 
-void test_insert(){
+void test_insertPQueue(){
     struct PQueue* pqueue = createPQueue(10);
     Node mynode,mynode2,mynode3,mynode4,mynode5,mynode6, mynode7, mynode8,mynode9 ;
 
