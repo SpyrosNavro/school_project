@@ -7,7 +7,7 @@ TESTS = ./tests/
 
 all : $(OBJS)
 	rm -f /tmp/*.out 
-	$(CC) -g -Wall -o -lm $(OBJS) $(OUT)
+	$(CC) -g -Wall -o $(OUT) $(OBJS) -lm
 
 graph.o : $(FILES)graph.c 
 	$(CC) $(FLAGS) $(FILES)graph.c 

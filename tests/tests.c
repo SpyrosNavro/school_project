@@ -87,21 +87,20 @@ void test_createPQueue(void)
 void test_insertPQueue(void)
 {
     struct PQueue* pqueue = createPQueue(10);
+    TEST_ASSERT(pqueue->capacity==7);
+    TEST_ASSERT(pqueue !=NULL);
+    TEST_ASSERT(pqueue->size==0);
     Node mynode,mynode2,mynode3,mynode4,mynode5,mynode6, mynode7, mynode8,mynode9 ;
 
     //coord=NULL, edges=NULL;
     mynode = malloc(sizeof(Node));
-    if (mynode == NULL){
-        printf("could not allocate memory for node"); 
-        return 1; 
-    }
+    TEST_ASSERT(mynode !=NULL);
+
     mynode->id=1;
     
     mynode2 = malloc(sizeof(Node));
-    if (mynode2 == NULL){
-        printf("could not allocate memory for node"); 
-        return 1; 
-    }
+    TEST_ASSERT(mynode !=NULL);
+
     mynode2->id=2;
 
     mynode3 = malloc(sizeof(Node));
@@ -125,15 +124,34 @@ void test_insertPQueue(void)
     mynode9 = malloc(sizeof(Node));
     mynode9->id=9;
 
+    
     insertPQueue(pqueue, mynode,23);
+    TEST_ASSERT(pqueue->size==1);
+
     insertPQueue(pqueue, mynode2,15);
+    TEST_ASSERT(pqueue->size==2);
+
     insertPQueue(pqueue, mynode3,678);
+    TEST_ASSERT(pqueue->size==3);
+
     insertPQueue(pqueue, mynode4,12);
+    TEST_ASSERT(pqueue->size==4);
+
     insertPQueue(pqueue, mynode5,35);
+    TEST_ASSERT(pqueue->size==5);
+
     insertPQueue(pqueue, mynode6,1278);
+    TEST_ASSERT(pqueue->size==6);
+
     insertPQueue(pqueue, mynode7,98.56);
+    TEST_ASSERT(pqueue->size==7);
+
     insertPQueue(pqueue, mynode8,34987.4);
+    TEST_ASSERT(pqueue->size==8);
+
     insertPQueue(pqueue, mynode9,7899.99);
+    TEST_ASSERT(pqueue->size==9);
+
 
 
     //printf("size of the queue is:%d\n",pqueue->size);
@@ -157,20 +175,23 @@ void test_insertPQueue(void)
 void test_extractMin(void)
 {
     struct PQueue* pqueue = createPQueue(10);
+    TEST_ASSERT(pqueue->capacity==7);
+    TEST_ASSERT(pqueue !=NULL);
+    TEST_ASSERT(pqueue->size==0);
     Node mynode,mynode2,mynode3,mynode4,mynode5,mynode6, mynode7, mynode8,mynode9 ;
 
     //coord=NULL, edges=NULL;
     mynode = malloc(sizeof(Node));
     if (mynode == NULL){
         printf("could not allocate memory for node"); 
-        return 1; 
+        //return 1; 
     }
     mynode->id=1;
     
     mynode2 = malloc(sizeof(Node));
     if (mynode2 == NULL){
         printf("could not allocate memory for node"); 
-        return 1; 
+        //return 1; 
     }
     mynode2->id=2;
 
@@ -196,21 +217,43 @@ void test_extractMin(void)
     mynode9->id=9;
 
     insertPQueue(pqueue, mynode,23);
+    TEST_ASSERT(pqueue->size==1);
+
     insertPQueue(pqueue, mynode2,15);
+    TEST_ASSERT(pqueue->size==2);
+
     insertPQueue(pqueue, mynode3,678);
+    TEST_ASSERT(pqueue->size==3);
+
     insertPQueue(pqueue, mynode4,12);
+    TEST_ASSERT(pqueue->size==4);
+
     insertPQueue(pqueue, mynode5,35);
+    TEST_ASSERT(pqueue->size==5);
+
     insertPQueue(pqueue, mynode6,1278);
+    TEST_ASSERT(pqueue->size==6);
+
     insertPQueue(pqueue, mynode7,98.56);
+    TEST_ASSERT(pqueue->size==7);
+
     insertPQueue(pqueue, mynode8,34987.4);
+    TEST_ASSERT(pqueue->size==8);
+
     insertPQueue(pqueue, mynode9,7899.99);
+    TEST_ASSERT(pqueue->size==9);
 
     printf("the items of the priority queue are the following: "); 
-    
+    struct checking min= extractMin(pqueue);
+ 
+
     while(!(isEmpty(pqueue))){
-        struct checking min= extractMin(pqueue);
+        min= extractMin(pqueue);
         printf("value with the smallest distance removed and has the value: %f\n", min.distance);
+        
     }
+    
+    TEST_ASSERT(pqueue->size==0);
 
     free(mynode);
     free(mynode2);
