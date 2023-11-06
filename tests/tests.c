@@ -31,7 +31,6 @@ void test_compute (void)
 }
 
 
-
 void test_import(void) 
 {
     int row = 9759;
@@ -40,6 +39,13 @@ void test_import(void)
     TEST_ASSERT(array != NULL);
 }
 
+void test_importBinarydata(void) 
+{
+    int row = 9759;
+    int** array = import_data("5k.txt", row);
+
+    TEST_ASSERT(array != NULL);
+}
 
 
 void test_create(void)
@@ -271,6 +277,102 @@ void test_extractMin(void)
     //return 0;
 }
 
+void test_searchPQueue(){
+    struct PQueue* pqueue = createPQueue(10);
+    TEST_ASSERT(pqueue->capacity==7);
+    TEST_ASSERT(pqueue !=NULL);
+    TEST_ASSERT(pqueue->size==0);
+    Node mynode,mynode2,mynode3,mynode4,mynode5,mynode6, mynode7, mynode8,mynode9,notexisting ;
+
+    //coord=NULL, edges=NULL;
+    mynode = malloc(sizeof(Node));
+    if (mynode == NULL){
+        printf("could not allocate memory for node"); 
+        //return 1; 
+    }
+    mynode->id=1;
+    
+    mynode2 = malloc(sizeof(Node));
+    if (mynode2 == NULL){
+        printf("could not allocate memory for node"); 
+        //return 1; 
+    }
+    mynode2->id=2;
+
+    mynode3 = malloc(sizeof(Node));
+    mynode3->id=3;
+
+    mynode4 = malloc(sizeof(Node));
+    mynode4->id=4;
+
+    mynode5 = malloc(sizeof(Node));
+    mynode5->id=5;
+
+    mynode6 = malloc(sizeof(Node));
+    mynode6->id=6;
+
+    mynode7 = malloc(sizeof(Node));
+    mynode7->id=7;
+
+    mynode8 = malloc(sizeof(Node));
+    mynode8->id=8;
+
+    mynode9 = malloc(sizeof(Node));
+    mynode9->id=9;
+
+    insertPQueue(pqueue, mynode,23);
+    TEST_ASSERT(pqueue->size==1);
+
+    insertPQueue(pqueue, mynode2,15);
+    TEST_ASSERT(pqueue->size==2);
+
+    insertPQueue(pqueue, mynode3,678);
+    TEST_ASSERT(pqueue->size==3);
+
+    insertPQueue(pqueue, mynode4,12);
+    TEST_ASSERT(pqueue->size==4);
+
+    insertPQueue(pqueue, mynode5,35);
+    TEST_ASSERT(pqueue->size==5);
+
+    insertPQueue(pqueue, mynode6,1278);
+    TEST_ASSERT(pqueue->size==6);
+
+    insertPQueue(pqueue, mynode7,98.56);
+    TEST_ASSERT(pqueue->size==7);
+
+    insertPQueue(pqueue, mynode8,34987.4);
+    TEST_ASSERT(pqueue->size==8);
+
+    insertPQueue(pqueue, mynode9,7899.99);
+    TEST_ASSERT(pqueue->size==9);
+
+    notexisting= malloc(sizeof(Node));
+    notexisting->id=20;
+    notexisting->coord=NULL;
+    notexisting->edges=NULL;
+  
+    int i= searchPQueue(pqueue,notexisting);
+    TEST_ASSERT(i==1);
+
+    free(mynode);
+    free(mynode2);
+    free(mynode3);
+    free(mynode4);
+    free(mynode5);
+    free(mynode6);
+    free(mynode7);
+    free(mynode8);
+    free(mynode9);
+    free(notexisting);
+    
+    
+    destroyPQueue(pqueue);
+
+
+
+}
+
 
 //-------------------------------------------------------//
 //-------------------------------------------------------//
@@ -284,5 +386,6 @@ TEST_LIST = {
     { "createPQueue", test_createPQueue},
     { "insertPQueue", test_insertPQueue},
     { "extractMin", test_extractMin},
+    { "searchPQueue", test_searchPQueue},
     { NULL, NULL }
 };

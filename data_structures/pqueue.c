@@ -104,6 +104,19 @@ struct checking extractMin(struct PQueue* pqueue){
     return min;
 }
 
+// search returns 0 if the node belongs in the queue, and 1 if if not 
+int searchPQueue(struct PQueue* pqueue, Node node){
+    for (int i=0; i<pqueue->size; i++){
+        
+        if(node->id == pqueue->array[i].node->id){
+            printf("id=%d\n",pqueue->array[i].node->id);
+            return 0;
+        }
+    }
+    return 1;
+}
+ 
+
 int isEmpty(struct PQueue* pqueue){
     printf("pqueue->size=%d\n",pqueue->size);
     return (pqueue->size == 0);
@@ -115,4 +128,3 @@ void destroyPQueue(struct PQueue* pqueue){
     free(pqueue->array);
     free(pqueue);
 }
-

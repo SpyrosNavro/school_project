@@ -24,7 +24,7 @@ struct PQueue{
 struct PQueue* createPQueue(int capacity);
 void insertPQueue(struct PQueue* pqueue, Node node, float distance);
 void destroyPQueue(struct PQueue* pqueue);
-
+int searchPQueue(struct PQueue* pqueue, Node node);
 
 void swap(struct checking* a, struct checking* b);
 void heapify(struct PQueue* pqueue, int root);
