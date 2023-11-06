@@ -108,6 +108,9 @@ int main(void)
             {
                 // reverse neighbor
                 reverse = graph->nodes[id]->reverse[rev]->src;
+                printf("id=%d\n",id);
+                printf("resverse=%d\n",id);
+
                 insertPQueue(queue[id], graph->nodes[reverse], graph->nodes[id]->reverse[rev]->distance);
                 insertPQueue(queue[reverse], graph->nodes[id], graph->nodes[id]->reverse[rev]->distance);
 
