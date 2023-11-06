@@ -73,6 +73,9 @@ int main(void)
                 for (int i = 0; i < graph->neighbors; i++)
                 {
                     neighbor_of_neighbor = graph->nodes[neighbor]->edges[i]->dest;
+                    
+                    if (id == neighbor_of_neighbor) continue;
+
                     distance = compute_distance(graph->nodes[id], graph->nodes[neighbor_of_neighbor], graph->dim);
                     printf(" NEIGBORS id =%d\n", graph->nodes[neighbor_of_neighbor]->id);
                     printf("distance %f\n", distance);
@@ -87,6 +90,9 @@ int main(void)
                 for (int i = 0; i < graph->nodes[neighbor]->nreverse; i++)
                 {
                     reverse_of_neighbor = graph->nodes[neighbor]->reverse[i]->src;
+
+                    if (id == reverse_of_neighbor) continue;
+
                     distance = compute_distance(graph->nodes[id], graph->nodes[reverse_of_neighbor], graph->dim);
                     insertPQueue(queue[id], graph->nodes[reverse_of_neighbor], distance);
                     insertPQueue(queue[reverse_of_neighbor], graph->nodes[id], distance);
@@ -110,6 +116,9 @@ int main(void)
                 for (int i = 0; i < graph->neighbors; i++)
                 {
                     neighbor_of_reverse = graph->nodes[reverse]->edges[i]->dest;
+
+                    if (id == neighbor_of_reverse) continue;
+
                     distance = compute_distance(graph->nodes[id], graph->nodes[neighbor_of_reverse], graph->dim);
                     insertPQueue(queue[id], graph->nodes[neighbor_of_reverse], distance);
                     insertPQueue(queue[neighbor_of_reverse], graph->nodes[id], distance);
@@ -120,6 +129,9 @@ int main(void)
                 for (int i = 0; i < graph->nodes[reverse]->nreverse; i++)
                 {
                     reverse_of_reverse = graph->nodes[reverse]->reverse[i]->src;
+
+                    if (id == reverse_of_reverse) continue;
+
                     distance = compute_distance(graph->nodes[id], graph->nodes[reverse_of_reverse], graph->dim);
                     insertPQueue(queue[id], graph->nodes[reverse_of_reverse], distance);
                     insertPQueue(queue[reverse_of_reverse], graph->nodes[id], distance);
@@ -202,7 +214,7 @@ int main(void)
             {
                 for (int i = 0; i < nedges; i++)
                 {
-                    printf("old:%d new:%d\n", graph->nodes[id]->edges[i]->dest, new_edges[i]->node->id);
+                    printf("old:%d new:%d old distance:%f new distance:%f\n", graph->nodes[id]->edges[i]->dest, new_edges[i]->node->id, graph->nodes[id]->edges[i]->distance, new_edges[i]->distance);
                     
                     graph->nodes[id]->edges[i]->src = graph->nodes[id]->id;
                     graph->nodes[id]->edges[i]->dest = new_edges[i]->node->id;
