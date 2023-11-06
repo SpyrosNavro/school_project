@@ -61,7 +61,7 @@ int main(void)
             for (int neighbors = 0; neighbors < graph->neighbors; neighbors++)
             {
                 // neighbor
-                printf(" MY ID =%d\n", id);
+                //printf(" MY ID =%d\n", id);
 
                 //printf(" TOTAL number of neighbors =%d\n", graph->neighbors);
                 neighbor = graph->nodes[id]->edges[neighbors]->dest;
@@ -214,7 +214,7 @@ int main(void)
         {
             for (int i = 0; i < nedges; i++)
             {
-                printf("ID%d OLD DEST%d\n", id, graph->nodes[id]->edges[i]->dest);
+                //printf("ID%d OLD DEST%d\n", id, graph->nodes[id]->edges[i]->dest);
             }
             
         }
@@ -227,12 +227,12 @@ int main(void)
             {
                 new_edges[i] = extractMin(queue[id]);
                 //new_edges[i] = &temp;
-                printf("EXTRACT MIN id%d => %d distance:%f\n", id, new_edges[i].node->id, new_edges[i].distance);
+               // printf("EXTRACT MIN id%d => %d distance:%f\n", id, new_edges[i].node->id, new_edges[i].distance);
             }
 
             for(int i = 0; i < nedges; i++)
             {
-                printf("EXTRACT MIN id%d => %d distance:%f\n", id, new_edges[i].node->id, new_edges[i].distance);
+                //printf("EXTRACT MIN id%d => %d distance:%f\n", id, new_edges[i].node->id, new_edges[i].distance);
             }
             printf("\n\n\n");
 
@@ -242,14 +242,14 @@ int main(void)
             for (int i = 0; i < nedges; i++)
             {
                 old_dest = graph->nodes[id]->edges[i]->dest;
-                printf("i:%d old dest: %d\n",i, old_dest);
+                //printf("i:%d old dest: %d\n",i, old_dest);
 
                 for (int j = 0; j < nedges; j++)
                 {
 
                     new_dest = new_edges[j].node->id;
 
-                    printf("id%d => edge%d %d distance:%f\n", id, j, new_dest, new_edges[j].distance);
+                    //printf("id%d => edge%d %d distance:%f\n", id, j, new_dest, new_edges[j].distance);
                     
                     // 1 edge has stayed the same
                     if (old_dest == new_dest)
@@ -325,7 +325,7 @@ int main(void)
     {
         for (int i = 0; i < nedges; i++)
         {
-            printf("FINAL\nid %d => %d\n", graph->nodes[id]->id, graph->nodes[id]->edges[i]->dest);
+            //printf("FINAL\nid %d => %d\n", graph->nodes[id]->id, graph->nodes[id]->edges[i]->dest);
         }
     }
 

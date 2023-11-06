@@ -238,7 +238,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
             }
             while ( (dest == id) || (dest < 0) || (dest >= graph->nnodes) );
 
-            printf("%d => %d\n", id, dest);
+            //printf("%d => %d\n", id, dest);
             // compute distance
             graph->nodes[id]->edges[j]->distance = compute_distance(graph->nodes[id], graph->nodes[graph->nodes[id]->edges[j]->dest], graph->dim);
 
