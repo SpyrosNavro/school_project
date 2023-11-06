@@ -61,6 +61,9 @@ int main(void)
             for (int neighbors = 0; neighbors < graph->neighbors; neighbors++)
             {
                 // neighbor
+                printf(" MY ID =%d\n", id);
+
+                //printf(" TOTAL number of neighbors =%d\n", graph->neighbors);
                 neighbor = graph->nodes[id]->edges[neighbors]->dest;
                 
 
@@ -313,6 +316,7 @@ int main(void)
             }
         
         }
+        
 
     } while (flag == 0);
 

@@ -100,7 +100,6 @@ struct checking extractMin(struct PQueue* pqueue){
     heapify(pqueue, 0);               // then the heapify puts it in the right position
     
                   
-
     return min;
 }
 
@@ -118,7 +117,6 @@ int searchPQueue(struct PQueue* pqueue, Node node){
  
 
 int isEmpty(struct PQueue* pqueue){
-    printf("pqueue->size=%d\n",pqueue->size);
     return (pqueue->size == 0);
 
 }
