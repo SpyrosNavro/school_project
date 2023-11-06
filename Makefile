@@ -21,6 +21,9 @@ pqueue.o : $(FILES)pqueue.c
 tests.o : $(TESTS)tests.c  
 	$(CC) $(FLAGS) $(TESTS)tests.c 
 
+run :
+	./main 
+
 valgrind: $(OUT)
 	rm -f /tmp/*.out 
 	valgrind --leak-check=full --show-leak-kinds=all  --track-origins=yes ./main
