@@ -19,9 +19,9 @@ struct graph {
 struct node {
     int id;    // id of point 
     int nreverse;
-    int* coord;  // coordinates of n-dimentional point
     Edge* edges;
     Edge* reverse;
+    int* coord;  // coordinates of n-dimentional point
 };
 
 // structure of edge
