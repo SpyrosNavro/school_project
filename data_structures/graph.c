@@ -85,6 +85,81 @@ int** import_data(const char *file_name, int vrows)
    return vector; 
 }
 
+int** import_Binarydata(const char *file_name)
+{   
+    FILE* pointer;
+    int** vector = NULL; // dynamilly allocated array (vector of vectors )
+    int vcol=100;
+    int vrows;
+     
+    pointer = fopen(file_name, "rb");  // reading the file 
+    if (pointer == NULL) 
+    {
+        printf("no file was found.");
+        return NULL;
+    }     
+    // how many rows are there 
+
+    vector = (int**) malloc(vrows*sizeof(int* )); // 2dimensional 
+    
+    if (vector == NULL){
+        printf("error allocating memory for the vector");
+        fclose(pointer);
+        return NULL;
+    }
+    
+    for (int i =0; i< vrows; i++){
+        vector[i] = (int *)malloc(vcol * sizeof(int));  // 2D array , allocate memory for 3 elements of every row 
+        
+        if (vector[i] == NULL){
+            printf("memory allocation error");
+            free(vector);
+            fclose(pointer);
+             
+        }
+
+    }
+
+    // save the elements of the file inside the vector (every row has three columns - its coordinates )
+    
+    for(int i=0; i<vrows; i++){
+        for(int j=0; j<vcol; j++){
+            float item; 
+            size_t items_read = fread(&item, sizeof(item),1,pointer);
+
+            if(items_read == 1 ){
+                vector[i][j]=item;
+            }
+            else {
+                printf("could not read from the file");
+                return 1; 
+            }
+        }
+
+    }
+    
+
+    // printing coordinates  
+    
+    for (int i =0; i< 3; i++){
+        printf("row %d:", i+1);
+        for(int j=0; j < vcol; j++) {
+            printf("%d \n",vector[i][j]);
+        }
+    }
+    
+
+    // freeing the memory of the vector 
+    // for (int i=0; i< vrows; i++){
+    //     free(vector[i]);
+
+    // }
+    // free(vector);
+    fclose(pointer);
+   
+   return vector; 
+}
+
 
 
 
@@ -181,49 +256,37 @@ void deleteGraph(Graph graph)
 
 
 
+ int main(void){     
+    const char *filename = "secondfile.bin";
+    int vrows = 9759;
+    int column = 100;
+    int nedges = 2;
+    int** vector = import_Binarydata(filename); 
+  
 
+    for (int i =0; i< 3; i++){
+        printf("row %d:\n", i);
 
-// int main(void) 
-// {     
-//     const char *filename = "5k.txt";
-//     int vrows = 9759;
-//     int column = 3;
-//     int nedges = 2;
-//     int** vector = import_data(filename, vrows);
-//     Graph graph;
+        for(int j=0; j < 3; j++){
+            printf("%d \n", vector[i][j] );
 
-//     // for (int i =0; i< 3; i++)
-//     // {
-//     //     printf("row %d:\n", i);
-
-//     //     for(int j=0; j < 3; j++) 
-//     //     {
-//     //         printf("%d \n", vector[i][j] );
-
-//     //     }
-//     // }
+        }
+    }
     
-//     if(vector !=NULL )
-//     {
-//         printf("Succesfully created the vector\n");
+     if(vector !=NULL )
+     {
+        printf("Succesfully created the vector\n");
 
-//         // delete vector 
-//         for (int i=0; i< vrows; i++)
-//         {
-//             free(vector[i]);
-//         }
-//         free(vector);
-//     }
-//     else{
-//         printf("Failed to create vector ");
-//     }
+        // delete vector 
+        for (int i=0; i< vrows; i++)
+         {
+            free(vector[i]);
+        }
+         free(vector);
+     }
+     else{
+         printf("Failed to create vector ");
+     }
 
-//     graph = createGraph(nedges, filename, vrows, column);
-
-//     if (deleteGraph(graph) == 1)
-//     {
-//         printf("delete was successful");
-//     }
-
-//     return 0;
-// }
+    return 0;
+ }
