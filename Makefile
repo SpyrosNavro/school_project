@@ -2,7 +2,7 @@ OBJS = graph.o pqueue.o nndescent.o
 #tests.o
 OUT = main
 CC = gcc
-FLAGS = -g -c -Wall -lm
+FLAGS = -g -c -Wall -lm -Wextra
 FILES = ./data_structures/
 TESTS = ./tests/
 

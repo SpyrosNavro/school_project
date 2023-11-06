@@ -63,11 +63,11 @@ int main(void)
                 // neighbor
                 printf(" MY ID =%d\n", id);
 
-                printf(" TOTAL number of neighbors =%d\n", graph->neighbors);
+                //printf(" TOTAL number of neighbors =%d\n", graph->neighbors);
                 neighbor = graph->nodes[id]->edges[neighbors]->dest;
                 insertPQueue(queue[id], graph->nodes[neighbor], graph->nodes[id]->edges[neighbors]->distance);
                 insertPQueue(queue[neighbor], graph->nodes[id], graph->nodes[id]->edges[neighbors]->distance);
-                printf( "node[id]:%d dest:%d distance:%f\n", graph->nodes[id]->id, graph->nodes[neighbor]->id, graph->nodes[id]->edges[neighbors]->distance);
+                //printf( "node[id]:%d dest:%d distance:%f\n", graph->nodes[id]->id, graph->nodes[neighbor]->id, graph->nodes[id]->edges[neighbors]->distance);
 
                 // neighbor of neighbor
                 for (int i = 0; i < graph->neighbors; i++)
