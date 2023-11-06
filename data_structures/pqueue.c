@@ -22,7 +22,7 @@ struct PQueue* createPQueue(int capacity){
     pqueue->size= 0;
     pqueue->array= (struct checking* )malloc(capacity* sizeof(struct checking));
 
-    printf("created a pqueue with capacity= %d\n", pqueue->capacity);
+    //printf("created a pqueue with capacity= %d\n", pqueue->capacity);
     return pqueue; 
 }
 

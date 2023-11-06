@@ -1,4 +1,5 @@
-OBJS = graph.o pqueue.o nndescent.o tests.o
+OBJS = graph.o pqueue.o nndescent.o
+#tests.o
 OUT = main
 CC = gcc
 FLAGS = -g -c -Wall -lm
@@ -18,8 +19,8 @@ pqueue.o : $(FILES)pqueue.c
 nndescent.o : ./nndescent.c 
 	$(CC) $(FLAGS) ./nndescent.c
 
-tests.o : $(TESTS)tests.c  
-	$(CC) $(FLAGS) $(TESTS)tests.c 
+#tests.o : $(TESTS)tests.c  
+#	$(CC) $(FLAGS) $(TESTS)tests.c 
 
 valgrind: $(OUT)
 	rm -f /tmp/*.out 
@@ -28,3 +29,4 @@ valgrind: $(OUT)
 clean :
 	rm -f /tmp/*.out 
 	rm -f $(OBJS) $(OUT)
+	clear

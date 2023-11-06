@@ -58,7 +58,7 @@ int** import_data(const char *file_name, int vrows)
         int indicator=0;
         
             if (fscanf(pointer, "%d %d %d %d", &indicator, &vector[i][j], &vector[i][j+1], &vector[i][j+2]) != vcol+1) {
-                printf("Error reading the coordinates");
+                printf("Error reading the coordinates\n");
             }
 
         
@@ -117,7 +117,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
         {
             graph->nodes[id]->coord = (int*)malloc(column * sizeof( *(graph->nodes[id]->coord) ));
             *(graph->nodes[id]->coord + j) = data[id][j];   // put data in node
-            printf("id%d data: %d\n", id, data[id][j]);
+            //printf("id%d data: %d\n", id, data[id][j]);
         }
     }
 
@@ -219,11 +219,6 @@ void deleteGraph(Graph graph)
 //     }
 
 //     graph = createGraph(nedges, filename, vrows, column);
-
-//     if (deleteGraph(graph) == 1)
-//     {
-//         printf("delete was successful");
-//     }
 
 //     return 0;
 // }
