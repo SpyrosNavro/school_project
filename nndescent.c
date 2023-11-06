@@ -61,6 +61,9 @@ int main(void)
             for (int neighbors = 0; neighbors < graph->neighbors; neighbors++)
             {
                 // neighbor
+                printf(" MY ID =%d\n", id);
+
+                printf(" TOTAL number of neighbors =%d\n", graph->neighbors);
                 neighbor = graph->nodes[id]->edges[neighbors]->dest;
                 insertPQueue(queue[id], graph->nodes[neighbor], graph->nodes[id]->edges[neighbors]->distance);
                 insertPQueue(queue[neighbor], graph->nodes[id], graph->nodes[id]->edges[neighbors]->distance);
@@ -71,7 +74,7 @@ int main(void)
                 {
                     neighbor_of_neighbor = graph->nodes[neighbor]->edges[i]->dest;
                     distance = compute_distance(graph->nodes[id], graph->nodes[neighbor_of_neighbor], graph->dim);
-                    printf("%d\n", graph->nodes[neighbor_of_neighbor]->id);
+                    printf(" NEIGBORS id =%d\n", graph->nodes[neighbor_of_neighbor]->id);
                     printf("distance %f\n", distance);
                     insertPQueue(queue[id], graph->nodes[neighbor_of_neighbor], distance);
                     insertPQueue(queue[neighbor_of_neighbor], graph->nodes[id], distance);
@@ -125,7 +128,7 @@ int main(void)
             
         }
 
-
+    
 
         // INITIALISE NREVERSE
         for (int id = 0; id < row; id++)
@@ -144,7 +147,7 @@ int main(void)
             {
                 temp = extractMin(queue[id]);
                 new_edges[i] = &temp;
-                printf("%d\n", new_edges[i]->node->id);
+//                printf("%d\n", new_edges[i]->node->id);
             }
 
 
@@ -154,7 +157,7 @@ int main(void)
             for (int i = 0; i < nedges; i++)
             {
                 old_dest = graph->nodes[id]->edges[i]->dest;
-                printf("check if new == old\n");
+//                printf("check if new == old\n");
 
                 for (int j = 0; j < nedges; j++)
                 {
@@ -185,7 +188,7 @@ int main(void)
             if (add_edge == nedges)
             {
                 add++;
-                printf("add %d\n", add);
+//                printf("add %d\n", add);
             }
 
             add_edge = 0;
@@ -219,6 +222,7 @@ int main(void)
             }
         
         }
+        
 
     } while (flag == 0);
 

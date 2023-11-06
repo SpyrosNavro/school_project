@@ -12,6 +12,7 @@ float compute_distance (Node a, Node b, int dim)
         sum = sum + pow(a->coord[i] - b->coord[i], 2);
     }
     sum = sqrt(sum);
+    printf(" COMPUTING NODE 1 with coordinates a=%d\n, b=%d\n, c=%d\n", a->coord[0], a->coord[1], a->coord[2]);
     return sum;
 }
 
@@ -84,84 +85,6 @@ int** import_data(const char *file_name, int vrows)
    
    return vector; 
 }
-
-int** import_Binarydata(const char *file_name)
-{   
-    FILE* pointer;
-    int** vector = NULL; // dynamilly allocated array (vector of vectors )
-    int vcol=100;
-    int vrows;
-     
-    pointer = fopen(file_name, "rb");  // reading the file 
-    if (pointer == NULL) 
-    {
-        printf("no file was found.");
-        return NULL;
-    }     
-    // how many rows are there 
-
-    vector = (int**) malloc(vrows*sizeof(int* )); // 2dimensional 
-    
-    if (vector == NULL){
-        printf("error allocating memory for the vector");
-        fclose(pointer);
-        return NULL;
-    }
-    
-    for (int i =0; i< vrows; i++){
-        vector[i] = (int *)malloc(vcol * sizeof(int));  // 2D array , allocate memory for 3 elements of every row 
-        
-        if (vector[i] == NULL){
-            printf("memory allocation error");
-            free(vector);
-            fclose(pointer);
-             
-        }
-
-    }
-
-    // save the elements of the file inside the vector (every row has three columns - its coordinates )
-    
-    for(int i=0; i<vrows; i++){
-        for(int j=0; j<vcol; j++){
-            float item; 
-            size_t items_read = fread(&item, sizeof(item),1,pointer);
-
-            if(items_read == 1 ){
-                vector[i][j]=item;
-            }
-            else {
-                printf("could not read from the file");
-                return 1; 
-            }
-        }
-
-    }
-    
-
-    // printing coordinates  
-    
-    for (int i =0; i< 3; i++){
-        printf("row %d:", i+1);
-        for(int j=0; j < vcol; j++) {
-            printf("%d \n",vector[i][j]);
-        }
-    }
-    
-
-    // freeing the memory of the vector 
-    // for (int i=0; i< vrows; i++){
-    //     free(vector[i]);
-
-    // }
-    // free(vector);
-    fclose(pointer);
-   
-   return vector; 
-}
-
-
-
 
 
 Graph createGraph (int nedges, const char *file_name, int row, int column) 
@@ -255,7 +178,7 @@ void deleteGraph(Graph graph)
 }
 
 
-
+/*
  int main(void){     
     const char *filename = "secondfile.bin";
     int vrows = 9759;
@@ -290,3 +213,5 @@ void deleteGraph(Graph graph)
 
     return 0;
  }
+
+*/
