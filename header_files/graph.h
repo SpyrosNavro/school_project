@@ -21,8 +21,7 @@ struct node {
     int nreverse;
     Edge* edges;
     Edge* reverse;
-    int* coord[];  // coordinates of n-dimentional point
-
+    int* coord;  // coordinates of n-dimentional point
 };
 
 // structure of edge

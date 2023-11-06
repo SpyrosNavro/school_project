@@ -111,11 +111,15 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
 
         graph->checked[id] = 0;
         
+        graph->nodes[id]->coord = malloc(column * sizeof( *(graph->nodes[id]->coord) ));
+        
         for (int j = 0; j < column; j++)
         {
-            graph->nodes[id]->coord = (int*)malloc(column * sizeof( *(graph->nodes[id]->coord) ));
-            *(graph->nodes[id]->coord + j) = data[id][j];   // put data in node
-            //printf("id%d data: %d\n", id, data[id][j]);
+            graph->nodes[id]->coord[j] = data[id][j];
+        }
+        for (int i = 0; i < column; i++)
+        {
+            printf("id:%d coord%d\n", graph->nodes[id]->id, graph->nodes[id]->coord[i]);
         }
     }
 
@@ -140,7 +144,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
 
                 dest = graph->nodes[id]->edges[j]->dest;
             }
-            while ( (dest == id) || (dest < 0) || (dest >= graph->nnodes) );
+            while ( (dest == id) && (dest < 0) && (dest >= graph->nnodes) );
 
             // compute distance
             graph->nodes[id]->edges[j]->distance = compute_distance(graph->nodes[id], graph->nodes[graph->nodes[id]->edges[j]->dest], graph->dim);
@@ -154,6 +158,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
             {
                 graph->nodes[dest]->reverse = realloc ( graph->nodes[dest]->reverse, 2*graph->nodes[dest]->nreverse*sizeof(Edge*) );
             }
+            //printf("GRAPH node[id]:%d dest:%d distance:%f\n", graph->nodes[id]->id, graph->nodes[id]->edges[j]->dest, graph->nodes[id]->edges[j]->distance);
         }
     }
     return graph;
