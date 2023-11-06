@@ -31,7 +31,6 @@ void test_compute (void)
 }
 
 
-
 void test_import(void) 
 {
     int row = 9759;
@@ -40,6 +39,13 @@ void test_import(void)
     TEST_ASSERT(array != NULL);
 }
 
+void test_importBinarydata(void) 
+{
+    int row = 9759;
+    int** array = import_data("5k.txt", row);
+
+    TEST_ASSERT(array != NULL);
+}
 
 
 void test_create(void)

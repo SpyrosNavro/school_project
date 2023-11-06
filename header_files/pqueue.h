@@ -6,6 +6,8 @@
 
 #pragma once
 
+typedef struct PQueue* PQ;
+typedef struct checking* Check;
 
 struct checking{   // the nodes that are checked, and have been put inside the queue 
     Node node; 
@@ -17,6 +19,7 @@ struct PQueue{
     int capacity; 
     int size;
 };
+
 
 struct PQueue* createPQueue(int capacity);
 void insertPQueue(struct PQueue* pqueue, Node node, float distance);
