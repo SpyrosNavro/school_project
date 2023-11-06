@@ -225,13 +225,13 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
     graph->dim = column;
     graph->nnodes = row;
     graph->neighbors = nedges;
-    
+    printf("CREATE GRAPH\n\n");
     // initialise NODES
     for (int id = 0; id < row; id++)
     { 
         graph->nodes[id] = malloc(sizeof( *(graph->nodes[id]) ));   // allocate node
         graph->nodes[id]->id = id;
-        graph->nodes[id]->reverse = malloc ( nedges * sizeof(*(graph->nodes[id]->reverse)) );  // allocate reverse neighbors
+        graph->nodes[id]->reverse = malloc ( row * sizeof(*(graph->nodes[id]->reverse)) );  // allocate reverse neighbors
         graph->nodes[id]->nreverse = 0;
 
 
@@ -242,10 +242,6 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
         for (int j = 0; j < column; j++)
         {
             graph->nodes[id]->coord[j] = data[id][j];
-        }
-        for (int i = 0; i < column; i++)
-        {
-            //printf("id:%d coord%d\n", graph->nodes[id]->id, graph->nodes[id]->coord[i]);
         }
     }
 
@@ -272,19 +268,13 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
             }
             while ( (dest == id) || (dest < 0) || (dest >= graph->nnodes) );
 
+            printf("%d => %d\n", id, dest);
             // compute distance
             graph->nodes[id]->edges[j]->distance = compute_distance(graph->nodes[id], graph->nodes[graph->nodes[id]->edges[j]->dest], graph->dim);
 
             // save reverse edge to destination
             graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse] = graph->nodes[id]->edges[j];
-            graph->nodes[dest]->nreverse = graph->nodes[dest]->nreverse + 1;
-            
-            // realloc array of reverse neighbors
-            if (graph->nodes[dest]->nreverse%nedges == 0) 
-            {
-                graph->nodes[dest]->reverse = realloc ( graph->nodes[dest]->reverse, 2*graph->nodes[dest]->nreverse*sizeof(Edge*) );
-            }
-            //printf("GRAPH node[id]:%d dest:%d distance:%f\n", graph->nodes[id]->id, graph->nodes[id]->edges[j]->dest, graph->nodes[id]->edges[j]->distance);
+            graph->nodes[dest]->nreverse++;
         }
     }
     return graph;

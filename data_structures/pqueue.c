@@ -108,7 +108,7 @@ int searchPQueue(struct PQueue* pqueue, Node node){
     for (int i=0; i<pqueue->size; i++){
         
         if(node->id == pqueue->array[i].node->id){
-            printf("id=%d\n",pqueue->array[i].node->id);
+            //printf("id=%d\n",pqueue->array[i].node->id);
             return 0;
         }
     }

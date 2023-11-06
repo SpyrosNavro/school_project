@@ -20,8 +20,9 @@ int main(void)
     int dest;
     int update, add, add_edge;
     int new_dest, old_dest;
-    struct checking temp;
-    Check new_edges[nedges];
+    //struct checking temp;
+    struct checking new_edges[nedges];
+
 
 
     graph = createGraph(nedges, filename, row, col);
@@ -37,14 +38,13 @@ int main(void)
     }
 
 
-
     // create Priority Queue for every node
     for (int id = 0; id < row; id++)
     {
         queue[id] = createPQueue(row);
     }
 
-
+    printf("\n\nNNDESCENT\n\n");
 
     // ITERATIONS
     do
@@ -65,9 +65,21 @@ int main(void)
 
                 //printf(" TOTAL number of neighbors =%d\n", graph->neighbors);
                 neighbor = graph->nodes[id]->edges[neighbors]->dest;
-                insertPQueue(queue[id], graph->nodes[neighbor], graph->nodes[id]->edges[neighbors]->distance);
-                insertPQueue(queue[neighbor], graph->nodes[id], graph->nodes[id]->edges[neighbors]->distance);
-                //printf( "node[id]:%d dest:%d distance:%f\n", graph->nodes[id]->id, graph->nodes[neighbor]->id, graph->nodes[id]->edges[neighbors]->distance);
+                
+
+                // search
+                if (searchPQueue(queue[id], graph->nodes[neighbor]) == 1)
+                {
+                    insertPQueue(queue[id], graph->nodes[neighbor], graph->nodes[id]->edges[neighbors]->distance);
+                }
+
+
+                if (searchPQueue(queue[neighbor], graph->nodes[id]) == 1)
+                {
+                    insertPQueue(queue[neighbor], graph->nodes[id], graph->nodes[id]->edges[neighbors]->distance);
+                }
+
+
 
                 // neighbor of neighbor
                 for (int i = 0; i < graph->neighbors; i++)
@@ -77,13 +89,20 @@ int main(void)
                     if (id == neighbor_of_neighbor) continue;
 
                     distance = compute_distance(graph->nodes[id], graph->nodes[neighbor_of_neighbor], graph->dim);
-                    printf(" NEIGBORS id =%d\n", graph->nodes[neighbor_of_neighbor]->id);
-                    printf("distance %f\n", distance);
-                    //printf("%d\n", graph->nodes[neighbor_of_neighbor]->id);
-                    //printf("distance %f\n", distance);
-                    insertPQueue(queue[id], graph->nodes[neighbor_of_neighbor], distance);
-                    insertPQueue(queue[neighbor_of_neighbor], graph->nodes[id], distance);
+                    
+                    // search
+                    if (searchPQueue(queue[id], graph->nodes[neighbor_of_neighbor]) == 1)
+                    {
+                        insertPQueue(queue[id], graph->nodes[neighbor_of_neighbor], distance);
+                    }
+
+
+                    if (searchPQueue(queue[neighbor_of_neighbor], graph->nodes[id]) == 1)
+                    {
+                        insertPQueue(queue[neighbor_of_neighbor], graph->nodes[id], distance);
+                    }
                 }
+
 
 
                 // reverse neighbor of neighbor
@@ -94,8 +113,18 @@ int main(void)
                     if (id == reverse_of_neighbor) continue;
 
                     distance = compute_distance(graph->nodes[id], graph->nodes[reverse_of_neighbor], graph->dim);
-                    insertPQueue(queue[id], graph->nodes[reverse_of_neighbor], distance);
-                    insertPQueue(queue[reverse_of_neighbor], graph->nodes[id], distance);
+                    
+                    // search
+                    if (searchPQueue(queue[id], graph->nodes[reverse_of_neighbor]) == 1)
+                    {
+                        insertPQueue(queue[id], graph->nodes[reverse_of_neighbor], distance);
+                    }
+
+
+                    if (searchPQueue(queue[reverse_of_neighbor], graph->nodes[id]) == 1)
+                    {
+                        insertPQueue(queue[reverse_of_neighbor], graph->nodes[id], distance);
+                    }
                 }
 
 
@@ -108,11 +137,19 @@ int main(void)
             {
                 // reverse neighbor
                 reverse = graph->nodes[id]->reverse[rev]->src;
-                printf("id=%d\n",id);
-                printf("resverse=%d\n",id);
+                
+                // search
+                if (searchPQueue(queue[id], graph->nodes[reverse]) == 1)
+                {
+                    insertPQueue(queue[id], graph->nodes[reverse], graph->nodes[id]->reverse[rev]->distance);
+                }
 
-                insertPQueue(queue[id], graph->nodes[reverse], graph->nodes[id]->reverse[rev]->distance);
-                insertPQueue(queue[reverse], graph->nodes[id], graph->nodes[id]->reverse[rev]->distance);
+
+                if (searchPQueue(queue[reverse], graph->nodes[id]) == 1)
+                {
+                    insertPQueue(queue[reverse], graph->nodes[id], graph->nodes[id]->reverse[rev]->distance);
+                }
+
 
 
                 // neighbors of reverse neighbor
@@ -123,9 +160,21 @@ int main(void)
                     if (id == neighbor_of_reverse) continue;
 
                     distance = compute_distance(graph->nodes[id], graph->nodes[neighbor_of_reverse], graph->dim);
-                    insertPQueue(queue[id], graph->nodes[neighbor_of_reverse], distance);
-                    insertPQueue(queue[neighbor_of_reverse], graph->nodes[id], distance);
+
+                    // search
+                    if (searchPQueue(queue[id], graph->nodes[neighbor_of_reverse]) == 1)
+                    {
+                        insertPQueue(queue[id], graph->nodes[neighbor_of_reverse], distance);
+                    }
+
+
+                    if (searchPQueue(queue[neighbor_of_reverse], graph->nodes[id]) == 1)
+                    {
+                        insertPQueue(queue[neighbor_of_reverse], graph->nodes[id], distance);
+                    }
+                    
                 }
+
 
 
                 // reverse neighbors of reverse neighbor
@@ -136,25 +185,39 @@ int main(void)
                     if (id == reverse_of_reverse) continue;
 
                     distance = compute_distance(graph->nodes[id], graph->nodes[reverse_of_reverse], graph->dim);
-                    insertPQueue(queue[id], graph->nodes[reverse_of_reverse], distance);
-                    insertPQueue(queue[reverse_of_reverse], graph->nodes[id], distance);
+                    
+                    // search
+                    if (searchPQueue(queue[id], graph->nodes[reverse_of_reverse]) == 1)
+                    {
+                        insertPQueue(queue[id], graph->nodes[reverse_of_reverse], distance);
+                    }
+                    
+
+                    if (searchPQueue(queue[reverse_of_reverse], graph->nodes[id]) == 1)
+                    {
+                        insertPQueue(queue[reverse_of_reverse], graph->nodes[id], distance);
+                    }
                 }
+            }
+        }
 
+        printf("\n\n\n");
 
+        // INITIALISE REVERSE
+        for (int id = 0; id < row; id++)
+        {
+            graph->nodes[id]->oldn = graph->nodes[id]->nreverse;
+            graph->nodes[id]->nreverse = 0;
+        }
+        
+        for (int id = 0; id < row; id++)
+        {
+            for (int i = 0; i < nedges; i++)
+            {
+                printf("ID%d OLD DEST%d\n", id, graph->nodes[id]->edges[i]->dest);
             }
             
         }
-
-    
-
-        // INITIALISE NREVERSE
-        for (int id = 0; id < row; id++)
-        {
-            graph->nodes[id]->nreverse = 0;
-        }
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        
-
 
         // UPDATE EDGES
         for (int id = 0; id < row; id++)
@@ -162,11 +225,16 @@ int main(void)
             // get new edges
             for(int i = 0; i < nedges; i++)
             {
-                temp = extractMin(queue[id]);
-                new_edges[i] = &temp;
-//                printf("%d\n", new_edges[i]->node->id);
+                new_edges[i] = extractMin(queue[id]);
+                //new_edges[i] = &temp;
+                printf("EXTRACT MIN id%d => %d distance:%f\n", id, new_edges[i].node->id, new_edges[i].distance);
             }
 
+            for(int i = 0; i < nedges; i++)
+            {
+                printf("EXTRACT MIN id%d => %d distance:%f\n", id, new_edges[i].node->id, new_edges[i].distance);
+            }
+            printf("\n\n\n");
 
             // check if new edges == old edges
             update = 0;
@@ -174,23 +242,25 @@ int main(void)
             for (int i = 0; i < nedges; i++)
             {
                 old_dest = graph->nodes[id]->edges[i]->dest;
-                printf("check if new == old\n");
+                printf("i:%d old dest: %d\n",i, old_dest);
 
                 for (int j = 0; j < nedges; j++)
                 {
 
-                    new_dest = new_edges[j]->node->id;
+                    new_dest = new_edges[j].node->id;
 
+                    printf("id%d => edge%d %d distance:%f\n", id, j, new_dest, new_edges[j].distance);
+                    
                     // 1 edge has stayed the same
                     if (old_dest == new_dest)
                     {
-                        printf("same edges\n");
+                        printf("..\n");
                         add_edge++;
                         break;
                     }
 
                     // found an update
-                    if ( (j == nedges - 1 ) && (old_dest != new_dest) )
+                    if ( (j == nedges - 1) && (old_dest != new_dest) )
                     {
                         update = 1;
                     }
@@ -206,7 +276,6 @@ int main(void)
             if (add_edge == nedges)
             {
                 add++;
-//                printf("add %d\n", add);
             }
 
             add_edge = 0;
@@ -217,19 +286,22 @@ int main(void)
             {
                 for (int i = 0; i < nedges; i++)
                 {
-                    printf("old:%d new:%d old distance:%f new distance:%f\n", graph->nodes[id]->edges[i]->dest, new_edges[i]->node->id, graph->nodes[id]->edges[i]->distance, new_edges[i]->distance);
+                    //printf("old:%d new:%d old distance:%f new distance:%f\n", graph->nodes[id]->edges[i]->dest, new_edges[i]->node->id, graph->nodes[id]->edges[i]->distance, new_edges[i]->distance);
                     
-                    graph->nodes[id]->edges[i]->src = graph->nodes[id]->id;
-                    graph->nodes[id]->edges[i]->dest = new_edges[i]->node->id;
-                    graph->nodes[id]->edges[i]->distance = new_edges[i]->distance;
-                    // printf("%d\n", graph->nodes[id]->edges[i]->src);
-                    // printf("%d\n", graph->nodes[id]->edges[i]->dest);
-                    // printf("%f\n", graph->nodes[id]->edges[i]->distance);
+                    if (searchPQueue(queue[id], new_edges[i].node) == 1)
+                    {
+                        graph->nodes[id]->edges[i]->src = graph->nodes[id]->id;
+                        graph->nodes[id]->edges[i]->dest = new_edges[i].node->id;
+                        graph->nodes[id]->edges[i]->distance = new_edges[i].distance;
 
-                    dest = graph->nodes[id]->edges[i]->dest;    
-               
-                    graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse] = graph->nodes[id]->edges[i];
-                    graph->nodes[dest]->nreverse++;
+                        dest = graph->nodes[id]->edges[i]->dest;    
+
+                        //printf("%d nreverse:%d \n",dest, graph->nodes[dest]->nreverse);
+                    
+                        graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse] = graph->nodes[id]->edges[i];
+                        graph->nodes[dest]->nreverse++;
+                    }
+                    
                 }
 
                 add = 0;
@@ -249,19 +321,13 @@ int main(void)
     } while (flag == 0);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    for (int id = 0; id < row; id++)
+    {
+        for (int i = 0; i < nedges; i++)
+        {
+            printf("FINAL\nid %d => %d\n", graph->nodes[id]->id, graph->nodes[id]->edges[i]->dest);
+        }
+    }
 
 
     printf("wow so fast\n");

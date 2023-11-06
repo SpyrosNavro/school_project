@@ -18,6 +18,7 @@ struct graph {
 // structure of nodes 
 struct node {
     int id;    // id of point 
+    int oldn;
     int nreverse;
     Edge* edges;
     Edge* reverse;
