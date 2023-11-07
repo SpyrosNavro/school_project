@@ -1,13 +1,17 @@
-OBJS = graph.o pqueue.o nndescent.o # tests.o
+OBJS1 = graph.o pqueue.o nndescent.o # tests.o
+OBJS2 = graph.o pqueue.o tests.o #nndescent.o
+OBJS = graph.o pqueue.o nndescent.o tests.o
 OUT = main
 CC = gcc
 FLAGS = -g -c -Wall -lm -Wextra
 FILES = ./data_structures/
 TESTS = ./tests/
 
-all : $(OBJS)
-	rm -f /tmp/*.out 
-	$(CC) -g -Wall -o $(OUT) $(OBJS) -lm
+nndescent: $(OBJS1)
+	$(CC) -g -Wall -o $(OUT) $(OBJS1) -lm
+
+tests: $(OBJS2)
+	$(CC) -g -Wall -o $(OUT) $(OBJS2) -lm
 
 graph.o : $(FILES)graph.c 
 	$(CC) $(FLAGS) $(FILES)graph.c 
@@ -18,8 +22,8 @@ pqueue.o : $(FILES)pqueue.c
 nndescent.o : ./nndescent.c 
 	$(CC) $(FLAGS) ./nndescent.c
 
-#tests.o : $(TESTS)tests.c  
-#	$(CC) $(FLAGS) $(TESTS)tests.c 
+tests.o : $(TESTS)tests.c  
+	$(CC) $(FLAGS) $(TESTS)tests.c 
 
 run :
 	./main 
