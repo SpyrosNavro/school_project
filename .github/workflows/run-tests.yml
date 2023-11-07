@@ -7,7 +7,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1    
     - name: Test App
-      run: ./gradlew test
+      run: ./main test
 
     - name: Archive Rest Results
       uses: actions/upload-artifact@v1
