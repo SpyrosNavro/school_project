@@ -57,6 +57,12 @@ int main(void)
             for (int neighbors = 0; neighbors < graph->neighbors; neighbors++)
             {
                 // neighbor
+<<<<<<< HEAD
+=======
+                //printf(" MY ID =%d\n", id);
+
+                //printf(" TOTAL number of neighbors =%d\n", graph->neighbors);
+>>>>>>> refs/remotes/origin/main
                 neighbor = graph->nodes[id]->edges[neighbors]->dest;
                 
 
@@ -174,7 +180,21 @@ int main(void)
         // INITIALISE REVERSE
         for (int id = 0; id < row; id++)
         {
+<<<<<<< HEAD
             temp[id] = 0;
+=======
+            graph->nodes[id]->oldn = graph->nodes[id]->nreverse;
+            graph->nodes[id]->nreverse = 0;
+        }
+        
+        for (int id = 0; id < row; id++)
+        {
+            for (int i = 0; i < nedges; i++)
+            {
+                //printf("ID%d OLD DEST%d\n", id, graph->nodes[id]->edges[i]->dest);
+            }
+            
+>>>>>>> refs/remotes/origin/main
         }
 
         // UPDATE EDGES
@@ -184,8 +204,20 @@ int main(void)
             for(int i = 0; i < nedges; i++)
             {
                 new_edges[i] = extractMin(queue[id]);
+<<<<<<< HEAD
             }
 
+=======
+                //new_edges[i] = &temp;
+               // printf("EXTRACT MIN id%d => %d distance:%f\n", id, new_edges[i].node->id, new_edges[i].distance);
+            }
+
+            for(int i = 0; i < nedges; i++)
+            {
+                //printf("EXTRACT MIN id%d => %d distance:%f\n", id, new_edges[i].node->id, new_edges[i].distance);
+            }
+            printf("\n\n\n");
+>>>>>>> refs/remotes/origin/main
 
             // check if new edges == old edges
             update = 0;
@@ -284,8 +316,12 @@ int main(void)
     {
         for (int i = 0; i < nedges; i++)
         {
+<<<<<<< HEAD
             printf("id %d => %d\n", graph->nodes[id]->id, graph->nodes[id]->edges[i]->dest);
             
+=======
+            //printf("FINAL\nid %d => %d\n", graph->nodes[id]->id, graph->nodes[id]->edges[i]->dest);
+>>>>>>> refs/remotes/origin/main
         }
     }
 

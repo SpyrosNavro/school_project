@@ -89,36 +89,6 @@ int** import_data(const char *file_name, int vrows)
 }
 
 
-void readfile(const char * file_name) {
-    FILE *file = fopen(file_name, "rb");
-    if (file == NULL) {
-        perror("Error opening the file");
-    }
-
-    uint32_t buffer;  // Assuming you want to read 4 bytes at a time (32 bits)
-    size_t items_read;
-    int i=0;
-    while ((items_read = fread(&buffer, sizeof(buffer), 1, file)) == 1) {
-        // Process the 4-byte data in the 'buffer' variable
-        if (i<=50)
-        printf("Read: %u\n", buffer);
-        i++;
-    }
-
-    if (feof(file)) {
-        printf("End of file reached.\n");
-    } else if (ferror(file)) {
-        perror("Error reading the file");
-    }
-
-
-
-    fclose(file);
-     
-}
-
-
-
 float** import_Binarydata(const char *file_name)
 {   
     FILE* pointer;
@@ -266,7 +236,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
             }
             while ( (dest == id) || (dest < 0) || (dest >= graph->nnodes) );
 
-            printf("%d => %d\n", id, dest);
+            //printf("%d => %d\n", id, dest);
             // compute distance
             graph->nodes[id]->edges[j]->distance = compute_distance(graph->nodes[id], graph->nodes[graph->nodes[id]->edges[j]->dest], graph->dim);
 
