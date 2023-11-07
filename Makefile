@@ -25,8 +25,9 @@ nndescent.o : ./nndescent.c
 tests.o : $(TESTS)tests.c  
 	$(CC) $(FLAGS) $(TESTS)tests.c 
 
-#run :
-#	./main 
+run :
+	./main
+	./nndescent 
 
 valgrind: $(OUT)
 	rm -f /tmp/*.out 
