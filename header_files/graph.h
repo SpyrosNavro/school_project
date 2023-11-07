@@ -12,13 +12,12 @@ typedef struct edge* Edge;
 struct graph {
     Node* nodes;
     int dim, nnodes, neighbors;
-    int* checked;
 };
 
 // structure of nodes 
 struct node {
     int id;    // id of point 
-    int oldn;
+    int checked;
     int nreverse;
     Edge* edges;
     Edge* reverse;
