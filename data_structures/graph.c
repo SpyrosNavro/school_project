@@ -217,7 +217,6 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
 {
     Graph graph = malloc(sizeof(*graph));
     graph->nodes = malloc ( row * sizeof(*(graph->nodes) ));  // allocate array of nodes
-    graph->checked = calloc(row, sizeof( *(graph->checked) ));
     int dest;
 
     int** data = import_data(file_name, row);
@@ -234,8 +233,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
         graph->nodes[id]->reverse = malloc ( row * sizeof(*(graph->nodes[id]->reverse)) );  // allocate reverse neighbors
         graph->nodes[id]->nreverse = 0;
 
-
-        graph->checked[id] = 0;
+        graph->nodes[id]->checked = 0;
         
         graph->nodes[id]->coord = malloc(column * sizeof( *(graph->nodes[id]->coord) ));
         

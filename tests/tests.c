@@ -29,7 +29,7 @@ void test_compute (void)
     free(a);
     free(b);
     // distance of points a and b is about 9.05
-    TEST_ASSERT(result = 9.055386);
+    TEST_ASSERT(result == 9.055386);
 
 }
 
