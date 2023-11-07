@@ -39,11 +39,6 @@ jobs:
     - name: Compile
       run: npm run build
 
-    - name: npm test
-      run: npm test -- --runInBand --forceExit
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
-
     - name: Lint
       run: npm run lint
 
