@@ -25,7 +25,8 @@ nndescent.o : ./nndescent.c
 tests.o : $(TESTS)tests.c  
 	$(CC) $(FLAGS) $(TESTS)tests.c 
 
-run :
+run : $(OBJS2)
+	$(CC) -g -Wall -o $(OUT) $(OBJS2) -lm
 	./main 
 
 valgrind: $(OUT)
