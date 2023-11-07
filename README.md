@@ -6,6 +6,16 @@
 ## Description
 
 
+## Spyros Contribution
+nndescent.c
+graph.c (createGraph, deleteGraph, compute_distance)
+tests.c
+
+## Tzortzina's Contribution
+graph.c (import_data, import_Binarydata)
+pqueue.c
+tests.c 
+
 ### run tests
 `
 make tests
