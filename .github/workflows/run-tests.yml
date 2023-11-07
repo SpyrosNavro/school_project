@@ -2,25 +2,15 @@ name: run-tests
 on: [push, pull_request]
 
 jobs:
-  build-deploy:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-18.04, macos-latest, windows-latest]
+  build-and-test:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v1    
+    - name: Test App
+      run: ./gradlew test
 
-    - name: make run
-      run: make run CFLAGS=-fPIC
-    
-    - name: make valgrind
-      if: matrix.os == 'ubuntu-18.04'
-      run: |
-        sudo apt install valgrind
-        make valgrind CFLAGS=-fPIC
-
-    - name: Upload
-      uses: actions/upload-artifact@v2
+    - name: Archive Rest Results
+      uses: actions/upload-artifact@v1
       with:
-        name: compiled-${{ matrix.os }}
-        path: .
+        name: test-results
+        path: app/build/reports/tests
