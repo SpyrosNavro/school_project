@@ -6,9 +6,9 @@
 int main(void)
 {
     Graph graph;
-    const char* filename = "data_structures/small.txt";
-    int nedges = 2;
-    int row = 5;
+    const char* filename = "data_structures/5k.txt";
+    int nedges = 10;
+    int row = 9759;
     int col = 3;
     int flag = 0;
     float distance;
@@ -43,8 +43,10 @@ int main(void)
     printf("\n\nNNDESCENT\n\n");
 
     // ITERATIONS
+    int iteration = 0;
     do
     {
+        printf("iteration %d\n", iteration++);
         add = 0;
 
 
