@@ -6,9 +6,9 @@
 int main(void)
 {
     Graph graph;
-    const char* filename = "data_structures/small.txt";
+    const char* filename = "data_structures/1k.txt";
     int nedges = 2;
-    int row = 5;
+    int row = 6673;
     int col = 3;
     int flag = 0;
     float distance;
@@ -41,12 +41,12 @@ int main(void)
     }
 
     printf("\n\nNNDESCENT\n\n");
-
+    int i=0;
     // ITERATIONS
     do
     {
         add = 0;
-
+        
 
         // PUT DISTANCES IN PRIORITY QUEUE
         for (int id = 0; id < row; id++)
@@ -284,7 +284,7 @@ int main(void)
     {
         for (int i = 0; i < nedges; i++)
         {
-            printf("id %d => %d\n", graph->nodes[id]->id, graph->nodes[id]->edges[i]->dest);
+//            printf("id %d => %d\n", graph->nodes[id]->id, graph->nodes[id]->edges[i]->dest);
             
         }
     }
