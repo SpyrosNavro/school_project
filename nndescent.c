@@ -6,9 +6,9 @@
 int main(void)
 {
     Graph graph;
-    const char* filename = "data_structures/5k.txt";
-    int nedges = 10;
-    int row = 9759;
+    const char* filename = "data_structures/1k.txt";
+    int nedges = 3;
+    int row = 6673;
     int col = 3;
     int flag = 0;
     float distance;
