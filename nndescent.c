@@ -48,7 +48,7 @@ int main(void)
     {
         printf("iteration %d\n", iteration++);
         add = 0;
-
+        
 
         // PUT DISTANCES IN PRIORITY QUEUE
         for (int id = 0; id < row; id++)
@@ -286,7 +286,7 @@ int main(void)
     {
         for (int i = 0; i < nedges; i++)
         {
-            printf("id %d => %d\n", graph->nodes[id]->id, graph->nodes[id]->edges[i]->dest);
+//            printf("id %d => %d\n", graph->nodes[id]->id, graph->nodes[id]->edges[i]->dest);
             
         }
     }
