@@ -28,7 +28,7 @@ tests.o : $(TESTS)tests.c
 	$(CC) $(FLAGS) $(TESTS)tests.c 
 
 run : $(OBJS2)
-	$(CC) -g -Wall -o $(OUT) $(OBJS2) -lm
+	$(CC) -g -Wall -o $(OUT2) $(OBJS2) -lm
 	./main 
 
 valgrind: $(OUT)
