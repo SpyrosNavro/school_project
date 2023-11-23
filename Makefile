@@ -7,6 +7,7 @@ OUT2 = test
 CC = gcc
 FLAGS = -g -c -Wall -lm -Wextra
 FILES = ./data_structures/
+FILES2 = ./nnd/
 TESTS = ./tests/
 
 nndescent: $(OBJS1)
@@ -21,8 +22,8 @@ graph.o : $(FILES)graph.c
 pqueue.o : $(FILES)pqueue.c
 	$(CC) $(FLAGS) $(FILES)pqueue.c
 
-nndescent.o : ./nndescent.c 
-	$(CC) $(FLAGS) ./nndescent.c
+nndescent.o : $(FILES2)nndescent.c 
+	$(CC) $(FLAGS) $(FILES2)nndescent.c
 
 tests.o : $(TESTS)tests.c  
 	$(CC) $(FLAGS) $(TESTS)tests.c 
