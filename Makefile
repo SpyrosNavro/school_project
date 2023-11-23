@@ -7,7 +7,7 @@ OUT2 = test
 CC = gcc
 FLAGS = -g -c -Wall -lm -Wextra
 FILES = ./data_structures/
-FILES2 = ./nnd/
+FILES2 = ./nnd_files/
 TESTS = ./tests/
 
 nndescent: $(OBJS1)
