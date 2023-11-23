@@ -6,8 +6,8 @@
 int main(void)
 {
     Graph graph;
-    const char* filename = "data_structures/1k.txt";
-    int nedges = 3;
+    const char* filename = "test_files/1k.txt";
+    int nedges = 2;
     int row = 6673;
     int col = 3;
     int flag = 0;
@@ -41,12 +41,11 @@ int main(void)
     }
 
     printf("\n\nNNDESCENT\n\n");
-
+    int i = 0;
     // ITERATIONS
-    int iteration = 0;
     do
     {
-        printf("iteration %d\n", iteration++);
+        printf("iteration: %d\n", i++);
         add = 0;
         
 
@@ -195,19 +194,16 @@ int main(void)
             for (int i = 0; i < nedges; i++)
             {
                 old_dest = graph->nodes[id]->edges[i]->dest;
-                //printf("i:%d old dest: %d\n",i, old_dest);
 
                 for (int j = 0; j < nedges; j++)
                 {
 
                     new_dest = new_edges[j].node->id;
 
-                    //printf("id%d => edge%d %d distance:%f\n", id, j, new_dest, new_edges[j].distance);
                     
                     // 1 edge has stayed the same
                     if (old_dest == new_dest)
                     {
-                        //printf("..\n");
                         add_edge++;
                         break;
                     }
@@ -258,7 +254,7 @@ int main(void)
                 add = 0;
 
             }
-            //printf("n reverse %d\n", graph->nodes[id]->nreverse);
+
             // if all nodes are the same, STOP ITERATIONS
             if (add == row)
             {
@@ -286,7 +282,7 @@ int main(void)
     {
         for (int i = 0; i < nedges; i++)
         {
-//            printf("id %d => %d\n", graph->nodes[id]->id, graph->nodes[id]->edges[i]->dest);
+            //printf("id %d => %d\n", graph->nodes[id]->id, graph->nodes[id]->edges[i]->dest);
             
         }
     }
@@ -295,7 +291,7 @@ int main(void)
     {
         for (int i = 0; i < graph->nodes[id]->nreverse; i++)
         {
-            printf("id %d has reverse neighbor %d\n", graph->nodes[id]->id, graph->nodes[id]->reverse[i]->src);
+            printf("id %d has reverse neighbor %d\n", id, graph->nodes[id]->reverse[i]->src);
         }
     }
 
