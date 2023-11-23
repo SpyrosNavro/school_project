@@ -29,7 +29,7 @@ tests.o : $(TESTS)tests.c
 
 run : $(OBJS2)
 	$(CC) -g -Wall -o $(OUT2) $(OBJS2) -lm
-	./main 
+	./test 
 
 valgrind: $(OUT)
 	rm -f /tmp/*.out 
