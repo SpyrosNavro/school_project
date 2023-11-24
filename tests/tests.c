@@ -45,6 +45,18 @@ void test_import(void)
     int** array = import_data("data_structures/5k.txt", row);
 
     TEST_ASSERT(array != NULL);
+    if(array !=NULL )
+     {
+        // delete vector 
+        for (int i=0; i< 9759; i++)
+         {
+            free(array[i]);
+        }
+         free(array);
+     }
+     else{
+         printf("Failed to create vector ");
+     }
 }
 
 void test_importBinarydata(void) 
@@ -89,7 +101,18 @@ void test_create(void)
 
     Graph graph = createGraph(nedges, "data_structures/5k.txt", row, column);
     TEST_ASSERT(graph != NULL);
-    deleteGraph(graph);
+    
+    for (int i = 0; i < graph->nnodes - 1; i++)
+    {
+        for (int j = 0; j < graph->neighbors; j++)
+        {
+            free(graph->nodes[i]->edges[j]);
+            free(graph->nodes[i]->reverse);
+        }
+        free(graph->nodes[i]);
+    }
+
+    free(graph);
 }
 
 

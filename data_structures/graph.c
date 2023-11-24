@@ -212,7 +212,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
             graph->nodes[id]->coord[j] = data[id][j];
         }
     }
-
+    
 
 
     // initialise EDGES
