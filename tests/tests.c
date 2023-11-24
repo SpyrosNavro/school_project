@@ -42,7 +42,7 @@ void test_compute (void)
 void test_import(void) 
 {
     int row = 9759;
-    int** array = import_data("data_structures/5k.txt", row);
+    int** array = import_data("test_files/5k.txt", row);
 
     TEST_ASSERT(array != NULL);
     if(array !=NULL )
@@ -62,7 +62,7 @@ void test_import(void)
 void test_importBinarydata(void) 
 {
    
-    const char *filename = "data_structures/secondfile.bin";
+    const char *filename = "test_files/secondfile.bin";
     
     float** vector = import_Binarydata(filename); 
     TEST_ASSERT(vector != NULL);
@@ -99,7 +99,7 @@ void test_create(void)
     int row = 9759;
     int column = 3;
 
-    Graph graph = createGraph(nedges, "data_structures/5k.txt", row, column);
+    Graph graph = createGraph(nedges, "test_files/5k.txt", row, column);
     TEST_ASSERT(graph != NULL);
     
     for (int i = 0; i < graph->nnodes - 1; i++)
@@ -123,7 +123,7 @@ void test_delete(void)
     int row = 9759;
     int column = 3;
 
-    Graph graph = createGraph(nedges, "data_structures/5k.txt", row, column);
+    Graph graph = createGraph(nedges, "test_files/5k.txt", row, column);
     deleteGraph(graph);
     TEST_ASSERT(graph != NULL);
 }
