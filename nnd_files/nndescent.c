@@ -13,7 +13,8 @@ int main(int argc, char* argv[])
 
     Graph graph;
     const char* filename = "test_files/1k.txt";
-    int nedges = 2;
+    int nedges = atoi(argv[1]);
+    printf("nedges %d=", nedges);
     int row = 6673;
     int col = 3;
     int flag = 0;
