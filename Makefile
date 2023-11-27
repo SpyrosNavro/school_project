@@ -42,3 +42,4 @@ valgrind: $(OUT)
 clean :
 	rm -f /tmp/*.out 
 	rm -f $(OBJS) $(OUT)
+	clear
