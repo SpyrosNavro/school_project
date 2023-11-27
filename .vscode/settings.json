@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "acutest.h": "c",
-        "graph.h": "c"
+        "graph.h": "c",
+        "nnd_functions.h": "c"
     }
 }
