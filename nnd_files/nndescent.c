@@ -1,10 +1,15 @@
 #include "../header_files/graph.h"
 #include "../header_files/pqueue.h"
 
+// argc the number of command line arguments 
+// argv is the array of strings containing the arguments 
 
+int main(int argc, char* argv[])
+{   
+    //for (int i=0; i<argc; i++){
+    //    printf("Argument %d= %s\n",i, argv[i]);   // argv[0]=./nndescent , arg[1]= first arguments
+    //}
 
-int main(void)
-{
     Graph graph;
     const char* filename = "test_files/1k.txt";
     int nedges = 2;

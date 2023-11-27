@@ -106,8 +106,8 @@ void test_create(void)
     {
         for (int j = 0; j < graph->neighbors; j++)
         {
-            free(graph->nodes[i]->edges[j]);
-            free(graph->nodes[i]->reverse);
+            //free(graph->nodes[i]->edges[j]);
+            //free(graph->nodes[i]->reverse);
         }
         free(graph->nodes[i]);
     }
