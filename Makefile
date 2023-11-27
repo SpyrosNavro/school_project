@@ -1,6 +1,6 @@
-OBJS1 = graph.o pqueue.o nndescent.o # tests.o
+OBJS1 = graph.o pqueue.o nndescent.o nnd_functions.o # tests.o
 OBJS2 = graph.o pqueue.o tests.o #nndescent.o
-OBJS = graph.o pqueue.o nndescent.o tests.o
+OBJS = graph.o pqueue.o nndescent.o tests.o nnd_functions.o
 OUT = nndescent test
 OUT1 = nndescent
 OUT2 = test
@@ -28,6 +28,9 @@ nndescent.o : $(FILES2)nndescent.c
 tests.o : $(TESTS)tests.c  
 	$(CC) $(FLAGS) $(TESTS)tests.c 
 
+nnd_functions.o: $(FILES2)nnd_functions.c 
+	$(CC) $(FLAGS) $(FILES2)nnd_functions.c 
+
 run : $(OBJS2)
 	$(CC) -g -Wall -o $(OUT2) $(OBJS2) -lm
 	./test 
@@ -39,4 +42,3 @@ valgrind: $(OUT)
 clean :
 	rm -f /tmp/*.out 
 	rm -f $(OBJS) $(OUT)
-	clear
