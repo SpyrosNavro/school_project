@@ -33,7 +33,7 @@ void check_neighbors(Graph graph, int id, PQ queue[])
             
             if (id == neighbor_of_neighbor) continue;
 
-            distance = compute_distance(graph->nodes[id], graph->nodes[neighbor_of_neighbor], graph->dim);
+            distance = euclideanDistance(graph->nodes[id], graph->nodes[neighbor_of_neighbor], graph->dim);
             
             // search
             if (searchPQueue(queue[id], graph->nodes[neighbor_of_neighbor]) == 1) {
@@ -52,7 +52,7 @@ void check_neighbors(Graph graph, int id, PQ queue[])
 
             if (id == reverse_of_neighbor) continue;
 
-            distance = compute_distance(graph->nodes[id], graph->nodes[reverse_of_neighbor], graph->dim);
+            distance = euclideanDistance(graph->nodes[id], graph->nodes[reverse_of_neighbor], graph->dim);
             
             // search
             if (searchPQueue(queue[id], graph->nodes[reverse_of_neighbor]) == 1) {
@@ -96,7 +96,7 @@ void check_reverse_neighbors(Graph graph, int id, PQ queue[])
 
             if (id == neighbor_of_reverse) continue;
 
-            distance = compute_distance(graph->nodes[id], graph->nodes[neighbor_of_reverse], graph->dim);
+            distance = euclideanDistance(graph->nodes[id], graph->nodes[neighbor_of_reverse], graph->dim);
 
 
             if (searchPQueue(queue[id], graph->nodes[neighbor_of_reverse]) == 1) {
@@ -116,7 +116,7 @@ void check_reverse_neighbors(Graph graph, int id, PQ queue[])
 
             if (id == reverse_of_reverse) continue;
 
-            distance = compute_distance(graph->nodes[id], graph->nodes[reverse_of_reverse], graph->dim);
+            distance = euclideanDistance(graph->nodes[id], graph->nodes[reverse_of_reverse], graph->dim);
             
             // search
             if (searchPQueue(queue[id], graph->nodes[reverse_of_reverse]) == 1) {
@@ -242,7 +242,7 @@ void search_neighbors(Graph graph, PQ search_queue, Node search_node, int seed, 
         }
         else
         {
-            distance = compute_distance(search_node, graph->nodes[neighbor], graph->dim);
+            distance = euclideanDistance(search_node, graph->nodes[neighbor], graph->dim);
 
             insertPQueue(search_queue, graph->nodes[neighbor], distance);
             graph->nodes[neighbor]->checked = 1;
@@ -271,7 +271,7 @@ void search_reverse_neighbors(Graph graph, PQ search_queue, Node search_node, in
         }
         else
         {
-            distance = compute_distance(search_node, graph->nodes[reverse], graph->dim);
+            distance = euclideanDistance(search_node, graph->nodes[reverse], graph->dim);
 
             insertPQueue(search_queue, graph->nodes[reverse], distance);
             graph->nodes[reverse]->checked = 1;

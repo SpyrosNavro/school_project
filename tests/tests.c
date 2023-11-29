@@ -24,7 +24,7 @@ void test_compute (void)
     b->coord[0] = 12;
     b->coord[1] = 8;
 
-    result = compute_distance(a, b, dim);
+    result = euclideanDistance(a, b, dim);
 
     free(a);
     free(b);
@@ -434,7 +434,7 @@ TEST_LIST = {
     { "test_importBinarydata", test_importBinarydata },
     { "createGraph", test_create },
     { "deleteGraph", test_delete },
-    { "compute_distance", test_compute},
+    { "euclideanDistance", test_compute},
     { "createPQueue", test_createPQueue},
     { "insertPQueue", test_insertPQueue},
     { "extractMin", test_extractMin},

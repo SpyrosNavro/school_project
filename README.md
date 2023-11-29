@@ -8,7 +8,7 @@
 
 ## Spyros Contribution
 nndescent.c
-graph.c (createGraph, deleteGraph, compute_distance)
+graph.c (createGraph, deleteGraph, euclideanDistance)
 tests.c
 
 ## Tzortzina's Contribution

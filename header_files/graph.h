@@ -33,6 +33,7 @@ struct edge {
 int** import_data(const char *file_name, int vrows);
 float** import_Binarydata(const char *file_name);
 
-float compute_distance(Node a, Node b, int dim);
+float euclideanDistance(Node a, Node b, int dim);
+float manhattanDistance (Node a, Node b, int dim);
 Graph createGraph(int nedges, const char *file_name, int row, int column);
 void deleteGraph(Graph graph);
