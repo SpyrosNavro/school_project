@@ -5,7 +5,7 @@
 // argc the number of command line arguments 
 // argv is the array of strings containing the arguments 
 
-int main()
+int main(int argc, char* argv[])
 {   
     //for (int i=0; i<argc; i++){
     //    printf("Argument %d= %s\n",i, argv[i]);   // argv[0]=./nndescent , arg[1]= first arguments
@@ -13,7 +13,8 @@ int main()
 
     Graph graph;
     const char* filename = "test_files/1k.txt";
-    int nedges = 3;
+    int nedges = atoi(argv[1]);
+    printf("nedges %d=", nedges);
     int row = 6673;
     int col = 3;
     int flag = 0;
