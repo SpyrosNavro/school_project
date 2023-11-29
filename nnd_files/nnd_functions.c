@@ -137,6 +137,7 @@ int update_edges(PQ queue[], Graph graph, int row, int nedges, int temp[])
 {
     struct checking new_edges[nedges];
     int update, add_edge, old_dest, new_dest, dest, add;
+    add = 0;
 
     for (int id = 0; id < row; id++)
     {
