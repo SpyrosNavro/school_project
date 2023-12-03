@@ -1,9 +1,11 @@
 OBJS1 = graph.o pqueue.o nndescent.o nnd_functions.o # tests.o
-OBJS2 = graph.o pqueue.o tests.o #nndescent.o
-OBJS = graph.o pqueue.o nndescent.o tests.o nnd_functions.o
-OUT = nndescent test
+OBJS2 = pqueue.o testPQ.o #nndescent.o
+OBJS3 = graph.o testGraph.o
+OBJS = graph.o pqueue.o nndescent.o testPQ.o testGraph.o nnd_functions.o
+OUT = nndescent testpq testgraph
 OUT1 = nndescent
-OUT2 = test
+OUT2 = testpq
+OUT3 = testgraph
 CC = gcc
 FLAGS = -g -c -Wall -lm -Wextra
 FILES = ./data_structures/
@@ -13,8 +15,11 @@ TESTS = ./tests/
 nndescent: $(OBJS1)
 	$(CC) -g -Wall -o $(OUT1) $(OBJS1) -lm
 
-tests: $(OBJS2)
+testpq: $(OBJS2)
 	$(CC) -g -Wall -o $(OUT2) $(OBJS2) -lm
+
+testgraph: $(OBJS3)
+	$(CC) -g -Wall -o $(OUT3) $(OBJS3) -lm
 
 graph.o : $(FILES)graph.c 
 	$(CC) $(FLAGS) $(FILES)graph.c 
@@ -25,8 +30,11 @@ pqueue.o : $(FILES)pqueue.c
 nndescent.o : $(FILES2)nndescent.c 
 	$(CC) $(FLAGS) $(FILES2)nndescent.c
 
-tests.o : $(TESTS)tests.c  
-	$(CC) $(FLAGS) $(TESTS)tests.c 
+testPQ.o : $(TESTS)testPQ.c  
+	$(CC) $(FLAGS) $(TESTS)testPQ.c 
+
+testGraph.o : $(TESTS)testGraph.c  
+	$(CC) $(FLAGS) $(TESTS)testGraph.c 
 
 nnd_functions.o: $(FILES2)nnd_functions.c 
 	$(CC) $(FLAGS) $(FILES2)nnd_functions.c 

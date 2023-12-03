@@ -133,14 +133,15 @@ void check_reverse_neighbors(Graph graph, int id, PQ queue[])
 
 
 
-int update_edges(PQ queue[], Graph graph, int row, int nedges, int temp[])
+int update_edges(PQ queue[], Graph graph, int row, int nedges)
 {
     struct checking new_edges[nedges];
-    int update, add_edge, old_dest, new_dest, dest, add;
+    int update, add_edge, old_dest, new_dest, add;
     add = 0;
 
     for (int id = 0; id < row; id++)
     {
+        graph->nodes[id]->nreverse = 0;
         // get new edges
         for(int i = 0; i < nedges; i++)
         {
@@ -198,12 +199,6 @@ int update_edges(PQ queue[], Graph graph, int row, int nedges, int temp[])
                 graph->nodes[id]->edges[i]->src = graph->nodes[id]->id;
                 graph->nodes[id]->edges[i]->dest = new_edges[i].node->id;
                 graph->nodes[id]->edges[i]->distance = new_edges[i].distance;
-
-                dest = graph->nodes[id]->edges[i]->dest;    
-
-                
-                graph->nodes[dest]->reverse[temp[dest]] = graph->nodes[id]->edges[i];
-                temp[dest]++;
             }
 
             add = 0;
