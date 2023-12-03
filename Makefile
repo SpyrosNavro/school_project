@@ -42,8 +42,9 @@ nnd_functions.o: $(FILES2)nnd_functions.c
 	$(CC) $(FLAGS) $(FILES2)nnd_functions.c 
 
 run : $(OBJ)
-	$(CC) -g -Wall -o $(OUTT) $(OBJ) -lm
+	$(CC) -g -Wall -o $(OUT2) $(OBJS2) -lm
 	./testpq
+	$(CC) -g -Wall -o $(OUT3) $(OBJS3) -lm
 	./testgraph
 
 valgrind: $(OUT)
