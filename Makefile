@@ -1,7 +1,7 @@
 OBJS1 = graph.o pqueue.o nndescent.o nnd_functions.o # tests.o
 OBJS2 = pqueue.o testPQ.o #nndescent.o
 OBJS3 = graph.o testGraph.o
-OBJ = testPQ.o testGraph.o
+OBJ = pqueue.o testPQ.o graph.o testGraph.o
 OBJS = graph.o pqueue.o nndescent.o testPQ.o testGraph.o nnd_functions.o
 OUT = nndescent testpq testgraph
 OUT1 = nndescent
