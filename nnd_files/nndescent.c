@@ -4,11 +4,11 @@
 
 
 
-int main(void)
+int main(int argc, char* argv[])
 {
     Graph graph;
     const char* filename = "test_files/small.txt";
-    int nedges = 5;
+    int nedges = atoi(argv[1]);
     int row = 100;
     int col = 3;
     int flag = 0;

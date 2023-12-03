@@ -7,7 +7,6 @@ OUT = nndescent testpq testgraph
 OUT1 = nndescent
 OUT2 = testpq
 OUT3 = testgraph
-OUTT = testpq testgraph
 CC = gcc
 FLAGS = -g -c -Wall -lm -Wextra
 FILES = ./data_structures/
