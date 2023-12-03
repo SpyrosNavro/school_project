@@ -6,7 +6,7 @@
 
 
 
-void check_neighbors(Graph graph, int id, PQ queue[])
+void checkNeighbors(Graph graph, int id, PQ queue[])
 {
     int neighbor, neighbor_of_neighbor, reverse_of_neighbor;
     float distance;
@@ -69,7 +69,7 @@ void check_neighbors(Graph graph, int id, PQ queue[])
 
 
 
-void check_reverse_neighbors(Graph graph, int id, PQ queue[])
+void checkReverse(Graph graph, int id, PQ queue[])
 {
     int reverse, neighbor_of_reverse, reverse_of_reverse;
     float distance;
@@ -133,7 +133,7 @@ void check_reverse_neighbors(Graph graph, int id, PQ queue[])
 
 
 
-int update_edges(PQ queue[], Graph graph, int row, int nedges)
+int updateEdges(PQ queue[], Graph graph, int row, int nedges)
 {
     struct checking new_edges[nedges];
     int update, add_edge, old_dest, new_dest, add;
@@ -220,7 +220,7 @@ int update_edges(PQ queue[], Graph graph, int row, int nedges)
 
 
 
-void search_neighbors(Graph graph, PQ search_queue, Node search_node, int seed, int nedges, int* add)
+void searchNeighbors(Graph graph, PQ search_queue, Node search_node, int seed, int nedges, int* add)
 {
     int distance, neighbor;
 
@@ -249,7 +249,7 @@ void search_neighbors(Graph graph, PQ search_queue, Node search_node, int seed, 
 
 
 
-void search_reverse_neighbors(Graph graph, PQ search_queue, Node search_node, int seed, int* add)
+void searchReverse(Graph graph, PQ search_queue, Node search_node, int seed, int* add)
 {
     int reverse, distance;
 

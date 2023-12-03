@@ -52,10 +52,10 @@ int main(int argc, char* argv[])
         for (int id = 0; id < row; id++)
         {
             // NEIGHBORS
-            check_neighbors(graph, id, queue);
+            checkNeighbors(graph, id, queue);
 
             // REVERSE NEIGHBORS
-            check_reverse_neighbors(graph, id, queue);
+            checkReverse(graph, id, queue);
         }
 
 
@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 
 
         // UPDATE EDGES
-        flag = update_edges(queue, graph, row, nedges);
+        flag = updateEdges(queue, graph, row, nedges);
 
 
 
@@ -157,11 +157,11 @@ int main(int argc, char* argv[])
 
 
         // NEIGHBORS
-        search_neighbors(graph, search_queue, search_node, seed, nedges, &add);
+        searchNeighbors(graph, search_queue, search_node, seed, nedges, &add);
     
 
         // REVERSE NEIGHBORS
-        search_reverse_neighbors(graph, search_queue, search_node, seed, &add);
+        searchReverse(graph, search_queue, search_node, seed, &add);
 
 
         // Truncate pool to k-top 
