@@ -35,18 +35,21 @@ int main(int argc, char* argv[])
     graph = createGraph(nedges, filename, row, col);
     srand(time(0));    
 
+    printf("before brute force");
+
+    brute_force_algorithm(graph, row, nedges);
 
     // create Priority Queue for every node
     for (int id = 0; id < row; id++)
     {
         queue[id] = createPQueue(row);
     }
-
+ 
     printf("\n\nNNDESCENT\n\n");
     int i = 0;
     // ITERATIONS
     do
-    {
+     {
         printf("iteration: %d\n", i++);
         add = 0;
         
@@ -120,7 +123,7 @@ int main(int argc, char* argv[])
         point[i] = rand()%21;
     }
     search_node->coord = point;
-
+    
     // we start from this random node of the graph
     int seed = rand()%row;
 
@@ -178,7 +181,7 @@ int main(int argc, char* argv[])
 
     } while (flag == 0);
     
-
+ 
 
 
 

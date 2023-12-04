@@ -249,7 +249,7 @@ void search_neighbors(Graph graph, PQ search_queue, Node search_node, int seed, 
     }
 }
 
-
+ 
 
 
 
@@ -277,3 +277,99 @@ void search_reverse_neighbors(Graph graph, PQ search_queue, Node search_node, in
         }
     }
 }
+
+// void brute_force(Graph graph, int row, Node search_node, int nedges){
+    
+//     PQ queue[row];
+//     for (int id = 0; id < row; id++)
+//     {
+//         queue[id] = createPQueue(row);
+//     }
+//     printf("\nSEARCH NODE INSIDE BRUTE FORCE:"); for (int i = 0; i < graph->dim; i++) { printf("%d ", search_node->coord[i]); } printf("\n");
+
+//     float distance;
+//     // with the given graph, we take 
+//     for (int id = 0; id < row; id++)
+//     { 
+//         distance = compute_distance(search_node,graph->nodes[id], graph->dim);
+//         //printf("distance computed %f=",distance);
+//         insertPQueue(search_queue, graph->nodes[id], distance);
+
+//     }
+//     struct checking results[nedges];
+//     printf("RESULTS FROM BRUTE FORCE:\n");
+//     printf("nedges=%d\n",nedges);
+//     for (int i = 0; i < nedges; i++){   
+//         results[i] = extractMin(search_queue);
+//         printf("distance EXTRACTED %f=",results[i].distance);
+//     }
+
+//     for (int i = 0; i < nedges; i++)
+//     {
+//         for (int j = 0; j < graph->dim; j++)
+//         {
+//             printf("%d ", results[i].node->coord[j]);
+//         }
+//         printf(" distance: %f\n", results[i].distance);
+//     }
+//     destroyPQueue(search_queue);
+// }
+
+void brute_force_algorithm(Graph graph, int row, int nedges){
+
+    printf("in brute force");
+    PQ queue[row];
+    // create a Priority Queue for every node
+    for (int id = 0; id < row; id++)
+    {
+        queue[id] = createPQueue(row);
+    }
+    float distance; 
+    for (int id = 0; id < row; id++)
+    {   
+        for(int j=0; j< row; j++){
+            if(searchPQueue(queue[id],graph->nodes[j] ) != 0){
+                if (id != j){
+                    distance = compute_distance(graph->nodes[id],graph->nodes[j], graph->dim);
+                    //printf("distance computed %f=",distance);
+                    insertPQueue(queue[id], graph->nodes[j], distance);
+                    insertPQueue(queue[j], graph->nodes[id], distance);
+                }
+            }
+        }
+
+    }
+    struct checking results[nedges];
+    printf("RESULTS FROM BRUTE FORCE:\n");
+    printf("nedges=%d\n",nedges);
+    
+    for (int id = 0; id < row; id++){
+        for (int i = 0; i < nedges; i++){   
+            results[i] = extractMin(queue[i]);
+            //printf("distance EXTRACTED %f=",results[i].distance);
+        }
+    }
+    // for (int i = 0; i < nedges; i++){
+    //     for (int j = 0; j < graph->dim; j++){
+    //         printf("%d ", results[i].node->coord[j]);
+    //     }
+    //     printf(" distance: %f\n", results[i].distance);
+    // }
+    // int correctNeighbors=0;
+    // int totalNeighbors= nedges*row;
+    // for (int id = 0; id < row; id++){
+
+    //     for (int j = 0; j < nedges; j++){   
+    //         if (graph->nodes[id]->edges[j]->dest == results[j].node->id ){
+    //             correctNeighbors++;
+    //         }
+    
+    //     }
+    // }
+    // double percentageSuccess = ((double)correctNeighbors / totalNeighbors) * 100;
+    // printf("Percentage of Success: %f\n", percentageSuccess);
+
+    for (int i=0; i<row; i++){
+        destroyPQueue(queue[i]);
+    }
+} 

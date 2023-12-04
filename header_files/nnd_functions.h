@@ -11,3 +11,5 @@ void check_reverse_neighbors(Graph graph, int id, PQ queue[]);
 int update_edges(PQ queue[], Graph graph, int row, int nedges, int temp[]);
 void search_neighbors(Graph graph, PQ search_queue, Node search_node, int seed, int nedges, int* add);
 void search_reverse_neighbors(Graph graph, PQ search_queue, Node search_node, int seed, int* add);
+//void brute_force(Graph graph, int row, Node search_node, int nedges);
+void brute_force_algorithm(Graph graph, int row, int nedges);
