@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <time.h>
 #include <math.h>
 
@@ -28,6 +29,7 @@ struct node {
 struct edge {
     int src, dest;
     float distance;
+    bool is;
 };
 
 int** import_data(const char *file_name, int vrows);

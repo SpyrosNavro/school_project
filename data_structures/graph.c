@@ -238,6 +238,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
         {
             graph->nodes[id]->edges[j] = malloc(sizeof( *(graph->nodes[id]->edges[j]) ));  // allocate edge
             graph->nodes[id]->edges[j]->src = id;
+            graph->nodes[id]->edges[j]->is = true;
 
             do 
             {
@@ -249,7 +250,6 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
             }
             while ( (dest == id) || (dest < 0) || (dest >= graph->nnodes) );
 
-            //printf("%d => %d\n", id, dest);
             // compute distance
             graph->nodes[id]->edges[j]->distance = euclideanDistance(graph->nodes[id], graph->nodes[graph->nodes[id]->edges[j]->dest], graph->dim);
 

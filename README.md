@@ -7,7 +7,7 @@
 
 
 ## Spyros Contribution
-nndescent.c
+nndescent.c (local join, )
 graph.c (createGraph, deleteGraph, euclideanDistance)
 tests.c
 

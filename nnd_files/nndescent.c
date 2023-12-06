@@ -9,9 +9,11 @@ int main(int argc, char* argv[])
     Graph graph;
     const char* filename = "test_files/small.txt";
     int nedges = atoi(argv[1]);
+    //int nedges = 4;
     int row = 100;
     int col = 3;
     int flag = 0;
+    int false_edges;
     float distance;
     int* point;
     PQ queue[row], search_queue;
@@ -23,6 +25,7 @@ int main(int argc, char* argv[])
     clock_t start, end;
     double time_spent;
 
+    printf("%d\n", argc);
 
     start = clock();
     graph = createGraph(nedges, filename, row, col);
@@ -46,40 +49,122 @@ int main(int argc, char* argv[])
     {
         printf("iteration: %d\n", i++);
         add = 0;
+        false_edges = 0;
         
+
+        for (int id = 0; id < row; id++)
+        {
+            queue[id] = createPQueue(row);
+        }
+
 
         // PUT DISTANCES IN PRIORITY QUEUE
         for (int id = 0; id < row; id++)
         {
             // NEIGHBORS
-            checkNeighbors(graph, id, queue);
+            //checkNeighbors(graph, id, queue);
 
             // REVERSE NEIGHBORS
-            checkReverse(graph, id, queue);
+            //checkReverse(graph, id, queue);
+
+
+            //====================================//
+            //============ LOCAL JOIN ============//
+            //====================================//
+
+            // NEIGHBORS
+            //localJoin(graph, id, queue);  // for some weird reason this doesn't work
+            int neighbor;
+            for (int neighbors = 0; neighbors < nedges; neighbors++)
+            {
+
+                // count how many IS flags are false
+                if (graph->nodes[id]->edges[neighbors]->is == false) 
+                {
+                    false_edges++;
+                    continue;
+                }
+
+                graph->nodes[id]->edges[neighbors]->is = false;
+                
+                //neighbor of node[id]
+                neighbor = graph->nodes[id]->edges[neighbors]->dest;
+
+                if (searchPQueue(queue[id], graph->nodes[neighbor]) == 1) {
+                insertPQueue(queue[id], graph->nodes[neighbor], graph->nodes[id]->edges[neighbors]->distance); }
+
+                if (searchPQueue(queue[neighbor], graph->nodes[id]) == 1) {
+                insertPQueue(queue[neighbor], graph->nodes[id], graph->nodes[id]->edges[neighbors]->distance); }
+
+
+                // compare with other neighbors 
+                for (int i = 0; i < nedges; i++)
+                {
+                    int theRest = graph->nodes[id]->edges[i]->dest;
+                    if (neighbor == theRest) continue;
+
+                    distance = euclideanDistance(graph->nodes[neighbor], graph->nodes[theRest], graph->dim);
+
+                    if (searchPQueue(queue[neighbor], graph->nodes[theRest]) == 1 ) {
+                    insertPQueue(queue[neighbor], graph->nodes[theRest], distance); }
+
+                    if (searchPQueue(queue[theRest], graph->nodes[neighbor]) == 1 ) {
+                    insertPQueue(queue[theRest], graph->nodes[neighbor], distance); }
+                }
+
+
+
+                // compare with reverse neighbors
+                for (int i = 0; i < graph->nodes[id]->nreverse; i++)
+                {
+                    int theRest = graph->nodes[id]->reverse[i]->src;
+
+                    distance = euclideanDistance(graph->nodes[neighbor], graph->nodes[theRest], graph->dim);
+
+                    if (searchPQueue(queue[neighbor], graph->nodes[theRest]) == 1 ) {
+                    insertPQueue(queue[neighbor], graph->nodes[theRest], distance); }
+
+                    if (searchPQueue(queue[theRest], graph->nodes[neighbor]) == 1 ) {
+                    insertPQueue(queue[theRest], graph->nodes[neighbor], distance); }
+                }
+            }
+
+            // REVERSE
+            RevlocalJoin(graph, id, queue, &false_edges);
+        }
+
+        if (false_edges == 2*(nedges*row))
+        {
+            flag = 1;
         }
 
 
         
-
-
         // UPDATE EDGES
-        flag = updateEdges(queue, graph, row, nedges);
+        if (flag == 0) flag = updateEdges(queue, graph, row, nedges);
 
 
 
         // UPDATE REVERSE NEIGHBORS
-        if (flag == 1)
+        if (flag == 0)  // IMPORTANT MAYBE WRONG
         {
-            for (int id = 0; id < row; id++)
+        for (int id = 0; id < row; id++)
+        {
+            for (int i = 0; i < nedges; i++)
             {
-                for (int i = 0; i < nedges; i++)
-                {
-                    dest = graph->nodes[id]->edges[i]->dest;
-                    graph->nodes[dest]->reverse[(graph->nodes[dest]->nreverse)++] = graph->nodes[id]->edges[i];
-                }
-                
+                dest = graph->nodes[id]->edges[i]->dest;
+                graph->nodes[dest]->reverse[(graph->nodes[dest]->nreverse)++] = graph->nodes[id]->edges[i];
             }
+            
         }
+        }
+
+        for (int id = 0; id < row; id++)
+        {
+            destroyPQueue(queue[id]);
+        }
+
+        printf("end\n");
 
     } while (flag == 0);
 
@@ -102,19 +187,14 @@ int main(int argc, char* argv[])
     int y = 0;
     for (int id = 0; id < row; id++)
     {
+        printf("id %d nreverse:%d\n", id, graph->nodes[id]->nreverse);
         for (int i = 0; i < graph->nodes[id]->nreverse; i++)
         {
-            printf("id %d has reverse neighbor %d\n", id, graph->nodes[id]->reverse[i]->dest);
+            printf("reverse:%d\n", graph->nodes[id]->reverse[i]->src);
             y++;
         }
     }
     printf("x = %d y = %d", x, y);
-
-    // free queue
-    for (int id = 0; id < row; id++)
-    {
-        destroyPQueue(queue[id]);
-    }
 
 
     //=====================================================================================//

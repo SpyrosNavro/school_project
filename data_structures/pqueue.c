@@ -87,7 +87,7 @@ void insertPQueue(struct PQueue* pqueue, Node node, float distance){
 // extract the minimum value - the node with the smallest distance
 struct checking extractMin(struct PQueue* pqueue){
     if(pqueue->size <=0){
-        printf("Empty priority queue, cannot extract minimum distance");
+        printf("Empty priority queue, cannot extract minimum distance\n");
         //return;    //** has to be an empty node struct type
     }
     if (pqueue->size ==1){
