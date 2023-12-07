@@ -5,7 +5,7 @@
 
 
 
-float compute_distance (Node a, Node b, int dim)
+float euclideanDistance (Node a, Node b, int dim)
 {
     float sum = 0;
     for (int i = 0; i < dim; i++) 
@@ -14,7 +14,20 @@ float compute_distance (Node a, Node b, int dim)
     }
     sum = sqrt(sum);
      
-    //printf(" COMPUTING NODE 1 with coordinates a=%d\n, b=%d\n, c=%d\n", a->coord[0], a->coord[1], a->coord[2]);
+    return sum;
+}
+
+
+
+
+float manhattanDistance (Node a, Node b, int dim)
+{
+    float sum = 0;
+    for (int i = 0; i < dim; i++) 
+    {
+        sum = sum + abs(a->coord[i] - b->coord[i]);
+    }
+     
     return sum;
 }
 
@@ -235,7 +248,8 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
 
             //printf("%d => %d\n", id, dest);
             // compute distance
-            graph->nodes[id]->edges[j]->distance = compute_distance(graph->nodes[id], graph->nodes[graph->nodes[id]->edges[j]->dest], graph->dim);
+            graph->nodes[id]->edges[j]->distance = euclideanDistance(graph->nodes[id], graph->nodes[graph->nodes[id]->edges[j]->dest], graph->dim);
+            printf("distance in GRAPH =%f\n", graph->nodes[id]->edges[j]->distance);
 
             // save reverse edge to destination
             graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse] = graph->nodes[id]->edges[j];

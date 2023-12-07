@@ -6,10 +6,11 @@
 #include "graph.h"
 #include "pqueue.h"
 
-void check_neighbors(Graph graph, int id, PQ queue[]);
-void check_reverse_neighbors(Graph graph, int id, PQ queue[]);
-int update_edges(PQ queue[], Graph graph, int row, int nedges, int temp[]);
-void search_neighbors(Graph graph, PQ search_queue, Node search_node, int seed, int nedges, int* add);
-void search_reverse_neighbors(Graph graph, PQ search_queue, Node search_node, int seed, int* add);
-//void brute_force(Graph graph, int row, Node search_node, int nedges);
+void checkNeighbors(Graph graph, int id, PQ queue[]);
+void checkReverse(Graph graph, int id, PQ queue[]);
+int updateEdges(PQ queue[], Graph graph, int row, int nedges);
+void searchNeighbors(Graph graph, PQ search_queue, Node search_node, int seed, int nedges, int* add);
+void searchReverse(Graph graph, PQ search_queue, Node search_node, int seed, int* add);
+void localJoin(Graph graph, int id, PQ queue[]);
+void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges, int* counter);
 void brute_force_algorithm(Graph graph, int row, int nedges);

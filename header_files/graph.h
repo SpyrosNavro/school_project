@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <time.h>
 #include <math.h>
 
@@ -18,9 +19,11 @@ struct graph {
 struct node {
     int id;    // id of point 
     int checked;
+    int same;
     int nreverse;
     Edge* edges;
     Edge* reverse;
+    //bool* true_rev;
     int* coord;  // coordinates of n-dimentional point
 };
 
@@ -28,11 +31,14 @@ struct node {
 struct edge {
     int src, dest;
     float distance;
+    bool is;
+    bool rev_is;
 };
 
 int** import_data(const char *file_name, int vrows);
 float** import_Binarydata(const char *file_name);
 
-float compute_distance(Node a, Node b, int dim);
+float euclideanDistance(Node a, Node b, int dim);
+float manhattanDistance (Node a, Node b, int dim);
 Graph createGraph(int nedges, const char *file_name, int row, int column);
 void deleteGraph(Graph graph);
