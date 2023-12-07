@@ -138,7 +138,12 @@ void checkReverse(Graph graph, int id, PQ queue[])
 int updateEdges(PQ queue[], Graph graph, int row, int nedges)
 {
     struct checking new_edges[nedges];
+<<<<<<< HEAD
     int update, add_edge, old_dest, new_dest, add, total_changes;
+=======
+    Edge old_edges[nedges];
+    int update, add_edge, old_dest, new_dest, add;
+>>>>>>> 267b4e6f844e757b357d259df09807106b8f8041
     add = 0;
     
 
@@ -147,11 +152,31 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
     for (int id = 0; id < row; id++)
     {
         graph->nodes[id]->nreverse = 0;
+
+
+        // save old edges
+        for (int i = 0; i < nedges; i++)
+        {
+            old_edges[i] = graph->nodes[id]->edges[i];
+        }
+        
+        // no need to update edges on this node
+        if (graph->nodes[id]->same == 1) continue;
+
+
+
         // get new edges
         for(int i = 0; i < nedges; i++)
         {
             new_edges[i] = extractMin(queue[id]);
+
+            // if (new_edges[i].node->id == id)
+            // {
+            //     printf("\n\n BULLSHIT \n\n");
+            // }
         }
+
+
 
 
         // check if new edges == old edges
@@ -163,10 +188,8 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
 
             for (int j = 0; j < nedges; j++)
             {
-
                 new_dest = new_edges[j].node->id;
 
-                
                 // 1 edge has stayed the same
                 if (old_dest == new_dest)
                 {
@@ -205,6 +228,21 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
                 graph->nodes[id]->edges[i]->src = graph->nodes[id]->id;
                 graph->nodes[id]->edges[i]->dest = new_edges[i].node->id;
                 graph->nodes[id]->edges[i]->distance = new_edges[i].distance;
+                graph->nodes[id]->edges[i]->is = true;
+            }
+
+
+            // put incremental search (is) flag where needed
+            for (int i = 0; i < nedges; i++)
+            {
+                for(int j = 0; j < nedges; j++)
+                {
+                    if (graph->nodes[id]->edges[i]->dest == old_edges[j]->dest)
+                    {
+                        graph->nodes[id]->edges[i]->is = false;
+                        break;
+                    } 
+                }
             }
 
             add = 0;
@@ -428,3 +466,132 @@ void brute_force_algorithm(Graph graph, int row, int nedges){
 
 
 
+
+
+
+
+void localJoin(Graph graph, int id, PQ queue[])
+{
+    int neighbor, distance;
+
+
+    for (int neighbors = 0; neighbors < graph->neighbors; neighbors++)
+    {
+
+        //neighbor of node[id]
+        neighbor = graph->nodes[id]->edges[neighbors]->dest;
+
+        if (searchPQueue(queue[id], graph->nodes[neighbor]) == 1) {
+        insertPQueue(queue[id], graph->nodes[neighbor], graph->nodes[id]->edges[neighbors]->distance); }
+
+
+        if (searchPQueue(queue[neighbor], graph->nodes[id]) == 1) {
+        insertPQueue(queue[neighbor], graph->nodes[id], graph->nodes[id]->edges[neighbors]->distance); }
+
+        // compare with other neighbors 
+        for (int i = 0; i < graph->neighbors; i++)
+        {
+            int theRest = graph->nodes[id]->edges[i]->dest;
+            if (neighbor == theRest) continue;
+
+            distance = euclideanDistance(graph->nodes[neighbor], graph->nodes[theRest], graph->dim);
+
+            if (searchPQueue(queue[neighbor], graph->nodes[theRest]) == 1 ) {
+            insertPQueue(queue[neighbor], graph->nodes[theRest], distance); }
+
+            if (searchPQueue(queue[theRest], graph->nodes[neighbor]) == 1 ) {
+            insertPQueue(queue[theRest], graph->nodes[neighbor], distance); }
+        }
+
+
+
+        // compare with reverse neighbors
+        for (int i = 0; i < graph->nodes[id]->nreverse; i++)
+        {
+            int theRest = graph->nodes[id]->reverse[i]->src;
+
+            distance = euclideanDistance(graph->nodes[neighbor], graph->nodes[theRest], graph->dim);
+
+            if (searchPQueue(queue[neighbor], graph->nodes[theRest]) == 1 ) {
+            insertPQueue(queue[neighbor], graph->nodes[theRest], distance); }
+
+            if (searchPQueue(queue[theRest], graph->nodes[neighbor]) == 1 ) {
+            insertPQueue(queue[theRest], graph->nodes[neighbor], distance); }
+        }
+    }
+}
+
+
+
+
+
+void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges, int* counter)
+{
+    int reverse, distance;
+
+
+    for (int num = 0; num < graph->nodes[id]->nreverse; num++)
+    {
+        // count how many IS flags are false
+        if (graph->nodes[id]->reverse[num]->rev_is == false) 
+        {
+            (*false_edges)++;
+            (*counter)++;
+            continue;
+        }
+
+        graph->nodes[id]->reverse[num]->rev_is = false;
+
+        //reverse of node[id]
+        reverse = graph->nodes[id]->reverse[num]->src;
+
+        //if (reverse == id) continue;
+        if (graph->nodes[id]->id == graph->nodes[reverse]->id)
+        {
+            printf("\n\n%d BULLSHIT4 \n\n",graph->nodes[id]->id);
+        }
+        if (searchPQueue(queue[id], graph->nodes[reverse]) == 1) {
+        insertPQueue(queue[id], graph->nodes[reverse], graph->nodes[id]->reverse[num]->distance); }
+
+        if (searchPQueue(queue[reverse], graph->nodes[id]) == 1) {
+        insertPQueue(queue[reverse], graph->nodes[id], graph->nodes[id]->reverse[num]->distance); }
+
+        // compare with neighbors 
+        for (int i = 0; i < graph->neighbors; i++)
+        {
+            int theRest = graph->nodes[id]->edges[i]->dest;
+            distance = euclideanDistance(graph->nodes[reverse], graph->nodes[theRest], graph->dim);
+
+            if (graph->nodes[id]->id == graph->nodes[theRest]->id)
+            {
+                printf("\n\n%d BULLSHIT5 \n\n",graph->nodes[id]->id);
+            }
+            if (searchPQueue(queue[reverse], graph->nodes[theRest]) == 1 ) {
+            insertPQueue(queue[reverse], graph->nodes[theRest], distance); }
+
+            if (searchPQueue(queue[theRest], graph->nodes[reverse]) == 1 ) {
+            insertPQueue(queue[theRest], graph->nodes[reverse], distance); }
+        }
+
+
+
+        // compare with other reverse neighbors
+        for (int i = 0; i < graph->nodes[id]->nreverse; i++)
+        {
+            int theRest = graph->nodes[id]->reverse[i]->src;
+            if (reverse == theRest) continue;
+
+            distance = euclideanDistance(graph->nodes[reverse], graph->nodes[theRest], graph->dim);
+
+            if (graph->nodes[id]->id == graph->nodes[theRest]->id)
+            {
+                printf("\n\n%d BULLSHIT6 \n\n",graph->nodes[id]->id);
+            }
+            if (searchPQueue(queue[reverse], graph->nodes[theRest]) == 1 ) {
+            insertPQueue(queue[reverse], graph->nodes[theRest], distance); }
+
+            if (searchPQueue(queue[theRest], graph->nodes[reverse]) == 1 ) {
+            insertPQueue(queue[theRest], graph->nodes[reverse], distance); }
+        }
+    }
+}

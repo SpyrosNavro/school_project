@@ -205,6 +205,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
     graph->nnodes = row;
     graph->neighbors = nedges;
     printf("CREATE GRAPH\n\n");
+
     // initialise NODES
     for (int id = 0; id < row; id++)
     { 
@@ -212,11 +213,10 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
         graph->nodes[id]->id = id;
         graph->nodes[id]->reverse = malloc ( row * sizeof(*(graph->nodes[id]->reverse)) );  // allocate reverse neighbors
         graph->nodes[id]->nreverse = 0;
-
         graph->nodes[id]->checked = 0;
-        
-        graph->nodes[id]->coord = malloc(column * sizeof( *(graph->nodes[id]->coord) ));
-        
+        graph->nodes[id]->same = 0;
+        graph->nodes[id]->coord = malloc( column * sizeof(*(graph->nodes[id]->coord)) );
+        //graph->nodes[id]->true_rev = malloc( row*sizeof(*(graph->nodes[id]->true_rev)) );
         for (int j = 0; j < column; j++)
         {
             graph->nodes[id]->coord[j] = data[id][j];
@@ -235,6 +235,8 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
         {
             graph->nodes[id]->edges[j] = malloc(sizeof( *(graph->nodes[id]->edges[j]) ));  // allocate edge
             graph->nodes[id]->edges[j]->src = id;
+            graph->nodes[id]->edges[j]->is = true;
+            graph->nodes[id]->edges[j]->rev_is = true;
 
             do 
             {
@@ -246,13 +248,13 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
             }
             while ( (dest == id) || (dest < 0) || (dest >= graph->nnodes) );
 
-            //printf("%d => %d\n", id, dest);
             // compute distance
             graph->nodes[id]->edges[j]->distance = euclideanDistance(graph->nodes[id], graph->nodes[graph->nodes[id]->edges[j]->dest], graph->dim);
             printf("distance in GRAPH =%f\n", graph->nodes[id]->edges[j]->distance);
 
             // save reverse edge to destination
             graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse] = graph->nodes[id]->edges[j];
+            //graph->nodes[dest]->true_rev[graph->nodes[dest]->nreverse] = true;
             graph->nodes[dest]->nreverse++;
         }
     } 
