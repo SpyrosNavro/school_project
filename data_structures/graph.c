@@ -219,7 +219,6 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
         graph->nodes[id]->checked = 0;
         graph->nodes[id]->same = 0;
         graph->nodes[id]->coord = malloc( column * sizeof(*(graph->nodes[id]->coord)) );
-        //graph->nodes[id]->true_rev = malloc( row*sizeof(*(graph->nodes[id]->true_rev)) );
         for (int j = 0; j < column; j++)
         {
             graph->nodes[id]->coord[j] = data[id][j];
@@ -252,11 +251,10 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
             while ( (dest == id) || (dest < 0) || (dest >= graph->nnodes) );
 
             // compute distance
-            graph->nodes[id]->edges[j]->distance = euclideanDistance(graph->nodes[id], graph->nodes[graph->nodes[id]->edges[j]->dest], graph->dim);
+            graph->nodes[id]->edges[j]->distance = euclideanDistance(graph->nodes[id], graph->nodes[dest], graph->dim);
 
             // save reverse edge to destination
             graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse] = graph->nodes[id]->edges[j];
-            //graph->nodes[dest]->true_rev[graph->nodes[dest]->nreverse] = true;
             graph->nodes[dest]->nreverse++;
         }
     }
