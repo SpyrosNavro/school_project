@@ -8,8 +8,7 @@ int main(int argc, char* argv[])
 {
     Graph graph;
     const char* filename = "test_files/small.txt";
-    //int nedges = atoi(argv[1]);
-    int nedges = 3;
+    int nedges = atoi(argv[1]);
     int row = 10;
     int col = 3;
     int flag = 0;
@@ -32,8 +31,9 @@ int main(int argc, char* argv[])
     start = clock();
     graph = createGraph(nedges, filename, row, col);
     srand(time(0));    
-
-
+    
+    int changes = 0;
+    float D = 0.1;
     // create Priority Queue for every node
     for (int id = 0; id < row; id++)
     {
@@ -160,12 +160,15 @@ int main(int argc, char* argv[])
 
         
         // UPDATE EDGES
-        if (flag == 0) flag = updateEdges(queue, graph, row, nedges);
+        if (flag == 0) changes = updateEdges(queue, graph, row, nedges);
 
+        printf("D*row*nedges=%f",D*row*nedges);
+        // early termination
+        if (changes < D*row*nedges || changes == 0) flag =1;
 
-
+        printf("changes=%d\n",changes);
         // UPDATE REVERSE EDGES
-        if (flag == 0)
+        if (changes > 0)
         {
             for (int id = 0; id < row; id++)
             {
@@ -174,6 +177,7 @@ int main(int argc, char* argv[])
                     dest = graph->nodes[id]->edges[i]->dest;
                     graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse] = graph->nodes[id]->edges[i];
                     graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse++]->rev_is = true;
+                    
                 }
             }
 
@@ -190,6 +194,9 @@ int main(int argc, char* argv[])
                         {
                             graph->nodes[id]->reverse[i]->rev_is = false;
                             break;
+                        }
+                        else {
+                            changes++;
                         }
                         x++;
                     }
@@ -235,7 +242,6 @@ int main(int argc, char* argv[])
         }
     }
     printf("x = %d y = %d", x, y);
-
 
     //=====================================================================================//
     //=====================================   SEARCH   ====================================//
