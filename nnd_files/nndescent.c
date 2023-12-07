@@ -8,12 +8,13 @@ int main(int argc, char* argv[])
 {
     Graph graph;
     const char* filename = "test_files/small.txt";
-    int nedges = atoi(argv[1]);
-    //int nedges = 4;
-    int row = 100;
+    //int nedges = atoi(argv[1]);
+    int nedges = 4;
+    int row = 10;
     int col = 3;
     int flag = 0;
     int false_edges;
+    Edge old_rev[row][row];
     float distance;
     int* point;
     PQ queue[row], search_queue;
@@ -21,6 +22,7 @@ int main(int argc, char* argv[])
     Node search_node;
     struct checking closest;
     struct checking valise[nedges];
+    int counter;
 
     clock_t start, end;
     double time_spent;
@@ -40,8 +42,6 @@ int main(int argc, char* argv[])
 
 
 
-
-
     printf("\n\nNNDESCENT\n\n");
     int i = 0;
     // ITERATIONS
@@ -52,10 +52,24 @@ int main(int argc, char* argv[])
         false_edges = 0;
         
 
+
         for (int id = 0; id < row; id++)
         {
             queue[id] = createPQueue(row);
         }
+
+
+        // save old reverse neighbors
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < graph->nodes[i]->nreverse; j++)
+            {
+                old_rev[i][j] = graph->nodes[i]->reverse[j];
+            }
+
+            old_rev[i][graph->nodes[i]->nreverse] = NULL;
+        }
+
 
 
         // PUT DISTANCES IN PRIORITY QUEUE
@@ -82,6 +96,7 @@ int main(int argc, char* argv[])
                 if (graph->nodes[id]->edges[neighbors]->is == false) 
                 {
                     false_edges++;
+                    counter++;
                     continue;
                 }
 
@@ -130,14 +145,16 @@ int main(int argc, char* argv[])
             }
 
             // REVERSE
-            RevlocalJoin(graph, id, queue, &false_edges);
+            RevlocalJoin(graph, id, queue, &false_edges, &counter);
+
+            if ( counter == nedges + graph->nodes[id]->nreverse ) graph->nodes[id]->same = 1;
+            counter = 0;
         }
 
-        if (false_edges == 2*(nedges*row))
-        {
-            flag = 1;
-        }
 
+
+        if (false_edges == 2*(nedges*row)) flag = 1;
+        printf("false edges %d %d\n",false_edges, 2*(nedges*row));
 
         
         // UPDATE EDGES
@@ -146,18 +163,40 @@ int main(int argc, char* argv[])
 
 
         // UPDATE REVERSE NEIGHBORS
-        if (flag == 0)  // IMPORTANT MAYBE WRONG
+        if (flag == 0)
         {
-        for (int id = 0; id < row; id++)
-        {
-            for (int i = 0; i < nedges; i++)
+            for (int id = 0; id < row; id++)
             {
-                dest = graph->nodes[id]->edges[i]->dest;
-                graph->nodes[dest]->reverse[(graph->nodes[dest]->nreverse)++] = graph->nodes[id]->edges[i];
+                for (int i = 0; i < nedges; i++)
+                {
+                    dest = graph->nodes[id]->edges[i]->dest;
+                    graph->nodes[dest]->reverse[(graph->nodes[dest]->nreverse)++] = graph->nodes[id]->edges[i];
+
+                }
             }
-            
+
+
+
+            for (int id = 0; id < row; id++)
+            {
+                for (int i = 0; i < graph->nodes[id]->nreverse; i++)
+                {
+                    int x = 0;
+                    while (old_rev[id][x] != NULL)
+                    {
+                        graph->nodes[id]->reverse[i]->is = true;
+                        if (graph->nodes[id]->reverse[i] == old_rev[id][x])
+                        {
+                            graph->nodes[id]->reverse[i]->is = false;
+                            break;
+                        }
+                        x++;
+                    }
+                }
+            }
         }
-        }
+
+
 
         for (int id = 0; id < row; id++)
         {

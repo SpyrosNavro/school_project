@@ -12,4 +12,4 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges);
 void searchNeighbors(Graph graph, PQ search_queue, Node search_node, int seed, int nedges, int* add);
 void searchReverse(Graph graph, PQ search_queue, Node search_node, int seed, int* add);
 void localJoin(Graph graph, int id, PQ queue[]);
-void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges);
+void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges, int* counter);

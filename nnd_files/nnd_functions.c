@@ -151,11 +151,12 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
             old_edges[i] = graph->nodes[id]->edges[i];
         }
         
-
+        if (graph->nodes[id]->same == 1) continue;
 
         // get new edges
         for(int i = 0; i < nedges; i++)
         {
+            if (graph->nodes[id]->nreverse == 0 && i == nedges -1) break;
             new_edges[i] = extractMin(queue[id]);
         }
 
@@ -358,7 +359,7 @@ void localJoin(Graph graph, int id, PQ queue[])
 
 
 
-void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges)
+void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges, int* counter)
 {
     int reverse, distance;
 
@@ -370,6 +371,7 @@ void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges)
         if (graph->nodes[id]->reverse[num]->is == false) 
         {
             (*false_edges)++;
+            (*counter)++;
             continue;
         }
 

@@ -208,6 +208,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
     graph->nnodes = row;
     graph->neighbors = nedges;
     printf("CREATE GRAPH\n\n");
+
     // initialise NODES
     for (int id = 0; id < row; id++)
     { 
@@ -215,11 +216,9 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
         graph->nodes[id]->id = id;
         graph->nodes[id]->reverse = malloc ( row * sizeof(*(graph->nodes[id]->reverse)) );  // allocate reverse neighbors
         graph->nodes[id]->nreverse = 0;
-
         graph->nodes[id]->checked = 0;
-        
+        graph->nodes[id]->same = 0;
         graph->nodes[id]->coord = malloc(column * sizeof( *(graph->nodes[id]->coord) ));
-        
         for (int j = 0; j < column; j++)
         {
             graph->nodes[id]->coord[j] = data[id][j];
