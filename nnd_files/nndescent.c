@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
     Graph graph;
     const char* filename = "test_files/small.txt";
     //int nedges = atoi(argv[1]);
-    int nedges = 4;
+    int nedges = 3;
     int row = 10;
     int col = 3;
     int flag = 0;
@@ -105,11 +105,7 @@ int main(int argc, char* argv[])
                 //neighbor of node[id]
                 neighbor = graph->nodes[id]->edges[neighbors]->dest;
 
-                //if (neighbor == id) continue;
-                if (graph->nodes[id]->id == graph->nodes[neighbor]->id)
-                {
-                    printf("\n\n%d BULLSHIT1 \n\n",graph->nodes[id]->id);
-                }
+
                 if (searchPQueue(queue[id], graph->nodes[neighbor]) == 1) {
                 insertPQueue(queue[id], graph->nodes[neighbor], graph->nodes[id]->edges[neighbors]->distance); }
 
@@ -125,10 +121,7 @@ int main(int argc, char* argv[])
 
                     distance = euclideanDistance(graph->nodes[neighbor], graph->nodes[theRest], graph->dim);
                     
-                    if (graph->nodes[id]->id == graph->nodes[theRest]->id)
-                    {
-                        printf("\n\n%d BULLSHIT2 \n\n",graph->nodes[id]->id);
-                    }
+
                     if (searchPQueue(queue[neighbor], graph->nodes[theRest]) == 1 ) {
                     insertPQueue(queue[neighbor], graph->nodes[theRest], distance); }
 
@@ -144,10 +137,7 @@ int main(int argc, char* argv[])
                     int theRest = graph->nodes[id]->reverse[i]->src;
                     distance = euclideanDistance(graph->nodes[neighbor], graph->nodes[theRest], graph->dim);
 
-                    if (graph->nodes[id]->id == graph->nodes[theRest]->id)
-                    {
-                        printf("\n\n%d BULLSHIT3 \n\n",graph->nodes[id]->id);
-                    }
+                    
                     if (searchPQueue(queue[neighbor], graph->nodes[theRest]) == 1 ) {
                     insertPQueue(queue[neighbor], graph->nodes[theRest], distance); }
 
@@ -183,7 +173,7 @@ int main(int argc, char* argv[])
                 {
                     dest = graph->nodes[id]->edges[i]->dest;
                     graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse] = graph->nodes[id]->edges[i];
-                    graph->nodes[dest]->reverse[(graph->nodes[dest]->nreverse)++]->rev_is = true;
+                    graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse++]->rev_is = true;
                 }
             }
 

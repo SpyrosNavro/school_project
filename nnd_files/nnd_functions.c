@@ -165,11 +165,6 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
         for(int i = 0; i < nedges; i++)
         {
             new_edges[i] = extractMin(queue[id]);
-
-            // if (new_edges[i].node->id == id)
-            // {
-            //     printf("\n\n BULLSHIT \n\n");
-            // }
         }
 
 
@@ -541,11 +536,7 @@ void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges, int* counte
         //reverse of node[id]
         reverse = graph->nodes[id]->reverse[num]->src;
 
-        //if (reverse == id) continue;
-        if (graph->nodes[id]->id == graph->nodes[reverse]->id)
-        {
-            printf("\n\n%d BULLSHIT4 \n\n",graph->nodes[id]->id);
-        }
+
         if (searchPQueue(queue[id], graph->nodes[reverse]) == 1) {
         insertPQueue(queue[id], graph->nodes[reverse], graph->nodes[id]->reverse[num]->distance); }
 
@@ -558,10 +549,7 @@ void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges, int* counte
             int theRest = graph->nodes[id]->edges[i]->dest;
             distance = euclideanDistance(graph->nodes[reverse], graph->nodes[theRest], graph->dim);
 
-            if (graph->nodes[id]->id == graph->nodes[theRest]->id)
-            {
-                printf("\n\n%d BULLSHIT5 \n\n",graph->nodes[id]->id);
-            }
+
             if (searchPQueue(queue[reverse], graph->nodes[theRest]) == 1 ) {
             insertPQueue(queue[reverse], graph->nodes[theRest], distance); }
 
@@ -579,10 +567,7 @@ void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges, int* counte
 
             distance = euclideanDistance(graph->nodes[reverse], graph->nodes[theRest], graph->dim);
 
-            if (graph->nodes[id]->id == graph->nodes[theRest]->id)
-            {
-                printf("\n\n%d BULLSHIT6 \n\n",graph->nodes[id]->id);
-            }
+
             if (searchPQueue(queue[reverse], graph->nodes[theRest]) == 1 ) {
             insertPQueue(queue[reverse], graph->nodes[theRest], distance); }
 
