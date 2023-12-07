@@ -23,6 +23,7 @@ struct node {
     int nreverse;
     Edge* edges;
     Edge* reverse;
+    //bool* true_rev;
     int* coord;  // coordinates of n-dimentional point
 };
 
@@ -31,6 +32,7 @@ struct edge {
     int src, dest;
     float distance;
     bool is;
+    bool rev_is;
 };
 
 int** import_data(const char *file_name, int vrows);

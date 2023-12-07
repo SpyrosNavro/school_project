@@ -105,6 +105,11 @@ int main(int argc, char* argv[])
                 //neighbor of node[id]
                 neighbor = graph->nodes[id]->edges[neighbors]->dest;
 
+                //if (neighbor == id) continue;
+                if (graph->nodes[id]->id == graph->nodes[neighbor]->id)
+                {
+                    printf("\n\n%d BULLSHIT1 \n\n",graph->nodes[id]->id);
+                }
                 if (searchPQueue(queue[id], graph->nodes[neighbor]) == 1) {
                 insertPQueue(queue[id], graph->nodes[neighbor], graph->nodes[id]->edges[neighbors]->distance); }
 
@@ -119,7 +124,11 @@ int main(int argc, char* argv[])
                     if (neighbor == theRest) continue;
 
                     distance = euclideanDistance(graph->nodes[neighbor], graph->nodes[theRest], graph->dim);
-
+                    
+                    if (graph->nodes[id]->id == graph->nodes[theRest]->id)
+                    {
+                        printf("\n\n%d BULLSHIT2 \n\n",graph->nodes[id]->id);
+                    }
                     if (searchPQueue(queue[neighbor], graph->nodes[theRest]) == 1 ) {
                     insertPQueue(queue[neighbor], graph->nodes[theRest], distance); }
 
@@ -133,9 +142,12 @@ int main(int argc, char* argv[])
                 for (int i = 0; i < graph->nodes[id]->nreverse; i++)
                 {
                     int theRest = graph->nodes[id]->reverse[i]->src;
-
                     distance = euclideanDistance(graph->nodes[neighbor], graph->nodes[theRest], graph->dim);
 
+                    if (graph->nodes[id]->id == graph->nodes[theRest]->id)
+                    {
+                        printf("\n\n%d BULLSHIT3 \n\n",graph->nodes[id]->id);
+                    }
                     if (searchPQueue(queue[neighbor], graph->nodes[theRest]) == 1 ) {
                     insertPQueue(queue[neighbor], graph->nodes[theRest], distance); }
 
@@ -154,7 +166,7 @@ int main(int argc, char* argv[])
 
 
         if (false_edges == 2*(nedges*row)) flag = 1;
-        printf("false edges %d %d\n",false_edges, 2*(nedges*row));
+        //printf("false edges %d %d\n",false_edges, 2*(nedges*row));
 
         
         // UPDATE EDGES
@@ -162,7 +174,7 @@ int main(int argc, char* argv[])
 
 
 
-        // UPDATE REVERSE NEIGHBORS
+        // UPDATE REVERSE EDGES
         if (flag == 0)
         {
             for (int id = 0; id < row; id++)
@@ -170,8 +182,8 @@ int main(int argc, char* argv[])
                 for (int i = 0; i < nedges; i++)
                 {
                     dest = graph->nodes[id]->edges[i]->dest;
-                    graph->nodes[dest]->reverse[(graph->nodes[dest]->nreverse)++] = graph->nodes[id]->edges[i];
-
+                    graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse] = graph->nodes[id]->edges[i];
+                    graph->nodes[dest]->reverse[(graph->nodes[dest]->nreverse)++]->rev_is = true;
                 }
             }
 
@@ -184,10 +196,9 @@ int main(int argc, char* argv[])
                     int x = 0;
                     while (old_rev[id][x] != NULL)
                     {
-                        graph->nodes[id]->reverse[i]->is = true;
-                        if (graph->nodes[id]->reverse[i] == old_rev[id][x])
+                        if (graph->nodes[id]->reverse[i]->src == old_rev[id][x]->src)
                         {
-                            graph->nodes[id]->reverse[i]->is = false;
+                            graph->nodes[id]->reverse[i]->rev_is = false;
                             break;
                         }
                         x++;
