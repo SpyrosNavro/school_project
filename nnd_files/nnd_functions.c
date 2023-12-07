@@ -138,12 +138,8 @@ void checkReverse(Graph graph, int id, PQ queue[])
 int updateEdges(PQ queue[], Graph graph, int row, int nedges)
 {
     struct checking new_edges[nedges];
-<<<<<<< HEAD
-    int update, add_edge, old_dest, new_dest, add, total_changes;
-=======
     Edge old_edges[nedges];
-    int update, add_edge, old_dest, new_dest, add;
->>>>>>> 267b4e6f844e757b357d259df09807106b8f8041
+    int update, add_edge, old_dest, new_dest, add, total_changes;
     add = 0;
     
 
