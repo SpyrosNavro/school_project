@@ -142,6 +142,10 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
 
     for (int id = 0; id < row; id++)
     {
+        // no need to update edges on this node
+        if (graph->nodes[id]->same == 1) continue;
+
+
         graph->nodes[id]->nreverse = 0;
 
 
@@ -151,9 +155,6 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
             old_edges[i] = graph->nodes[id]->edges[i];
         }
         
-        // no need to update edges on this node
-        if (graph->nodes[id]->same == 1) continue;
-
 
 
         // get new edges
@@ -174,6 +175,7 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
 
             for (int j = 0; j < nedges; j++)
             {
+                //printf("error %d\n", new_dest);
                 new_dest = new_edges[j].node->id;
 
                 // 1 edge has stayed the same
@@ -395,7 +397,6 @@ void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges, int* counte
             int theRest = graph->nodes[id]->edges[i]->dest;
             distance = euclideanDistance(graph->nodes[reverse], graph->nodes[theRest], graph->dim);
 
-
             if (searchPQueue(queue[reverse], graph->nodes[theRest]) == 1 ) {
             insertPQueue(queue[reverse], graph->nodes[theRest], distance); }
 
@@ -412,7 +413,6 @@ void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges, int* counte
             if (reverse == theRest) continue;
 
             distance = euclideanDistance(graph->nodes[reverse], graph->nodes[theRest], graph->dim);
-
 
             if (searchPQueue(queue[reverse], graph->nodes[theRest]) == 1 ) {
             insertPQueue(queue[reverse], graph->nodes[theRest], distance); }

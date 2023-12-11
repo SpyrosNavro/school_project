@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
     const char* filename = "test_files/small.txt";
     //int nedges = atoi(argv[1]);
     int nedges = 3;
-    int row = 10;
+    int row = 50;
     int col = 3;
     int flag = 0;
     int false_edges;
@@ -105,7 +105,6 @@ int main(int argc, char* argv[])
                 //neighbor of node[id]
                 neighbor = graph->nodes[id]->edges[neighbors]->dest;
 
-
                 if (searchPQueue(queue[id], graph->nodes[neighbor]) == 1) {
                 insertPQueue(queue[id], graph->nodes[neighbor], graph->nodes[id]->edges[neighbors]->distance); }
 
@@ -120,7 +119,7 @@ int main(int argc, char* argv[])
                     if (neighbor == theRest) continue;
 
                     distance = euclideanDistance(graph->nodes[neighbor], graph->nodes[theRest], graph->dim);
-                    
+
 
                     if (searchPQueue(queue[neighbor], graph->nodes[theRest]) == 1 ) {
                     insertPQueue(queue[neighbor], graph->nodes[theRest], distance); }
