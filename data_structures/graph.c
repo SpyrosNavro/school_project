@@ -32,9 +32,6 @@ float manhattanDistance (Node a, Node b, int dim)
 }
 
 
-
-
-
 int** import_data(const char *file_name, int vrows)
 {
     FILE* pointer;
@@ -257,7 +254,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
             graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse] = graph->nodes[id]->edges[j];
             graph->nodes[dest]->nreverse++;
         }
-    }
+    } 
     return graph;
 }
  

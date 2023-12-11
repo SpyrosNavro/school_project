@@ -137,9 +137,10 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
 {
     struct checking new_edges[nedges];
     Edge old_edges[nedges];
-    int update, add_edge, old_dest, new_dest, add;
+    int update, add_edge, old_dest, new_dest, add, total_changes;
     add = 0;
-
+     
+    total_changes = 0;
     for (int id = 0; id < row; id++)
     {
         // no need to update edges on this node
@@ -189,6 +190,7 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
                 if ( (j == nedges - 1) && (old_dest != new_dest) )
                 {
                     update = 1;
+                    total_changes++;
                 }
             }
             
@@ -244,7 +246,7 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
     }
 
 
-    return 0;
+    return total_changes;
 }
 
 
@@ -422,3 +424,74 @@ void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges, int* counte
         }
     }
 }
+
+void brute_force_algorithm(Graph graph, int row, int nedges){
+
+    printf("in brute force");
+    PQ queue[row];
+    // create a Priority Queue for every node
+    for (int id = 0; id < row; id++)
+    {
+        queue[id] = createPQueue(row);
+    }
+    float distance=0.0; 
+    for (int id = 0; id < row; id++)
+    {   
+        for(int j=0; j< row; j++){
+            if(searchPQueue(queue[id],graph->nodes[j] ) != 0){
+                if (id != j){
+                    distance = euclideanDistance(graph->nodes[id],graph->nodes[j], graph->dim);
+                    //printf("distance computed BRUTE FORCE =%f\n",distance);
+                    insertPQueue(queue[id], graph->nodes[j], distance);
+                    insertPQueue(queue[j], graph->nodes[id], distance);
+                    
+                }
+            }
+        }
+        
+    }
+    struct checking results[nedges];
+//    printf("RESULTS FROM BRUTE FORCE:\n");
+
+    int correctNeighbors=0;
+    int totalNeighbors= nedges*row;
+    int nn_edge, brute_edge;
+    for (int id = 0; id < row; id++){
+        // get the k nearest for every node
+        for(int i = 0; i < nedges; i++){
+            results[i] = extractMin(queue[id]);
+
+        }
+
+        // get the k nearest for every node
+    
+        // check if real edges == nnedges
+        for (int i = 0; i < nedges; i++){
+            nn_edge = graph->nodes[id]->edges[i]->dest;
+            
+            // same edge 
+            
+            for (int j = 0; j < nedges; j++){
+
+                brute_edge = results[j].node->id;
+
+                if (nn_edge == brute_edge){
+                    // found the correct 
+                    correctNeighbors++;
+                }
+
+            }
+
+        }
+        
+
+    }
+    
+    double percentageSuccess = ((double)correctNeighbors / totalNeighbors) * 100;
+    printf("Percentage of Success: %f\n", percentageSuccess);
+
+    for (int i=0; i<row; i++){
+        destroyPQueue(queue[i]);
+    }
+    
+}  
