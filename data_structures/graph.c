@@ -208,7 +208,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
 
     // initialise NODES
     for (int id = 0; id < row; id++)
-    { 
+    {       
         graph->nodes[id] = malloc(sizeof( *(graph->nodes[id]) ));   // allocate node
         graph->nodes[id]->id = id;
         graph->nodes[id]->reverse = malloc ( row * sizeof(*(graph->nodes[id]->reverse)) );  // allocate reverse neighbors
@@ -257,7 +257,7 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
     } 
     return graph;
 }
- 
+
 
 
 
