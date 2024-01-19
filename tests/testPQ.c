@@ -20,7 +20,7 @@ void test_insertPQueue(void)
     TEST_ASSERT(pqueue->capacity==10);
     TEST_ASSERT(pqueue !=NULL);
     TEST_ASSERT(pqueue->size==0);
-    Node mynode,mynode2,mynode3,mynode4,mynode5,mynode6, mynode7, mynode8,mynode9 ;
+    Node mynode, mynode2, mynode3, mynode4, mynode5, mynode6, mynode7, mynode8, mynode9 ;
 
     //coord=NULL, edges=NULL;
     mynode = malloc(sizeof(Node));
@@ -82,7 +82,6 @@ void test_insertPQueue(void)
 
     insertPQueue(pqueue, mynode8,34987.4);
     TEST_ASSERT(pqueue->size==8);
-
 
     insertPQueue(pqueue, mynode9,7899.99);
     TEST_ASSERT(pqueue->size==9);
@@ -261,12 +260,13 @@ void test_searchPQueue(){
     insertPQueue(pqueue, mynode3,5467);
     TEST_ASSERT(pqueue->size==3);
 
-    int i= searchPQueue(pqueue,mynode3);
-
+    TEST_ASSERT(searchPQueue(pqueue,mynode) == 0);
+    TEST_ASSERT(searchPQueue(pqueue,mynode2) == 0);
+    TEST_ASSERT(searchPQueue(pqueue,mynode3) == 0);
+    // int i= searchPQueue(pqueue,mynode3);
+    int i;
     notexisting= malloc(sizeof(Node));
     notexisting->id=20;
-    notexisting->coord=NULL;
-    notexisting->edges=NULL;
     
     i= searchPQueue(pqueue,notexisting);
     // 1 -> does not belong to the queue
@@ -291,7 +291,7 @@ void test_isEmpty(){
     TEST_ASSERT(pqueue !=NULL);
     TEST_ASSERT(pqueue->size==0);
     TEST_ASSERT(isEmpty(pqueue)==1);
-
+    destroyPQueue(pqueue);
 }
 //-------------------------------------------------------//
 //-------------------------------------------------------//

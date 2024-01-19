@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
 	"version": "0.2.0",
 	"configurations": [
 		{
@@ -137,4 +138,11 @@
 			"preLaunchTask": "All files in directory: compile",
 		},
 	]
+=======
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": []
+>>>>>>> af94004e6f504787fd52027870470968f622cf84
 }

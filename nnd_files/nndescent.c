@@ -4,36 +4,114 @@
 
 
 
-int main(int argc, char* argv[])
+
+taskDis disQueue[50];
+int disCount = 0;
+int unfinishedD;
+
+pthread_mutex_t mutexDis;
+pthread_cond_t condDis;
+
+
+void executeTaskD(taskDis* task) {
+    task->taskFunction(task->graph, task->id, task->pq);
+}
+
+
+void submitTaskD(taskDis task) {
+    pthread_mutex_lock(&mutexDis);
+    disQueue[disCount++] = task;
+    pthread_mutex_unlock(&mutexDis);
+    pthread_cond_signal(&condDis);
+}
+
+
+
+void* startThreadD() {
+    taskDis task;
+    //pid_t x;
+
+    while (1) {
+        pthread_mutex_lock(&mutexDis);
+        while (disCount == 0) {
+            if (0 == unfinishedD) 
+            {            
+                //printf("%d LEAVING HEYYYYYYYYYYY\n", x);
+                return 0;
+            }
+
+            //printf("2nd while: %d id:%d\n", unfinishedD, x);
+            pthread_cond_wait(&condDis, &mutexDis);
+        }
+
+        task = disQueue[0];
+        for (int i = 0; i < disCount - 1; i++) {
+            disQueue[i] = disQueue[i + 1];
+        }
+        disCount--;
+        unfinishedD--;
+        pthread_mutex_unlock(&mutexDis);
+        
+        executeTaskD(&task);
+        
+        //printf("Root: %d  \n", unfinished);
+
+        if (0 == unfinishedD) {          
+            //printf("%d LEAVING\n", x);
+            break;
+        }
+    }
+    return 0;
+}
+
+
+
+
+
+
+int main(void)
 {
     Graph graph;
-    const char* filename = "test_files/small.txt";
-    int nedges = atoi(argv[1]);
-    int row = 10;
-    int col = 3;
+    char filename[100];
+    const char* file = "configuration.txt";
+    //int nedges = atoi(argv[1]);
+    int nedges;
+    int row;
+    int col;
     int flag = 0;
-    int false_edges;
-    Edge old_rev[row][row];
+    float D;
+    // int false_edges;
+    //Edge old_rev[row][row];
     float distance;
     int* point;
-    PQ queue[row], search_queue;
+    PQ search_queue;
     int dest, add;
     Node search_node;
     struct checking closest;
-    struct checking valise[nedges];
-    int counter;
-
     clock_t start, end;
     double time_spent;
+    // pthread_t th[THREAD_NUM];
 
-    printf("%d\n", argc);
+    FILE* pointer = fopen(file, "r");
+    if (pointer == NULL)
+    {
+        printf("Couldn't open file\n");
+        return 0;
+    }
+    fscanf(pointer, "%s %d %d %d %f", filename, &row, &col, &nedges, &D);
+    fclose(pointer);
+
+    PQ queue[row];
+    struct checking valise[nedges];
+
+    printf("%s %d %d %d %f\n", filename, row, col, nedges, D);
 
     start = clock();
     graph = createGraph(nedges, filename, row, col);
     srand(time(0));    
     
-    int changes = 0;
-    float D = 0.1;
+    // int changes = 0;
+    // float D = 0.1;
     // create Priority Queue for every node
     for (int id = 0; id < row; id++)
     {
@@ -49,28 +127,22 @@ int main(int argc, char* argv[])
     {
         printf("iteration: %d\n", i++);
         add = 0;
-        false_edges = 0;
+        // false_edges = 0;
         
-
-
         for (int id = 0; id < row; id++)
         {
             queue[id] = createPQueue(row);
         }
 
-
-        // save old reverse neighbors
-        for (int i = 0; i < row; i++)
-        {
-            for (int j = 0; j < graph->nodes[i]->nreverse; j++)
-            {
-                old_rev[i][j] = graph->nodes[i]->reverse[j];
-            }
-
-            old_rev[i][graph->nodes[i]->nreverse] = NULL;
-        }
-
-
+        // THREADS
+        // for (int i = 0; i < THREAD_NUM; i++)
+        // {
+        //     if (pthread_create(&th[i], NULL, &startThread, NULL) != 0) 
+        //     {
+        //         perror("Failed to create thread");
+        //     }
+        // }
+        // unfinishedD = row;
 
         // PUT DISTANCES IN PRIORITY QUEUE
         for (int id = 0; id < row; id++)
@@ -81,128 +153,92 @@ int main(int argc, char* argv[])
             // REVERSE NEIGHBORS
             //checkReverse(graph, id, queue);
 
-
             //====================================//
             //============ LOCAL JOIN ============//
             //====================================//
 
+            // taskDis task = {
+            //     .taskFunction = &localJoin,
+            //     .graph = graph,
+            //     .id = id,
+            //     .pq = queue
+            // };
+
+            // SUBMIT TASK
+            // submitTaskD(task);
+
+            // taskDis task = {
+            //     .taskFunction = &RevlocalJoin,
+            //     .graph = graph,
+            //     .id = id,
+            //     .pq = queue
+            // };
+
+            // SUBMIT TASK
+            // submitTaskD(task);
+
             // NEIGHBORS
-            //localJoin(graph, id, queue);  // for some weird reason this doesn't work
-            int neighbor;
-            for (int neighbors = 0; neighbors < nedges; neighbors++)
-            {
+            localJoin(graph, id, queue);
 
-                // count how many IS flags are false
-                if (graph->nodes[id]->edges[neighbors]->is == false) 
-                {
-                    false_edges++;
-                    counter++;
-                    continue;
-                }
-
-                graph->nodes[id]->edges[neighbors]->is = false;
-                
-                //neighbor of node[id]
-                neighbor = graph->nodes[id]->edges[neighbors]->dest;
-
-
-                if (searchPQueue(queue[id], graph->nodes[neighbor]) == 1) {
-                insertPQueue(queue[id], graph->nodes[neighbor], graph->nodes[id]->edges[neighbors]->distance); }
-
-                if (searchPQueue(queue[neighbor], graph->nodes[id]) == 1) {
-                insertPQueue(queue[neighbor], graph->nodes[id], graph->nodes[id]->edges[neighbors]->distance); }
-
-
-                // compare with other neighbors 
-                for (int i = 0; i < nedges; i++)
-                {
-                    int theRest = graph->nodes[id]->edges[i]->dest;
-                    if (neighbor == theRest) continue;
-
-                    distance = euclideanDistance(graph->nodes[neighbor], graph->nodes[theRest], graph->dim);
-                    
-
-                    if (searchPQueue(queue[neighbor], graph->nodes[theRest]) == 1 ) {
-                    insertPQueue(queue[neighbor], graph->nodes[theRest], distance); }
-
-                    if (searchPQueue(queue[theRest], graph->nodes[neighbor]) == 1 ) {
-                    insertPQueue(queue[theRest], graph->nodes[neighbor], distance); }
-                }
-
-
-
-                // compare with reverse neighbors
-                for (int i = 0; i < graph->nodes[id]->nreverse; i++)
-                {
-                    int theRest = graph->nodes[id]->reverse[i]->src;
-                    distance = euclideanDistance(graph->nodes[neighbor], graph->nodes[theRest], graph->dim);
-
-                    
-                    if (searchPQueue(queue[neighbor], graph->nodes[theRest]) == 1 ) {
-                    insertPQueue(queue[neighbor], graph->nodes[theRest], distance); }
-
-                    if (searchPQueue(queue[theRest], graph->nodes[neighbor]) == 1 ) {
-                    insertPQueue(queue[theRest], graph->nodes[neighbor], distance); }
-                }
-            }
-
-            // REVERSE
-            RevlocalJoin(graph, id, queue, &false_edges, &counter);
-
-            if ( counter == nedges + graph->nodes[id]->nreverse ) graph->nodes[id]->same = 1;
-            counter = 0;
+            // REVERSE NEIGHBORS
+            RevlocalJoin(graph, id, queue);
         }
 
 
 
-        if (false_edges == 2*(nedges*row)) flag = 1;
-        //printf("false edges %d %d\n",false_edges, 2*(nedges*row));
+        // for (int i = 0; i < THREAD_NUM; i++)
+        // {
+        //     if (pthread_join(th[i], NULL) != 0)
+        //     {
+        //         perror("Failed to join thread");
+        //     }
+        // }
 
+        // if (false_edges == 2*(nedges*row)) flag = 1;
         
         // UPDATE EDGES
-        if (flag == 0) changes = updateEdges(queue, graph, row, nedges);
+        if (flag == 0) flag = updateEdges(queue, graph, row, nedges);
 
-        printf("D*row*nedges=%f",D*row*nedges);
-        // early termination
-        if (changes < D*row*nedges || changes == 0) flag =1;
+        // printf("D*row*nedges= %f   ",D*row*nedges);
+        // // EARLY TERMINATION
+        // if (changes < D*row*nedges || changes == 0) flag =1;
+        // printf("changes= %d\n",changes);
 
-        printf("changes=%d\n",changes);
         // UPDATE REVERSE EDGES
-        if (changes > 0)
+        // if (changes > 0)
+        // {
+        for (int id = 0; id < row; id++)
         {
-            for (int id = 0; id < row; id++)
+            for (int i = 0; i < nedges; i++)
             {
-                for (int i = 0; i < nedges; i++)
-                {
-                    dest = graph->nodes[id]->edges[i]->dest;
-                    graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse] = graph->nodes[id]->edges[i];
-                    graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse++]->rev_is = true;
-                    
-                }
-            }
-
-
-
-            for (int id = 0; id < row; id++)
-            {
-                for (int i = 0; i < graph->nodes[id]->nreverse; i++)
-                {
-                    int x = 0;
-                    while (old_rev[id][x] != NULL)
-                    {
-                        if (graph->nodes[id]->reverse[i]->src == old_rev[id][x]->src)
-                        {
-                            graph->nodes[id]->reverse[i]->rev_is = false;
-                            break;
-                        }
-                        else {
-                            changes++;
-                        }
-                        x++;
-                    }
-                }
+                dest = graph->nodes[id]->edges[i]->dest;
+                graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse] = graph->nodes[id]->edges[i];
+                graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse++]->rev_is = true;
+                
             }
         }
+
+
+            // for (int id = 0; id < row; id++)
+            // {
+            //     for (int i = 0; i < graph->nodes[id]->nreverse; i++)
+            //     {
+            //         int x = 0;
+            //         while (old_rev[id][x] != NULL)
+            //         {
+            //             if (graph->nodes[id]->reverse[i]->src == old_rev[id][x]->src)
+            //             {
+            //                 graph->nodes[id]->reverse[i]->rev_is = false;
+            //                 break;
+            //             }
+            //             else {
+            //                 changes++;
+            //             }
+            //             x++;
+            //         }
+            //     }
+            // }
+        // }
 
 
 
@@ -241,7 +277,7 @@ int main(int argc, char* argv[])
             y++;
         }
     }
-    printf("x = %d y = %d", x, y);
+    printf("x = %d y = %d\n", x, y);
 
     //=====================================================================================//
     //=====================================   SEARCH   ====================================//
@@ -259,6 +295,7 @@ int main(int argc, char* argv[])
     }
     search_node->coord = point;
 
+
     // we start from this random node of the graph
     int seed = rand()%row;
 
@@ -266,18 +303,20 @@ int main(int argc, char* argv[])
     search_queue = createPQueue(row);
 
 
-    
-
+    int old_seed;
     // SEARCH K-NEAREST NEIGHBORS
     do
     {
-
+        old_seed = seed;
+        printf("seed: %d\n", seed);
         // insert node[seed] into search_queue
-        if (graph->nodes[seed]->checked == 0)
+        if (graph->nodes[seed]->checked == 0)  // the mistake is here 
         {
             distance = euclideanDistance(search_node, graph->nodes[seed], graph->dim);
-            //printf("id %d distance: %f\n", graph->nodes[seed]->id, distance);
-            insertPQueue(search_queue, graph->nodes[seed], distance);
+
+            if (searchPQueue(search_queue, graph->nodes[seed]) == 1) {
+            insertPQueue(search_queue, graph->nodes[seed], distance); }
+            
             graph->nodes[seed]->checked = 1;
         }
 
@@ -289,16 +328,20 @@ int main(int argc, char* argv[])
         // REVERSE NEIGHBORS
         searchReverse(graph, search_queue, search_node, seed, &add);
 
+        
 
         // Truncate pool to k-top 
         for (int i = 0; i < nedges; i++)
         {
+            printf("extract\n");
             valise[i] = extractMin(search_queue);
         }
         destroyPQueue(search_queue);
         search_queue = createPQueue(row);
         for (int i = 0; i < nedges; i++)
         {
+            printf("insert %d\n", valise[i].node->id);
+
             insertPQueue(search_queue, valise[i].node, valise[i].distance);
         }
 
@@ -314,29 +357,32 @@ int main(int argc, char* argv[])
         add = 0;
         seed = closest.node->id;
 
+        if (old_seed == seed) flag = 1;
+
 
     } while (flag == 0);
     
 
 
-
-
     printf("\n\n\n\nPOINT:"); for (int i = 0; i < graph->dim; i++) { printf("%d ", point[i]); } printf("\n");
 
-
+    struct checking result;
 
     printf("K-NEAREST NODES:\n");
 
     for (int i = 0; i < nedges; i++)
     {
+        result = extractMin(search_queue);
+
         for (int j = 0; j < graph->dim; j++)
         {
-            printf("%d ", valise[i].node->coord[j]);
+            printf("%d ", result.node->coord[j]);
         }
-        printf(" distance: %f\n", valise[i].distance);
+        printf(" distance: %f\n", result.distance);
     }
     
     deleteGraph(graph);
+    destroyPQueue(search_queue);
     end = clock();
     time_spent = ((double)(end - start))/CLOCKS_PER_SEC;
     printf("\nTime needed for action: %fsec\n", time_spent);

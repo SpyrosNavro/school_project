@@ -144,8 +144,12 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
     for (int id = 0; id < row; id++)
     {
         // no need to update edges on this node
-        if (graph->nodes[id]->same == 1) continue;
-        
+        // if (graph->nodes[id]->same == 1) 
+        // {
+        //     printf("woooow\n");
+        //     continue;
+        // }
+
         graph->nodes[id]->nreverse = 0;
 
 
@@ -155,7 +159,6 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
             old_edges[i] = graph->nodes[id]->edges[i];
         }
         
-
 
 
         // get new edges
@@ -176,6 +179,7 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
 
             for (int j = 0; j < nedges; j++)
             {
+                //printf("error %d\n", new_dest);
                 new_dest = new_edges[j].node->id;
 
                 // 1 edge has stayed the same
@@ -244,8 +248,8 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
         }
     }
 
-
-    return total_changes;
+    return 0;
+    // return total_changes;
 }
 
 
@@ -254,7 +258,8 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
 
 void searchNeighbors(Graph graph, PQ search_queue, Node search_node, int seed, int nedges, int* add)
 {
-    int distance, neighbor;
+    int neighbor;
+    float distance;
 
     for (int neighbors = 0; neighbors < nedges; neighbors++)
     {
@@ -262,7 +267,6 @@ void searchNeighbors(Graph graph, PQ search_queue, Node search_node, int seed, i
         neighbor = graph->nodes[seed]->edges[neighbors]->dest;
 
 
-        // neighbor
         if (graph->nodes[neighbor]->checked == 1)
         {
             (*add)++;
@@ -271,7 +275,9 @@ void searchNeighbors(Graph graph, PQ search_queue, Node search_node, int seed, i
         {
             distance = euclideanDistance(search_node, graph->nodes[neighbor], graph->dim);
 
-            insertPQueue(search_queue, graph->nodes[neighbor], distance);
+            if (searchPQueue(search_queue, graph->nodes[neighbor]) == 1) {
+            insertPQueue(search_queue, graph->nodes[neighbor], distance); }
+            
             graph->nodes[neighbor]->checked = 1;
         }
     }
@@ -283,7 +289,8 @@ void searchNeighbors(Graph graph, PQ search_queue, Node search_node, int seed, i
 
 void searchReverse(Graph graph, PQ search_queue, Node search_node, int seed, int* add)
 {
-    int reverse, distance;
+    int reverse;
+    float distance;
 
     for (int rev = 0; rev < graph->nodes[seed]->nreverse; rev++)
     {
@@ -291,7 +298,6 @@ void searchReverse(Graph graph, PQ search_queue, Node search_node, int seed, int
         reverse = graph->nodes[seed]->reverse[rev]->src;
 
 
-        // reverse neighbor
         if (graph->nodes[reverse]->checked == 1)
         {
             (*add)++;
@@ -300,7 +306,9 @@ void searchReverse(Graph graph, PQ search_queue, Node search_node, int seed, int
         {
             distance = euclideanDistance(search_node, graph->nodes[reverse], graph->dim);
 
-            insertPQueue(search_queue, graph->nodes[reverse], distance);
+            if (searchPQueue(search_queue, graph->nodes[reverse]) == 1) {
+            insertPQueue(search_queue, graph->nodes[reverse], distance); }
+            
             graph->nodes[reverse]->checked = 1;
         }
     }
@@ -310,23 +318,100 @@ void searchReverse(Graph graph, PQ search_queue, Node search_node, int seed, int
 
 
 
+
+
+
+
+
+// init disQueue[50];
+// int disCount = 0;
+// int unfinishedD;
+
+// pthread_mutex_t mutexDis;
+// pthread_cond_t condDis;
+
+
+// void executeTaskD(init* task);
+// {
+//     task->taskFunction(task->graph, task->id, task->column, task->data);
+// }
+
+
+
+// void submitTaskD(init task) {
+//     pthread_mutex_lock(&mutexDis);
+//     disQueue[disCount++] = task;
+//     pthread_mutex_unlock(&mutexDis);
+//     pthread_cond_signal(&condDis);
+// }
+
+
+
+// void* startThreadD() {
+//     init task;
+//     pid_t x;
+
+//     while (1) {
+//         pthread_mutex_lock(&mutexDis);
+//         while (disCount == 0) {
+//             if (0 == unfinishedD) 
+//             {            
+//                 printf("%d LEAVING HEYYYYYYYYYYY\n", x);
+//                 return 0;
+//             }
+
+//             printf("2nd while: %d id:%d\n", unfinishedD, x);
+//             pthread_cond_wait(&condDis, &mutexDis);
+//         }
+
+//         task = disQueue[0];
+//         for (int i = 0; i < disCount - 1; i++) {
+//             disQueue[i] = disQueue[i + 1];
+//         }
+//         disCount--;
+//         unfinishedD--;
+//         pthread_mutex_unlock(&mutexDis);
+        
+//         executeTaskD(&task);
+        
+//         //printf("Root: %d  \n", unfinished);
+
+//         if (0 == unfinishedD) {          
+//             printf("%d LEAVING\n", x);
+//             break;
+//         }
+//     }
+//     return 0;
+// }
+
+
+
 void localJoin(Graph graph, int id, PQ queue[])
 {
     int neighbor, distance;
-
-
     for (int neighbors = 0; neighbors < graph->neighbors; neighbors++)
     {
 
+        // count how many IS flags are false
+        // if (graph->nodes[id]->edges[neighbors]->is == false) 
+        // {
+        //     false_edges++;
+        //     counter++;
+        //     continue;
+        // }
+
+        // graph->nodes[id]->edges[neighbors]->is = false;
+        
         //neighbor of node[id]
         neighbor = graph->nodes[id]->edges[neighbors]->dest;
+
 
         if (searchPQueue(queue[id], graph->nodes[neighbor]) == 1) {
         insertPQueue(queue[id], graph->nodes[neighbor], graph->nodes[id]->edges[neighbors]->distance); }
 
-
         if (searchPQueue(queue[neighbor], graph->nodes[id]) == 1) {
         insertPQueue(queue[neighbor], graph->nodes[id], graph->nodes[id]->edges[neighbors]->distance); }
+
 
         // compare with other neighbors 
         for (int i = 0; i < graph->neighbors; i++)
@@ -335,6 +420,7 @@ void localJoin(Graph graph, int id, PQ queue[])
             if (neighbor == theRest) continue;
 
             distance = euclideanDistance(graph->nodes[neighbor], graph->nodes[theRest], graph->dim);
+
 
             if (searchPQueue(queue[neighbor], graph->nodes[theRest]) == 1 ) {
             insertPQueue(queue[neighbor], graph->nodes[theRest], distance); }
@@ -350,8 +436,11 @@ void localJoin(Graph graph, int id, PQ queue[])
         {
             int theRest = graph->nodes[id]->reverse[i]->src;
 
+            if (neighbor == theRest) continue;
+
             distance = euclideanDistance(graph->nodes[neighbor], graph->nodes[theRest], graph->dim);
 
+            
             if (searchPQueue(queue[neighbor], graph->nodes[theRest]) == 1 ) {
             insertPQueue(queue[neighbor], graph->nodes[theRest], distance); }
 
@@ -365,22 +454,20 @@ void localJoin(Graph graph, int id, PQ queue[])
 
 
 
-void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges, int* counter)
+void RevlocalJoin(Graph graph, int id, PQ queue[])
 {
     int reverse, distance;
-
-
     for (int num = 0; num < graph->nodes[id]->nreverse; num++)
     {
         // count how many IS flags are false
-        if (graph->nodes[id]->reverse[num]->rev_is == false) 
-        {
-            (*false_edges)++;
-            (*counter)++;
-            continue;
-        }
+        // if (graph->nodes[id]->reverse[num]->rev_is == false) 
+        // {
+        //     false_edges++;
+        //     counter++;
+        //     continue;
+        // }
 
-        graph->nodes[id]->reverse[num]->rev_is = false;
+        // graph->nodes[id]->reverse[num]->rev_is = false;
 
         //reverse of node[id]
         reverse = graph->nodes[id]->reverse[num]->src;
@@ -396,8 +483,10 @@ void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges, int* counte
         for (int i = 0; i < graph->neighbors; i++)
         {
             int theRest = graph->nodes[id]->edges[i]->dest;
-            distance = euclideanDistance(graph->nodes[reverse], graph->nodes[theRest], graph->dim);
+            
+            if (reverse == theRest) continue;
 
+            distance = euclideanDistance(graph->nodes[reverse], graph->nodes[theRest], graph->dim);
 
             if (searchPQueue(queue[reverse], graph->nodes[theRest]) == 1 ) {
             insertPQueue(queue[reverse], graph->nodes[theRest], distance); }
@@ -416,7 +505,6 @@ void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges, int* counte
 
             distance = euclideanDistance(graph->nodes[reverse], graph->nodes[theRest], graph->dim);
 
-
             if (searchPQueue(queue[reverse], graph->nodes[theRest]) == 1 ) {
             insertPQueue(queue[reverse], graph->nodes[theRest], distance); }
 
@@ -425,6 +513,40 @@ void RevlocalJoin(Graph graph, int id, PQ queue[], int* false_edges, int* counte
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void brute_force_algorithm(Graph graph, int row, int nedges){
 
