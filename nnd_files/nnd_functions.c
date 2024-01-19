@@ -240,7 +240,7 @@ int updateEdges(PQ queue[], Graph graph, int row, int nedges)
         // if all nodes are the same, STOP ITERATIONS
         if (add == row)
         {
-            return 1;
+            return 0;
         }
     }
 
