@@ -17,7 +17,6 @@ Graph initializeRPTreeGraph (int nedges, const char *file_name, int row, int col
 {
     Graph graph = malloc(sizeof(*graph));
     graph->nodes = malloc ( row * sizeof(*(graph->nodes) ));  // allocate array of nodes
-    int dest;
 
     int** data = import_data(file_name, row);
     
@@ -173,7 +172,6 @@ TreeNode* createRandomProjectionTree(Node* nodes, Graph graph, int vrows,int col
             free(randomVector);
             return treen; 
     }
-    return;
 }
 
 void initializeLeafNodes(TreeNode* root, Graph graph, int D, int nedges, int vrows){
@@ -231,7 +229,7 @@ void connectGraphEdges(TreeNode* leafNode, Graph graph, int numNodes, int nedges
             for (int j = 0; j < nedges; j++){
                 
                 graph->nodes[leafNode->nodes[id]->id]->edges[j]->src =  leafNode->nodes[id]->id;
-                if(j < numNodes-1){ 
+                if(j < numNodes-2){ 
                     
                     graph->nodes[leafNode->nodes[id]->id]->edges[j]->dest = results[j].node->id; 
         
