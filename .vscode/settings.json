@@ -3,5 +3,6 @@
         "acutest.h": "c",
         "graph.h": "c",
         "nnd_functions.h": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "enabled"
 }

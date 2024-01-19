@@ -1,11 +1,105 @@
 #include "../header_files/graph.h"
 #include <stdint.h>
+#include <sys/types.h>
+// #include <unistd.h>
+#include <sys/syscall.h>
  
 #include "../header_files/pqueue.h"
+#include "../header_files/job_scheduler.h"
 
+
+///////////////////////////////////////////////
+/////////////////// THREADS ///////////////////
+///////////////////////////////////////////////
+
+
+init initQueue[50];
+int initCount = 0;
+int unfinished;
+
+pthread_mutex_t mutexInit;
+pthread_cond_t condInit;
+
+
+void executeTask (init* task)
+{
+    task->taskFunction(task->graph, task->id, task->column, task->data);
+}
+
+
+
+void submitTask(init task) {
+    pthread_mutex_lock(&mutexInit);
+    initQueue[initCount++] = task;
+    pthread_mutex_unlock(&mutexInit);
+    pthread_cond_signal(&condInit);
+}
+
+
+
+void* startThread() {
+    init task;
+    pid_t x;
+
+    while (1) {
+        pthread_mutex_lock(&mutexInit);
+        while (initCount == 0) {
+            if (0 == unfinished) 
+            {
+                x = syscall(__NR_gettid);
+            
+                printf("%d LEAVING HEYYYYYYYYYYY\n", x);
+                return 0;
+            }
+            x = syscall(__NR_gettid);
+
+            printf("2nd while: %d id:%d\n", unfinished, x);
+            pthread_cond_wait(&condInit, &mutexInit);
+        }
+
+        task = initQueue[0];
+        for (int i = 0; i < initCount - 1; i++) {
+            initQueue[i] = initQueue[i + 1];
+        }
+        initCount--;
+        unfinished--;
+        pthread_mutex_unlock(&mutexInit);
+        
+        executeTask(&task);
+        
+        //printf("Root: %d  \n", unfinished);
+
+        if (0 == unfinished) {
+            x = syscall(__NR_gettid);
+            
+            printf("%d LEAVING\n", x);
+            break;
+        }
+    }
+    return 0;
+}
+
+
+///////////////////////////////////////////////
+///////////////////////////////////////////////
+///////////////////////////////////////////////
 
 
 float euclideanDistance (Node a, Node b, int dim)
+{
+    float sum = 0;
+    sum = a->norm + b->norm;
+    for (int i = 0; i < dim; i++) 
+    {
+        sum = sum -2*a->coord[i]*b->coord[i];
+        // sum = sum + pow(a->coord[i] - b->coord[i], 2);
+    }
+    // sum = sqrt(sum);
+     
+    return sum;
+}
+
+float euclideanDistanceTest (Node a, Node b, int dim)
 {
     float sum = 0;
     for (int i = 0; i < dim; i++) 
@@ -20,6 +114,7 @@ float euclideanDistance (Node a, Node b, int dim)
 
 
 
+
 float manhattanDistance (Node a, Node b, int dim)
 {
     float sum = 0;
@@ -30,6 +125,9 @@ float manhattanDistance (Node a, Node b, int dim)
      
     return sum;
 }
+
+
+
 
 
 int** import_data(const char *file_name, int vrows)
@@ -97,6 +195,9 @@ int** import_data(const char *file_name, int vrows)
    
    return vector; 
 }
+
+
+
 
 
 float** import_Binarydata(const char *file_name)
@@ -193,22 +294,54 @@ float** import_Binarydata(const char *file_name)
 
 
 
+void initialiseData (Graph graph, int id, int column, int** data)
+{
+    for (int j = 0; j < column; j++)
+    {
+        graph->nodes[id]->norm = pow(data[id][j], 2);
+    }
+
+    // printf("finished\n");
+}
+
+
+
+
+
 Graph createGraph (int nedges, const char *file_name, int row, int column) 
 {
-    Graph graph = malloc(sizeof(*graph));
-    graph->nodes = malloc ( row * sizeof(*(graph->nodes) ));  // allocate array of nodes
+    pthread_t th[THREAD_NUM];
+    pthread_mutex_init(&mutexInit, NULL);
+    pthread_cond_init(&condInit, NULL);
     int dest;
 
+    Graph graph = malloc(sizeof(*graph));
+    graph->nodes = malloc ( row * sizeof(*(graph->nodes) ));  // allocate array of nodes
+    unfinished = row;
+
     int** data = import_data(file_name, row);
+
+    printf("CREATE GRAPH\n\n");
+
+    // CREATE THREADS
+    for (int i = 0; i < THREAD_NUM; i++)
+    {
+        if (pthread_create(&th[i], NULL, &startThread, NULL) != 0) 
+        {
+            perror("Failed to create thread");
+        }
+    }
+    // printf("Threads created successfully\n");
     
+
     graph->dim = column;
     graph->nnodes = row;
     graph->neighbors = nedges;
-    printf("CREATE GRAPH\n\n");
+
 
     // initialise NODES
     for (int id = 0; id < row; id++)
-    { 
+    {
         graph->nodes[id] = malloc(sizeof( *(graph->nodes[id]) ));   // allocate node
         graph->nodes[id]->id = id;
         graph->nodes[id]->reverse = malloc ( row * sizeof(*(graph->nodes[id]->reverse)) );  // allocate reverse neighbors
@@ -216,11 +349,38 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
         graph->nodes[id]->checked = 0;
         graph->nodes[id]->same = 0;
         graph->nodes[id]->coord = malloc( column * sizeof(*(graph->nodes[id]->coord)) );
+        graph->nodes[id]->norm = 0;
+
         for (int j = 0; j < column; j++)
         {
             graph->nodes[id]->coord[j] = data[id][j];
+            //graph->nodes[id]->norm = pow(data[id][j], 2);
+        }
+
+        init task = {
+            .taskFunction = &initialiseData,
+            .graph = graph,
+            .id = id,
+            .column = column,
+            .data = data
+        };
+
+        // SUBMIT TASK
+        submitTask(task);
+        //printf("submitted\n");
+    }
+
+    
+    for (int i = 0; i < THREAD_NUM; i++)
+    {
+        if (pthread_join(th[i], NULL) != 0)
+        {
+            perror("Failed to join thread");
         }
     }
+
+    pthread_mutex_destroy(&mutexInit);
+    pthread_cond_destroy(&condInit);
     
 
 
@@ -254,23 +414,111 @@ Graph createGraph (int nedges, const char *file_name, int row, int column)
             graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse] = graph->nodes[id]->edges[j];
             graph->nodes[dest]->nreverse++;
         }
-    } 
+    }
+    for (int i = 0; i < row; i++)
+    {
+        free(data[i]);
+    }
+    free(data);
+    return graph;
+}
+
+
+
+
+Graph createGraphTest (int nedges, const char *file_name, int row, int column) 
+{
+    int dest;
+
+    Graph graph = malloc(sizeof(*graph));
+    graph->nodes = malloc ( row * sizeof(*(graph->nodes) ));  // allocate array of nodes
+    unfinished = row;
+
+    int** data = import_data(file_name, row);
+
+    printf("CREATE GRAPH\n\n");
+
+    graph->dim = column;
+    graph->nnodes = row;
+    graph->neighbors = nedges;
+
+    // initialise NODES
+    for (int id = 0; id < row; id++)
+    {
+        graph->nodes[id] = malloc(sizeof( *(graph->nodes[id]) ));   // allocate node
+        graph->nodes[id]->id = id;
+        graph->nodes[id]->reverse = malloc ( row * sizeof(*(graph->nodes[id]->reverse)) );  // allocate reverse neighbors
+        graph->nodes[id]->nreverse = 0;
+        graph->nodes[id]->checked = 0;
+        graph->nodes[id]->same = 0;
+        graph->nodes[id]->coord = malloc( column * sizeof(*(graph->nodes[id]->coord)) );
+        graph->nodes[id]->norm = 0;
+
+        for (int j = 0; j < column; j++)
+        {
+            graph->nodes[id]->coord[j] = data[id][j];
+            graph->nodes[id]->norm = pow(data[id][j], 2);
+        }
+    }
+
+
+    // initialise EDGES
+    for (int id = 0; id < row; id++)
+    {
+        // add directed edges to each node
+        graph->nodes[id]->edges = malloc ( nedges * sizeof(*(graph->nodes[id]->edges)) );
+                
+        for (int j = 0; j < nedges; j++)
+        {
+            graph->nodes[id]->edges[j] = malloc(sizeof( *(graph->nodes[id]->edges[j]) ));  // allocate edge
+            graph->nodes[id]->edges[j]->src = id;
+            graph->nodes[id]->edges[j]->is = true;
+            graph->nodes[id]->edges[j]->rev_is = true;
+
+            do 
+            {
+                // rand in range [0, rows-1]
+                // rand() % (max_number + 1 - minimum_number) + minimum_number
+                graph->nodes[id]->edges[j]->dest = rand()%row; 
+
+                dest = graph->nodes[id]->edges[j]->dest;
+            }
+            while ( (dest == id) || (dest < 0) || (dest >= graph->nnodes) );
+
+            // compute distance
+            graph->nodes[id]->edges[j]->distance = euclideanDistance(graph->nodes[id], graph->nodes[dest], graph->dim);
+
+            // save reverse edge to destination
+            graph->nodes[dest]->reverse[graph->nodes[dest]->nreverse] = graph->nodes[id]->edges[j];
+            graph->nodes[dest]->nreverse++;
+        }
+    }
+    for (int i = 0; i < row; i++)
+    {
+        free(data[i]);
+    }
+    free(data);
     return graph;
 }
  
 
 
 
+
 void deleteGraph(Graph graph)
 {   
-    for (int i = 0; i < graph->nnodes - 1; i++)
+    for (int i = 0; i < graph->nnodes; i++)
     {
         for (int j = 0; j < graph->neighbors; j++)
         {
             free(graph->nodes[i]->edges[j]);
         }
+        free(graph->nodes[i]->reverse);
+        free(graph->nodes[i]->coord);
+        free(graph->nodes[i]->edges);
         free(graph->nodes[i]);
     }
+    free(graph->nodes);
 
     free(graph);
 }

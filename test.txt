@@ -1,0 +1,17 @@
+Η εκτέλεση του NN Descent αλγορίθμου γίνεται ως εξης:
+make nndescent
+./nndescent
+
+Η εκτέλεση των tests για το Priority Queue γίνεται ως εξης:
+make testpq
+./testpq
+
+Η εκτέλεση των tests για το Graph γίνεται ως εξης:
+make testgraph
+./testgraph
+
+Ο έλεγχος για leaks των συναρτήσεων γίνεται ως εξης:
+make valgrind
+
+Ο καθαρισμός των εκτελέσιμων αρχείων και της οθόνης terminal γίνεται ως εξης:
+make clean

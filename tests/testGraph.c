@@ -24,25 +24,20 @@ void test_compute (void)
     b->coord[0] = 12;
     b->coord[1] = 8;
 
-    result = euclideanDistance(a, b, dim);
+    result = euclideanDistanceTest(a, b, dim);
 
+    free(a->coord);
+    free(b->coord);
     free(a);
     free(b);
-    // distance of points a and b is about 9.05
-    int yes=1;
-    if(result==9.055386){
-        yes=0;
-    }
-    
-    TEST_ASSERT(yes== 1);
-
+    TEST_ASSERT(fabs(result - 9.055386) < 0.1);
 }
 
 
 void test_import(void) 
 {
     int row = 9759;
-    int** array = import_data("test_files/5k.txt", row);
+    int** array = import_data("datasets/5k.txt", row);
 
     TEST_ASSERT(array != NULL);
     if(array !=NULL )
@@ -52,43 +47,34 @@ void test_import(void)
          {
             free(array[i]);
         }
-         free(array);
+        free(array);
      }
      else{
-         printf("Failed to create vector ");
+        printf("Failed to create vector ");
      }
 }
 
+
 void test_importBinarydata(void) 
 {
-   
-    const char *filename = "test_files/secondfile.bin";
+    const char *filename = "datasets/secondfile.bin";
     
     float** vector = import_Binarydata(filename); 
     TEST_ASSERT(vector != NULL);
     
-
-    // for (int i =0; i< 3; i++){
-    //     printf("row %d:\n", i);
-
-    //     for(int j=0; j < 3; j++){
-    //         printf("%d \n", vector[i][j] );
-
-    //     }
-    // }
-    
-     if(vector !=NULL )
-     {
+    if(vector !=NULL )
+    {
         // delete vector 
         for (int i=0; i< 50; i++)
          {
             free(vector[i]);
         }
-         free(vector);
-     }
-     else{
-         printf("Failed to create vector ");
-     }
+        free(vector);
+    }
+    else
+    {
+        printf("Failed to create vector ");
+    }
  
 }
 
@@ -99,20 +85,10 @@ void test_create(void)
     int row = 9759;
     int column = 3;
 
-    Graph graph = createGraph(nedges, "test_files/5k.txt", row, column);
+    Graph graph = createGraphTest(nedges, "datasets/5k.txt", row, column);
     TEST_ASSERT(graph != NULL);
-    
-    for (int i = 0; i < graph->nnodes - 1; i++)
-    {
-        for (int j = 0; j < graph->neighbors; j++)
-        {
-            //free(graph->nodes[i]->edges[j]);
-            //free(graph->nodes[i]->reverse);
-        }
-        free(graph->nodes[i]);
-    }
 
-    free(graph);
+    deleteGraph(graph);
 }
 
 
@@ -123,7 +99,7 @@ void test_delete(void)
     int row = 9759;
     int column = 3;
 
-    Graph graph = createGraph(nedges, "test_files/5k.txt", row, column);
+    Graph graph = createGraphTest(nedges, "datasets/5k.txt", row, column);
     deleteGraph(graph);
     TEST_ASSERT(graph != NULL);
 }

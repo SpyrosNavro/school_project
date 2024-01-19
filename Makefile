@@ -8,7 +8,7 @@ OUT1 = nndescent
 OUT2 = testpq
 OUT3 = testgraph
 CC = gcc
-FLAGS = -g -c -Wall -lm -Wextra
+FLAGS = -g -c -Wall -lm -Wextra -pthread
 FILES = ./data_structures/
 FILES2 = ./nnd_files/
 TESTS = ./tests/
@@ -47,8 +47,8 @@ run : $(OBJ)
 	./testgraph
 
 valgrind: $(OUT)
-	rm -f /tmp/*.out 
-	valgrind --leak-check=full --show-leak-kinds=all  --track-origins=yes ./nndescent
+#rm -f /tmp/*.out 
+	valgrind --leak-check=full --show-leak-kinds=all  --track-origins=yes ./main
 
 clean :
 	rm -f /tmp/*.out 
