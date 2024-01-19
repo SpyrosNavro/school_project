@@ -51,7 +51,7 @@ run : $(OBJ)
 
 valgrind: $(OUT)
 #rm -f /tmp/*.out 
-	valgrind --leak-check=full --show-leak-kinds=all  --track-origins=yes ./testpq
+	valgrind --leak-check=full --show-leak-kinds=all  --track-origins=yes ./main
 
 clean :
 	rm -f /tmp/*.out 
