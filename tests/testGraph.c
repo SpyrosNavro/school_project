@@ -91,6 +91,35 @@ void test_create(void)
     deleteGraph(graph);
 }
 
+void test_create_random_projection(void)
+{
+    // Build a random projection tree
+    int treeDepth = 3;
+    // TreeNode* root = buildRandomProjectionTree( );
+
+    // Initialize a directed graph from the random projection tree
+    int nedges = 2;
+    int row = 10;
+    int column = 3;
+    const char* filename = "datasets/5k.txt";
+    int D = 2;
+    int depth =2;
+ 
+    Graph graph= initializeRPTreeGraph(nedges, filename, row, column, treeDepth, D);
+     
+    //for (int i=0; i<D; i++){
+        TreeNode* treen;
+        treen = createRandomProjectionTree(graph->nodes, graph, row,column, depth, D, row, nedges);
+        
+        initializeLeafNodes(treen, graph, D, nedges, row);
+        // Free the allocated memory
+ 
+        free_RandomProjectionTree(treen, nedges);
+
+    //}
+    free(graph);
+    return 0;
+}
 
 
 void test_delete(void)
@@ -110,5 +139,6 @@ TEST_LIST = {
     { "createGraph", test_create },
     { "deleteGraph", test_delete },
     { "euclideanDistance", test_compute},
+    { "randomProjectionTree",test_create_random_projection},
     { NULL, NULL }
 };

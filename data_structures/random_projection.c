@@ -329,33 +329,33 @@ void free_RandomProjectionTree( TreeNode* treen, int nedges){
 
 }
 
-int main() {
+// int main() {
     
-    // Build a random projection tree
-    int treeDepth = 3;
-    // TreeNode* root = buildRandomProjectionTree( );
+//     // Build a random projection tree
+//     int treeDepth = 3;
+//     // TreeNode* root = buildRandomProjectionTree( );
 
-    // Initialize a directed graph from the random projection tree
-    int nedges = 2;
-    int row = 10;
-    int column = 3;
-    const char* filename = "small.txt";
-    int D = 2;
-    int depth =2;
+//     // Initialize a directed graph from the random projection tree
+//     int nedges = 2;
+//     int row = 10;
+//     int column = 3;
+//     const char* filename = "small.txt";
+//     int D = 2;
+//     int depth =2;
  
-    Graph graph= initializeRPTreeGraph(nedges, filename, row, column, treeDepth, D);
+//     Graph graph= initializeRPTreeGraph(nedges, filename, row, column, treeDepth, D);
      
-    //for (int i=0; i<D; i++){
-        TreeNode* treen;
-        treen = createRandomProjectionTree(graph->nodes, graph, row,column, depth, D, row, nedges);
+//     //for (int i=0; i<D; i++){
+//         TreeNode* treen;
+//         treen = createRandomProjectionTree(graph->nodes, graph, row,column, depth, D, row, nedges);
         
-        initializeLeafNodes(treen, graph, D, nedges, row);
-        // Free the allocated memory
+//         initializeLeafNodes(treen, graph, D, nedges, row);
+//         // Free the allocated memory
  
-        free_RandomProjectionTree(treen, nedges);
+//         free_RandomProjectionTree(treen, nedges);
 
-    //}
-    free(graph);
-    return 0;
-} 
+//     //}
+//     free(graph);
+//     return 0;
+// } 
 
