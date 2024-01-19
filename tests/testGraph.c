@@ -118,7 +118,6 @@ void test_create_random_projection(void)
 
     //}
     free(graph);
-    return 0;
 }
 
 

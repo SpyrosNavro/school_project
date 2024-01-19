@@ -1,6 +1,6 @@
 OBJS1 = graph.o pqueue.o nndescent.o nnd_functions.o # tests.o
 OBJS2 = pqueue.o testPQ.o #nndescent.o
-OBJS3 = graph.o testGraph.o
+OBJS3 = graph.o testGraph.o random_projection.o pqueue.o
 OBJ = pqueue.o testPQ.o graph.o testGraph.o randomprojection.o
 OBJS = graph.o pqueue.o nndescent.o testPQ.o testGraph.o nnd_functions.o randomprojection.o
 OUT = nndescent testpq testgraph
@@ -28,7 +28,7 @@ graph.o : $(FILES)graph.c
 pqueue.o : $(FILES)pqueue.c
 	$(CC) $(FLAGS) $(FILES)pqueue.c
 
-randomprojection.o : $(FILES)random_projection.c
+random_projection.o : $(FILES)random_projection.c
 	$(CC) $(FLAGS) $(FILES)random_projection.c
 
 nndescent.o : $(FILES2)nndescent.c 
